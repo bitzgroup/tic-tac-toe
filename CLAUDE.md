@@ -41,7 +41,7 @@ tic-tac-toe/
 
 ## Commands
 
-- **iOS** (from `ios/TicTacToe/`):
+- **iOS** (from `ios/`):
   - Regenerate the Xcode project after adding/removing files: `xcodegen generate` (needs
     [XcodeGen](https://github.com/yonaskolb/XcodeGen); `project.yml` is the source of truth, the
     generated `.xcodeproj` is committed too — see `docs/ARCHITECTURE.md`).
