@@ -100,5 +100,11 @@ branching model, the same convention `bitzgroup/SpriteKit` and `bitzgroup/Gamepl
 - **`.gitignore`** (root) covers macOS `.DS_Store`; `ios/.gitignore` and `android/.gitignore` cover
   each platform's own build artifacts — same split as the `SpriteKit`/`GameplayKit`/`GKSKBridge`
   sibling repos.
-- **Git operations:** do not run `git commit` or `git push` unless explicitly requested by the user
-  for that specific change.
+- **Git operations require an explicit request, every time.** This covers the whole workflow —
+  `git commit`, `git push`, opening a PR (`gh pr create`), and merging one (`gh pr merge`) — not
+  just the two literal commands named. A general "proceed" on a feature/task is not standing
+  authorization for the git steps that follow it: implement, edit, build, and verify freely, but
+  stop before each commit/push/PR-create/PR-merge and wait for that specific go-ahead, even
+  mid-task and even if the user approved a git action earlier in the same conversation. This
+  applies identically inside the `android/SpriteKit`/`GameplayKit`/`GKSKBridge` submodule
+  checkouts.
