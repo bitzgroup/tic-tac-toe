@@ -11,6 +11,10 @@ Checklist items are marked `[ ]` until done; update this file as work lands, the
 ## Phase 0 — Repository scaffolding
 
 - [x] Root docs: `README.md`, `CLAUDE.md`, `docs/GAME_DESIGN.md`, `docs/ARCHITECTURE.md`, this file
+- [x] `main`/`develop` branch protection (PR required, no direct pushes, no force-push/deletion) —
+      matching `bitzgroup/SpriteKit`/`GameplayKit`'s settings, **except** their required `build`
+      status check, which this repo doesn't set yet since no CI workflow exists until an app is
+      scaffolded (see the next two items)
 - [ ] `ios/TicTacToe` — empty Xcode project, iOS 15+ deployment target, SwiftUI `App` presenting a
       blank `SKView`/`SpriteView`, no game logic yet
 - [ ] `android/` — Gradle project skeleton; `SpriteKit`, `GameplayKit`, and `GKSKBridge` added as
@@ -19,6 +23,9 @@ Checklist items are marked `[ ]` until done; update this file as work lands, the
       yet — note `GKSKBridge` is still pre-scaffolding upstream, so this item is blocked on that
       repo settling its own module layout first (see `docs/ARCHITECTURE.md`)
 - [ ] Both apps build and launch to a blank screen (`xcodebuild build` / `./gradlew assemble`)
+- [ ] CI workflow (a `build` job/status check) for each app, then add it as a **required** status
+      check on `main`/`develop` branch protection — closing the one gap noted above, bringing this
+      repo's protection settings to full parity with `bitzgroup/SpriteKit`/`GameplayKit`
 
 ## Phase 1 — Game model (GameplayKit)
 

@@ -63,7 +63,11 @@ branching model, the same convention `bitzgroup/SpriteKit` and `bitzgroup/Gamepl
 | `release/<version>` | `develop` | `main` **and** `develop` | e.g. `release/0.1.0`. Release-prep fixes only, no new features. |
 | `hotfix/<name>` | `main` | `main` **and** `develop` | Urgent fixes to a released `main`. |
 
-- Every merge goes through a PR; CI (once each app is scaffolded) must pass first.
+- Every merge goes through a PR — `main`/`develop` branch protection is live (no direct pushes, no
+  force-push/deletion), matching `bitzgroup/SpriteKit`/`GameplayKit`'s settings except their
+  required `build` CI status check, which isn't set here yet since this repo has no CI workflow
+  until an app is scaffolded (see `docs/ROADMAP.md` Phase 0) — add it as a required check on both
+  branches once that CI exists.
 - `release/*`/`hotfix/*` don't exist yet: the first release is cut once Phases 0–4 of
   `docs/ROADMAP.md` are complete. Until then, all work happens on `feature/*` branches merged into
   `develop` — `main` isn't touched again until that first release.
