@@ -15,8 +15,9 @@ Checklist items are marked `[ ]` until done; update this file as work lands, the
       matching `bitzgroup/SpriteKit`/`GameplayKit`'s settings, **except** their required `build`
       status check, which this repo doesn't set yet since no CI workflow exists until an app is
       scaffolded (see the next two items)
-- [x] `ios/TicTacToe` — Xcode project generated via [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-      from `project.yml`, iOS 15+ deployment target, SwiftUI `App` presenting a blank `SKScene` via
+- [x] `ios/` — Xcode project (project root, no extra nesting — mirrors `android/` being the Gradle
+      root directly) generated via [XcodeGen](https://github.com/yonaskolb/XcodeGen) from
+      `project.yml`, iOS 15+ deployment target, SwiftUI `App` presenting a blank `SKScene` via
       `SpriteView`, no game logic yet
 - [x] `android/` — Gradle project skeleton; `SpriteKit`, `GameplayKit`, and `GKSKBridge` added as
       git submodules (currently tracking each repo's `develop` branch — see

@@ -45,8 +45,7 @@ matching `SpriteKit`'s `:spritekit` and `GameplayKit`'s `:gameplaykit` in shape.
 ```text
 tic-tac-toe/
 ├── docs/                    # this document, GAME_DESIGN.md, ROADMAP.md
-├── ios/
-│   └── TicTacToe/           # Xcode project — Swift, Apple's own SpriteKit + GameplayKit
+├── ios/                     # Xcode project root — Swift, Apple's own SpriteKit + GameplayKit
 └── android/
     ├── app/                 # Jetpack Compose host app — Kotlin
     ├── SpriteKit/           # git submodule → github.com/bitzgroup/SpriteKit
@@ -68,31 +67,36 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   newer SpriteKit/GameplayKit feature).
 - App shell: a SwiftUI `App` presenting an `SKView` (directly, or via `SpriteView` — either hosts
   the same `MenuScene`/`GameScene` from `docs/GAME_DESIGN.md`).
-- **Project file generation:** `ios/TicTacToe/project.yml` ([XcodeGen](https://github.com/yonaskolb/XcodeGen)
-  spec) is the source of truth for the `.xcodeproj`'s targets/settings — regenerate after adding
-  files with `xcodegen generate` (run from `ios/TicTacToe/`). XcodeGen itself is a dev-time-only
-  tool (not an app dependency, not linked into the binary); the generated `.xcodeproj` is committed
-  alongside `project.yml` so anyone without XcodeGen installed can still open and build the project
-  directly in Xcode.
-- Suggested source layout inside the app target:
+- **Project file generation:** `ios/project.yml` ([XcodeGen](https://github.com/yonaskolb/XcodeGen)
+  spec) is the source of truth for `ios/TicTacToe.xcodeproj`'s targets/settings — regenerate after
+  adding files with `xcodegen generate` (run from `ios/`). `ios/` is the Xcode project root
+  directly (no extra nesting level), mirroring how `android/` is the Gradle project root directly.
+  XcodeGen itself is a dev-time-only tool (not an app dependency, not linked into the binary); the
+  generated `.xcodeproj` is committed alongside `project.yml` so anyone without XcodeGen installed
+  can still open and build the project directly in Xcode.
+- Suggested source layout inside the app target (`ios/TicTacToe/`, the app target's source
+  folder — analogous to `android/app/`):
 
   ```text
-  TicTacToe/
-  ├── TicTacToeApp.swift        # SwiftUI App entry point, hosts the SKView
-  ├── Game/                     # GameplayKit layer
-  │   ├── TicTacToeBoard.swift         # rules only — no GameplayKit dependency (see GAME_DESIGN.md)
-  │   ├── TicTacToePlayer.swift        # GKGameModelPlayer
-  │   ├── TicTacToeMove.swift          # GKGameModelUpdate
-  │   ├── TicTacToeGameModel.swift     # GKGameModel, wraps TicTacToeBoard
-  │   ├── States/                      # GKState subclasses (TurnBeginState, HumanTurnState, ...)
-  │   └── Entities/                    # GKEntity/GKComponent — needs GKSKBridge, see GAME_DESIGN.md
-  │       ├── TicTacToeMarkEntity.swift     # GKEntity: one per placed mark
-  │       └── TicTacToeMarkComponent.swift  # GKComponent: player + cellIndex
-  ├── Scenes/                   # SpriteKit layer
-  │   ├── MenuScene.swift
-  │   └── GameScene.swift
-  └── Resources/
-      └── Localizable.xcstrings # String Catalog, en base + ja — see "Localization" below
+  ios/
+  ├── project.yml                # XcodeGen spec — source of truth for TicTacToe.xcodeproj
+  ├── TicTacToe.xcodeproj/
+  └── TicTacToe/                 # app target sources
+      ├── TicTacToeApp.swift        # SwiftUI App entry point, hosts the SKView
+      ├── Game/                     # GameplayKit layer
+      │   ├── TicTacToeBoard.swift         # rules only — no GameplayKit dependency (see GAME_DESIGN.md)
+      │   ├── TicTacToePlayer.swift        # GKGameModelPlayer
+      │   ├── TicTacToeMove.swift          # GKGameModelUpdate
+      │   ├── TicTacToeGameModel.swift     # GKGameModel, wraps TicTacToeBoard
+      │   ├── States/                      # GKState subclasses (TurnBeginState, HumanTurnState, ...)
+      │   └── Entities/                    # GKEntity/GKComponent — needs GKSKBridge, see GAME_DESIGN.md
+      │       ├── TicTacToeMarkEntity.swift     # GKEntity: one per placed mark
+      │       └── TicTacToeMarkComponent.swift  # GKComponent: player + cellIndex
+      ├── Scenes/                   # SpriteKit layer
+      │   ├── MenuScene.swift
+      │   └── GameScene.swift
+      └── Resources/
+          └── Localizable.xcstrings # String Catalog, en base + ja — see "Localization" below
   ```
 
 - **Localization:** a String Catalog (`Localizable.xcstrings`) holding the `en` base strings plus a
