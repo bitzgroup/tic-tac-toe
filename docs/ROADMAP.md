@@ -12,9 +12,8 @@ Checklist items are marked `[ ]` until done; update this file as work lands, the
 
 - [x] Root docs: `README.md`, `CLAUDE.md`, `docs/GAME_DESIGN.md`, `docs/ARCHITECTURE.md`, this file
 - [x] `main`/`develop` branch protection (PR required, no direct pushes, no force-push/deletion) —
-      matching `bitzgroup/SpriteKit`/`GameplayKit`'s settings, **except** their required `build`
-      status check, which this repo doesn't set yet since no CI workflow exists until an app is
-      scaffolded (see the next two items)
+      matching `bitzgroup/SpriteKit`/`GameplayKit`'s settings; required CI status checks added once
+      `.github/workflows/ci.yml` existed (see below)
 - [x] `ios/` — Xcode project (project root, no extra nesting — mirrors `android/` being the Gradle
       root directly) generated via [XcodeGen](https://github.com/yonaskolb/XcodeGen) from
       `project.yml`, iOS 15+ deployment target, SwiftUI `App` presenting a blank `SKScene` via
@@ -34,9 +33,13 @@ Checklist items are marked `[ ]` until done; update this file as work lands, the
       upstream, merged to `develop` then `main`, and republished as `v0.1.0` (replacing the
       original tag — nothing had consumed it yet, per the repo owner's direction).
       `android/SpriteKit` now tracks `develop`, which already includes this fix.
-- [ ] CI workflow (a `build` job/status check) for each app, then add it as a **required** status
-      check on `main`/`develop` branch protection — closing the one gap noted above, bringing this
-      repo's protection settings to full parity with `bitzgroup/SpriteKit`/`GameplayKit`
+- [x] CI workflow (`.github/workflows/ci.yml`, `ios`/`android` jobs) for each app, then add both
+      as **required** status checks on `main`/`develop` branch protection — closing the one gap
+      noted above, bringing this repo's protection settings to full parity with
+      `bitzgroup/SpriteKit`/`GameplayKit`. Along the way, fixed `.gitmodules` to use `https://`
+      submodule URLs instead of `git@github.com:` — CI runners have no SSH key configured, so
+      `actions/checkout`'s `submodules: recursive` would otherwise fail to clone them (public
+      repos clone anonymously fine over HTTPS, so this has no functional downside).
 
 ## Phase 1 — Game model (GameplayKit)
 
