@@ -15,14 +15,24 @@ Checklist items are marked `[ ]` until done; update this file as work lands, the
       matching `bitzgroup/SpriteKit`/`GameplayKit`'s settings, **except** their required `build`
       status check, which this repo doesn't set yet since no CI workflow exists until an app is
       scaffolded (see the next two items)
-- [ ] `ios/TicTacToe` — empty Xcode project, iOS 15+ deployment target, SwiftUI `App` presenting a
-      blank `SKView`/`SpriteView`, no game logic yet
-- [ ] `android/` — Gradle project skeleton; `SpriteKit`, `GameplayKit`, and `GKSKBridge` added as
-      git submodules and wired into `settings.gradle.kts`/`:app`'s `build.gradle.kts` per
-      `docs/ARCHITECTURE.md`; `:app` presents a blank `spritekit-compose` `SKView`, no game logic
-      yet — note `GKSKBridge` is still pre-scaffolding upstream, so this item is blocked on that
-      repo settling its own module layout first (see `docs/ARCHITECTURE.md`)
-- [ ] Both apps build and launch to a blank screen (`xcodebuild build` / `./gradlew assemble`)
+- [x] `ios/TicTacToe` — Xcode project generated via [XcodeGen](https://github.com/yonaskolb/XcodeGen)
+      from `project.yml`, iOS 15+ deployment target, SwiftUI `App` presenting a blank `SKScene` via
+      `SpriteView`, no game logic yet
+- [x] `android/` — Gradle project skeleton; `SpriteKit`, `GameplayKit`, and `GKSKBridge` added as
+      git submodules (currently tracking each repo's `develop` branch — see
+      `docs/ARCHITECTURE.md`'s "Working with the submodules") and wired into
+      `settings.gradle.kts`/`:app`'s `build.gradle.kts` per `docs/ARCHITECTURE.md`; `:app` presents
+      a blank `spritekit-compose` `SKView`, no game logic yet
+- [x] Both apps build and launch to a blank screen (`xcodebuild build` / `./gradlew assemble`,
+      confirmed by installing and launching on a simulator/emulator) — see the note below on a
+      `bitzgroup/SpriteKit` fix this surfaced
+- [x] `bitzgroup/SpriteKit`'s `v0.1.0` had a real bug blocking `:spritekit-compose` and
+      `bitzgroup/GKSKBridge`'s `:gkskbridge` from ever being embedded together (each required a
+      different, incompatible Gradle project path for the shared `:spritekit` module — see
+      [PR #24](https://github.com/bitzgroup/SpriteKit/pull/24) for the full explanation): fixed
+      upstream, merged to `develop` then `main`, and republished as `v0.1.0` (replacing the
+      original tag — nothing had consumed it yet, per the repo owner's direction).
+      `android/SpriteKit` now tracks `develop`, which already includes this fix.
 - [ ] CI workflow (a `build` job/status check) for each app, then add it as a **required** status
       check on `main`/`develop` branch protection — closing the one gap noted above, bringing this
       repo's protection settings to full parity with `bitzgroup/SpriteKit`/`GameplayKit`
@@ -56,14 +66,12 @@ Implemented independently in Swift (iOS, against Apple's `GameplayKit.framework`
 
 Implemented independently against Apple's `SpriteKit.framework`/`GameplayKit.framework` (iOS) and
 `jp.co.bitz.spritekit`/`jp.co.bitz.spritekit.compose`/`jp.co.bitz.gkskbridge` (Android) from
-`docs/GAME_DESIGN.md`'s "Presentation" and "Marks as entities" sections. Blocked on
-`bitzgroup/GKSKBridge` settling its own scaffolding/module layout first (see `docs/ARCHITECTURE.md`
-and Phase 0).
+`docs/GAME_DESIGN.md`'s "Presentation" and "Marks as entities" sections.
 
 - [ ] `GameScene`: 3×3 grid (`SKShapeNode` strokes), 9 tappable per-cell `SKShapeNode`s
-- [ ] `TicTacToeMarkEntity` (`GKEntity`) + `TicTacToeMarkComponent` (`GKComponent`) + a
-      `GKSKNodeComponent` per placed mark, stepped each frame by a `GKComponentSystem<GKSKNodeComponent>`
-      in `GameScene.update(_:)` — see `docs/GAME_DESIGN.md`'s "Marks as entities" section
+- [ ] `GameScene` owns a `GKScene` (`rootNode` = itself); `TicTacToeMarkEntity` (`GKEntity`) +
+      `TicTacToeMarkComponent` (`GKComponent`) + `GKSKNodeComponent` per placed mark, appended to
+      `gkScene.entities` — see `docs/GAME_DESIGN.md`'s "Marks as entities" section
 - [ ] `X`/`O` marks as stroked `SKShapeNode` paths (not label glyphs — see the rationale in
       `docs/GAME_DESIGN.md`), owned by their entity's `GKSKNodeComponent`, placement pop-in
       `SKAction`

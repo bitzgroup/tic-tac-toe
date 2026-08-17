@@ -17,17 +17,17 @@ frameworks they mirror. See
 
 ## Project status
 
-Documentation and implementation plan only — no app code yet. See
-[`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist; update this
-section (and that file's checkboxes) as phases land.
+Phase 0 (repository scaffolding) is complete: both apps build and launch to a blank scene. No game
+logic yet — that's Phase 1+. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and
+progress checklist; update this section (and that file's checkboxes) as phases land.
 
 ## Project structure
 
 ```text
 tic-tac-toe/
 ├── docs/          # GAME_DESIGN.md, ARCHITECTURE.md, ROADMAP.md
-├── ios/           # planned: Xcode project, Swift, Apple's SpriteKit + GameplayKit
-└── android/       # planned: Gradle project, Kotlin, SpriteKit/GameplayKit/GKSKBridge as git submodules
+├── ios/           # Xcode project (XcodeGen-generated), Swift, Apple's SpriteKit + GameplayKit
+└── android/       # Gradle project, Kotlin, SpriteKit/GameplayKit/GKSKBridge as git submodules
 ```
 
 - `docs/GAME_DESIGN.md` — rules, GameplayKit AI/state-machine design, SpriteKit presentation spec,
@@ -41,14 +41,19 @@ tic-tac-toe/
 
 ## Commands
 
-Neither app exists yet (Phase 0 of `docs/ROADMAP.md`). Once scaffolded:
-
-- iOS (from `ios/`): build/test via Xcode, or `xcodebuild build`/`xcodebuild test` from the CLI.
-- Android (from `android/`): `./gradlew assemble`, `./gradlew testDebugUnitTest` — same Gradle
-  commands as the `SpriteKit`/`GameplayKit`/`GKSKBridge` submodules themselves, since `:app` shares
-  their `minSdk`/`compileSdk`/Kotlin baseline.
-
-Update this section with the real commands once each project is scaffolded.
+- **iOS** (from `ios/TicTacToe/`):
+  - Regenerate the Xcode project after adding/removing files: `xcodegen generate` (needs
+    [XcodeGen](https://github.com/yonaskolb/XcodeGen); `project.yml` is the source of truth, the
+    generated `.xcodeproj` is committed too — see `docs/ARCHITECTURE.md`).
+  - Build: `xcodebuild -project TicTacToe.xcodeproj -scheme TicTacToe -destination 'platform=iOS Simulator,name=<simulator>' build`
+  - Or open `TicTacToe.xcodeproj` in Xcode directly (build/run/test from there).
+- **Android** (from `android/`): `./gradlew :app:assembleDebug`, `./gradlew :app:testDebugUnitTest`,
+  `./gradlew :app:ktlintCheck`, `./gradlew :app:detekt` — scoped to `:app` for the same reason
+  `bitzgroup/GKSKBridge` scopes its own commands to `:gkskbridge` (see its `CLAUDE.md`): an
+  unscoped task also runs against the included `SpriteKit`/`GameplayKit`/`GKSKBridge` submodule
+  projects, whose build scripts resolve `$rootDir`-relative paths (their own
+  `config/detekt/detekt.yml` overrides) against *this* repo's root once included here, not their
+  own.
 
 ## Git Branching Workflow
 
@@ -90,8 +95,9 @@ branching model, the same convention `bitzgroup/SpriteKit` and `bitzgroup/Gamepl
 - **`android/SpriteKit`, `android/GameplayKit`, and `android/GKSKBridge` are git submodules**, not
   vendored copies — see `docs/ARCHITECTURE.md`'s "Working with the submodules" section for
   clone/update commands. Don't hand-edit files inside them from this repo; changes belong upstream
-  in their own repositories. `GKSKBridge` is still pre-scaffolding upstream as of this writing (see
-  its own `CLAUDE.md`) — its module name/layout isn't final, so treat anything about it here as
-  provisional until that repo settles it.
+  in their own repositories. **All three currently track their `develop` branch** (not a pinned
+  release tag) for the duration of active co-development across the four repos — see
+  `docs/ARCHITECTURE.md`'s "Working with the submodules" section for why and how to switch back to
+  tag-pinning later.
 - **Git operations:** do not run `git commit` or `git push` unless explicitly requested by the user
   for that specific change.

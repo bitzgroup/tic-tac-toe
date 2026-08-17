@@ -141,40 +141,44 @@ TurnBeginState ──▶ HumanTurnState ──▶ TurnEndState ──▶ TurnBeg
 - **`GameOverState`** — terminal for this game instance; a new game is a new scene/model/state
   machine, not a transition back out of this state.
 
-### Marks as entities: `GKEntity` + `GKSKNodeComponent`
+### Marks as entities: `GKScene` + `GKEntity` + `GKSKNodeComponent`
 
-Rather than adding each mark's `SKShapeNode` (see [Presentation](#presentation-spritekit-layer)
-below) straight to the scene, placing a mark creates a `GKEntity`. This is the one part of the app
-that needs [`bitzgroup/GKSKBridge`](https://github.com/bitzgroup/GKSKBridge) on Android — binding a
-GameplayKit entity to a SpriteKit node is exactly the cross-framework surface neither `SpriteKit`
-nor `GameplayKit` alone can own (see `docs/ARCHITECTURE.md`'s "Why a third library" section). This
-mirrors the entity/component wiring Xcode's own SpriteKit-plus-GameplayKit "Game" project template
-generates; neither of the two official Apple references cited above (the `GKStrategist.gameModel`
-doc snippet, the FourInARow sample) happens to demonstrate it, since neither combines SpriteKit
-with GameplayKit, but it's the standard idiom Apple's own tooling produces when the two frameworks
-are used together — which is reason enough on its own for a parity sample like this one to exercise
-it.
+Rather than tracking each mark's `SKShapeNode` (see [Presentation](#presentation-spritekit-layer)
+below) as a bare node, placing a mark creates a `GKEntity` and hands it to a `GKScene`. This is the
+one part of the app that needs [`bitzgroup/GKSKBridge`](https://github.com/bitzgroup/GKSKBridge) on
+Android — binding a GameplayKit entity to a SpriteKit node is exactly the cross-framework surface
+neither `SpriteKit` nor `GameplayKit` alone can own (see `docs/ARCHITECTURE.md`'s "Why a third
+library" section). This mirrors the entity/component wiring Xcode's own SpriteKit-plus-GameplayKit
+"Game" project template generates; neither of the two official Apple references cited above (the
+`GKStrategist.gameModel` doc snippet, the FourInARow sample) happens to demonstrate it, since
+neither combines SpriteKit with GameplayKit, but it's the standard idiom Apple's own tooling
+produces when the two frameworks are used together — reason enough on its own for a parity sample
+like this one to exercise it. The exact shape below follows `bitzgroup/GKSKBridge`'s own v0.1.0
+API (which mirrors Apple's real `GKScene`/`GKSKNodeComponent` — both plain, non-magical types with
+no implicit scene-graph side effects):
 
+- **`GameScene` owns a `GKScene`** (`rootNode` set to the scene itself, `entities` starting empty).
+  This is a plain container — `GKScene` does not add anything to the node tree on its own, and
+  `GKSKNodeComponent` does not either: adding a `GKSKNodeComponent(node:)` to an entity only sets
+  `node.entity` (and clears it again on removal) so the node can look its owning entity up, nothing
+  more. `GameScene` still adds each mark's `SKShapeNode` to the tree itself via a plain `addChild`,
+  the same as every other node in [Presentation](#presentation-spritekit-layer) below — entities
+  don't change *how* nodes get on screen, only how they're associated with game data.
 - **`TicTacToeMarkEntity`** (`GKEntity`) — one per placed mark, with two components:
-  - **`GKSKNodeComponent`** — Apple's own type on iOS; `bitzgroup/GKSKBridge`'s port
-    (`jp.co.bitz.gkskbridge`) on Android. Wraps the mark's `SKShapeNode` and is what actually adds
-    it into `GameScene`'s node tree (`GKSKNodeComponent.addToParentNode(_:)` and its Android
-    equivalent) — the one node in the whole game that isn't added via a plain `addChild` call,
-    specifically so the app exercises the bridge.
+  - **`GKSKNodeComponent(node:)`** — Apple's own type on iOS; `bitzgroup/GKSKBridge`'s port
+    (`jp.co.bitz.gkskbridge`) on Android. Wraps the mark's `SKShapeNode`, and is what lets
+    `GameScene`'s touch handling go from a tapped `SKNode` back to the `GKEntity`/
+    `TicTacToeMarkComponent` that owns it (`node.entity`) — not the other way around.
   - **`TicTacToeMarkComponent`** (an ordinary `GKComponent` subclass, not part of GKSKBridge) —
     records which player (`X`/`O`) and which `cellIndex` this entity's mark belongs to. Exists to
     show an entity carrying more than just its node component, not only the bridge itself.
-- `GameScene` owns a `GKComponentSystem<GKSKNodeComponent>` plus its own `entities: [GKEntity]`
-  array; `GameScene.update(_:)` steps the component system once per frame
-  (`componentSystem.update(deltaTime:)`), matching the update loop Xcode's own SpriteKit +
-  GameplayKit project template generates. The placement pop-in and win-pulse animations (below)
-  still run as `SKAction`s on the wrapped node — the per-frame component step exists to exercise
-  `GKSKBridge`'s update path itself, not to replace `SKAction`.
-- New Game clears `entities` and recreates the component system along with re-presenting a fresh
-  `GameScene` (see "New Game" below) — a new game never reuses an old entity.
-- **`GKAgent`/`GKAgentDelegate` steering — GKSKBridge's other documented feature — is not used
-  here.** Marks are placed, not moved; there's nothing for an agent to steer toward. See
-  `docs/ROADMAP.md`'s "Explicitly out of scope."
+- On placement: create the entity, add both components, add the node to `GameScene` via `addChild`,
+  append the entity to `gkScene.entities`. On New Game: both `gkScene.entities` and the node tree
+  are discarded together with the old `GameScene` (see "New Game" below) — a new game never reuses
+  an old entity.
+- **`GKAgent`/`GKAgentDelegate` steering and `GKAgentNodeComponent` — GKSKBridge's other documented
+  feature — are not used here.** Marks are placed, not moved; there's nothing for an agent to steer
+  toward. See `docs/ROADMAP.md`'s "Explicitly out of scope."
 
 ## Presentation (SpriteKit layer)
 
@@ -201,9 +205,10 @@ description below produces the same look on both platforms.
   stroked circular `SKShapeNode` path. Deliberately not `SKLabelNode` text ("✕"/"○") — glyph
   rendering/metrics differ across iOS's and Android's font stacks in ways that would undercut a
   side-by-side visual comparison, while a stroked path renders identically (same size, same line
-  width) on both. Each mark's `SKShapeNode` is owned by a `TicTacToeMarkEntity` and added to the
-  scene via its `GKSKNodeComponent` — see [Marks as entities](#marks-as-entities-gkentity--gksknodecomponent)
-  above — rather than by a direct `addChild` call.
+  width) on both. Each mark's `SKShapeNode` is added to the scene via a plain `addChild`, same as
+  every other node here, and is also wrapped by a `TicTacToeMarkEntity`'s `GKSKNodeComponent` so
+  touch handling can recover the entity/player/cell behind a tapped node — see
+  [Marks as entities](#marks-as-entities-gkscene--gkentity--gksknodecomponent) above.
 - **Placement animation:** each mark pops in via `SKAction.group([scale(to: 1, duration: 0.15),
   fadeAlpha(to: 1, duration: 0.15)])` from a zero-scale, zero-alpha start.
 - **AI "thinking" delay:** `AITurnState` waits a fixed ~0.4s (an `SKAction.wait(forDuration:)` the
@@ -285,7 +290,7 @@ difficulty and a given sequence of taps on both apps:
       each platform).
 - [ ] `MenuScene` → `GameScene` and New Game transitions both play the same `SKTransition` on both
       apps.
-- [ ] Every placed mark is a `GKEntity` with a `GKSKNodeComponent` (not a node added directly) on
-      both apps, and New Game leaves no stale entities behind.
+- [ ] Every placed mark is a `GKEntity` with a `GKSKNodeComponent` wrapping its node, added to the
+      scene's `GKScene.entities` on both apps, and New Game leaves no stale entities behind.
 - [ ] Every string in the [Localization](#localization) table renders correctly, on both apps, in
       both `en` and `ja` (switch the device/simulator system language, not an in-app switcher).

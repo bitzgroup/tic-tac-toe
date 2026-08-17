@@ -1,0 +1,52 @@
+name: TicTacToe
+options:
+  bundleIdPrefix: jp.co.bitz
+  deploymentTarget:
+    iOS: "15.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+
+targets:
+  TicTacToe:
+    type: application
+    platform: iOS
+    sources:
+      - path: TicTacToe
+    info:
+      path: Generated/Info.plist
+      properties:
+        UILaunchScreen: {}
+        CFBundleDisplayName: $(PRODUCT_NAME)
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.co.bitz.tictactoe
+    dependencies:
+      - sdk: SpriteKit.framework
+      - sdk: GameplayKit.framework
+
+schemes:
+  TicTacToe:
+    build:
+      targets:
+        TicTacToe: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
