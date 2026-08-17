@@ -99,5 +99,8 @@ branching model, the same convention `bitzgroup/SpriteKit` and `bitzgroup/Gamepl
   release tag) for the duration of active co-development across the four repos — see
   `docs/ARCHITECTURE.md`'s "Working with the submodules" section for why and how to switch back to
   tag-pinning later.
+- **`.gitignore`** (root) covers macOS `.DS_Store`; `ios/.gitignore` and `android/.gitignore` cover
+  each platform's own build artifacts — same split as the `SpriteKit`/`GameplayKit`/`GKSKBridge`
+  sibling repos.
 - **Git operations:** do not run `git commit` or `git push` unless explicitly requested by the user
   for that specific change.
