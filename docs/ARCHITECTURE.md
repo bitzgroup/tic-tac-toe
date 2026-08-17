@@ -28,14 +28,17 @@ GameplayKit and SpriteKit are both system frameworks, so the parts of each that 
 separate OSS libraries that are each meant to be usable standalone — bridging code doesn't belong
 in either one, since that would force a project that only needs one of them to also pull in the
 other. GKSKBridge holds that bridging surface on its own, and this app is one of the projects that
-actually needs it: every placed mark is a `GKEntity` wrapped by a `GKSKNodeComponent` rather than a
-bare `SKNode` added directly to the scene (see `docs/GAME_DESIGN.md`'s "Marks as entities" section
-for the full design and rationale) — the standard entity/node-binding idiom Xcode's own
-SpriteKit-plus-GameplayKit project template generates. `GKAgent`/`GKAgentDelegate` steering,
-GKSKBridge's other documented feature, is *not* used here — Tic-Tac-Toe marks are placed, not
-moved. See `bitzgroup/GKSKBridge`'s own `README.md`/`CLAUDE.md` for exactly what the library
-covers — as of this writing that repo is still pre-scaffolding, so treat its exact API surface as
-unsettled until its own docs say otherwise.
+actually needs it: every placed mark is a `GKEntity` wrapped by a `GKSKNodeComponent`, held in a
+`GKScene` (see `docs/GAME_DESIGN.md`'s "Marks as entities" section for the full design and
+rationale) — the standard entity/node-binding idiom Xcode's own SpriteKit-plus-GameplayKit project
+template generates. `GKAgent`/`GKAgentDelegate` steering and `GKAgentNodeComponent` — GKSKBridge's
+other documented feature — are *not* used here: Tic-Tac-Toe marks are placed, not moved.
+
+`bitzgroup/GKSKBridge` [released `0.1.0`](https://github.com/bitzgroup/GKSKBridge/releases/tag/0.1.0)
+with its full `docs/ROADMAP.md` plan complete: `GKSKNodeComponent`, `SKNode.entity`, `GKScene`, and
+`GKAgentNodeComponent` are implemented, tested, and documented — see its own `README.md`/
+`CLAUDE.md` for the full API. Its Gradle module is `:gkskbridge` (package `jp.co.bitz.gkskbridge`),
+matching `SpriteKit`'s `:spritekit` and `GameplayKit`'s `:gameplaykit` in shape.
 
 ## Repository layout
 
@@ -65,6 +68,12 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   newer SpriteKit/GameplayKit feature).
 - App shell: a SwiftUI `App` presenting an `SKView` (directly, or via `SpriteView` — either hosts
   the same `MenuScene`/`GameScene` from `docs/GAME_DESIGN.md`).
+- **Project file generation:** `ios/TicTacToe/project.yml` ([XcodeGen](https://github.com/yonaskolb/XcodeGen)
+  spec) is the source of truth for the `.xcodeproj`'s targets/settings — regenerate after adding
+  files with `xcodegen generate` (run from `ios/TicTacToe/`). XcodeGen itself is a dev-time-only
+  tool (not an app dependency, not linked into the binary); the generated `.xcodeproj` is committed
+  alongside `project.yml` so anyone without XcodeGen installed can still open and build the project
+  directly in Xcode.
 - Suggested source layout inside the app target:
 
   ```text
@@ -112,10 +121,8 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   include(":GameplayKit:gameplaykit")
   project(":GameplayKit:gameplaykit").projectDir = file("GameplayKit/gameplaykit")
 
-  // GKSKBridge is still pre-scaffolding as of this writing — its own module name/layout isn't
-  // settled yet (see its CLAUDE.md, "Open architecture decisions"). Mirror whatever it lands on
-  // here once it exists; the candidate approach documented there is a plain Gradle project-path
-  // dependency, same shape as the two includes above.
+  include(":GKSKBridge:gkskbridge")
+  project(":GKSKBridge:gkskbridge").projectDir = file("GKSKBridge/gkskbridge")
   ```
 
   ```kotlin
@@ -123,9 +130,19 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   dependencies {
       implementation(project(":SpriteKit:spritekit-compose"))
       implementation(project(":GameplayKit:gameplaykit"))
-      // implementation(project(":GKSKBridge:..."))  // once GKSKBridge is scaffolded
+      implementation(project(":GKSKBridge:gkskbridge"))
   }
   ```
+
+  GKSKBridge's own `gkskbridge/build.gradle.kts` depends on `:GameplayKit:gameplaykit` and
+  `:SpriteKit:spritekit` via the same kind of project-path reference — it carries no submodules of
+  its own (see its `docs/ARCHITECTURE.md`), so those two project paths must exist under those exact
+  names in whichever `settings.gradle.kts` includes it, which the include block above guarantees.
+  All three submodules' Gradle version catalogs (`agp` 8.5.2, `kotlin` 2.0.20, `detekt` 1.23.6,
+  `ktlint-gradle` 12.1.1) agree, so `android/gradle/libs.versions.toml` can declare one shared set
+  of versions/plugins for the whole build — Gradle only reads the *including* project's version
+  catalog, not each submodule's own `gradle/libs.versions.toml`, so this repo's own catalog is what
+  actually governs versions once they're included here.
 
 - Suggested source layout inside `:app` (deliberately mirroring the iOS layout above, package by
   package, so the two are easy to compare file-for-file):
@@ -162,6 +179,16 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
 
 ### Working with the submodules
 
+**During this active co-development period, all three submodules track their `develop` branch**
+(`.gitmodules`' `branch = develop`, set via `git submodule set-branch --branch develop <path>`)
+rather than being pinned to a release tag — tic-tac-toe's own implementation is currently the
+fastest way real gaps in the three libraries surface (see the `spritekit-compose`/`GKSKBridge`
+nested-project-path bug found and fixed while scaffolding Phase 0), so tracking `develop` lets
+fixes flow in without a formal release cycle each time. Once the three libraries and this app are
+all stable, switch back to pinning each submodule to a specific release tag (`git submodule set-branch
+--branch '' <path>` — an empty branch name reverts to the default detached-at-a-fixed-commit
+behavior) for reproducible builds.
+
 ```sh
 # first checkout
 git clone --recurse-submodules git@github.com:bitzgroup/tic-tac-toe.git
@@ -169,7 +196,8 @@ git clone --recurse-submodules git@github.com:bitzgroup/tic-tac-toe.git
 # already cloned without --recurse-submodules
 git submodule update --init --recursive
 
-# pull in upstream changes to any of the three libraries later
+# pull in upstream changes to any of the three libraries later (checks out each submodule's
+# develop branch tip, per the tracking config above)
 git submodule update --remote android/SpriteKit
 git submodule update --remote android/GameplayKit
 git submodule update --remote android/GKSKBridge

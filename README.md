@@ -20,8 +20,8 @@ repo's own documentation stays English-only, as is conventional for public OSS. 
 
 ## Status
 
-Documentation and implementation plan only so far — no app code yet. See
-[`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist.
+Phase 0 (repository scaffolding) is complete: both apps build and launch to a blank scene, no game
+logic yet. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist.
 
 ## Repository layout
 
@@ -38,7 +38,7 @@ tic-tac-toe/
   embeds the three library submodules, how parity is verified
 - [`docs/ROADMAP.md`](docs/ROADMAP.md) — phased implementation plan and progress checklist
 
-See [`CLAUDE.md`](CLAUDE.md) for build/test commands once each app exists.
+See [`CLAUDE.md`](CLAUDE.md) for build/test commands.
 
 ## License
 
