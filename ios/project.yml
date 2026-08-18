@@ -35,15 +35,30 @@ targets:
       - sdk: SpriteKit.framework
       - sdk: GameplayKit.framework
 
+  TicTacToeTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: TicTacToeTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.co.bitz.tictactoe.tests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: TicTacToe
+
 schemes:
   TicTacToe:
     build:
       targets:
         TicTacToe: all
+        TicTacToeTests: [test]
     run:
       config: Debug
     test:
       config: Debug
+      targets:
+        - TicTacToeTests
     profile:
       config: Release
     analyze:

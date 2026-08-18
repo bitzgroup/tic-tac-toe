@@ -20,8 +20,9 @@ repo's own documentation stays English-only, as is conventional for public OSS. 
 
 ## Status
 
-Phase 0 (repository scaffolding) is complete: both apps build and launch to a blank scene, no game
-logic yet. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist.
+Phase 0 (repository scaffolding) and Phase 1 (GameplayKit game model, AI, turn state machine) are
+complete, both fully unit-tested — no SpriteKit/UI wiring yet. See
+[`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist.
 
 ## Repository layout
 

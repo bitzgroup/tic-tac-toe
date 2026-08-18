@@ -81,22 +81,25 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   ios/
   ├── project.yml                # XcodeGen spec — source of truth for TicTacToe.xcodeproj
   ├── TicTacToe.xcodeproj/
-  └── TicTacToe/                 # app target sources
-      ├── TicTacToeApp.swift        # SwiftUI App entry point, hosts the SKView
-      ├── Game/                     # GameplayKit layer
-      │   ├── TicTacToeBoard.swift         # rules only — no GameplayKit dependency (see GAME_DESIGN.md)
-      │   ├── TicTacToePlayer.swift        # GKGameModelPlayer
-      │   ├── TicTacToeMove.swift          # GKGameModelUpdate
-      │   ├── TicTacToeGameModel.swift     # GKGameModel, wraps TicTacToeBoard
-      │   ├── States/                      # GKState subclasses (TurnBeginState, HumanTurnState, ...)
-      │   └── Entities/                    # GKEntity/GKComponent — needs GKSKBridge, see GAME_DESIGN.md
-      │       ├── TicTacToeMarkEntity.swift     # GKEntity: one per placed mark
-      │       └── TicTacToeMarkComponent.swift  # GKComponent: player + cellIndex
-      ├── Scenes/                   # SpriteKit layer
-      │   ├── MenuScene.swift
-      │   └── GameScene.swift
-      └── Resources/
-          └── Localizable.xcstrings # String Catalog, en base + ja — see "Localization" below
+  ├── TicTacToe/                 # app target sources
+  │   ├── TicTacToeApp.swift        # SwiftUI App entry point, hosts the SKView
+  │   ├── ContentView.swift          # Phase 0 placeholder — replaced by MenuScene in Phase 2/3
+  │   ├── Game/                     # GameplayKit layer
+  │   │   ├── TicTacToeBoard.swift         # rules only — no GameplayKit dependency (see GAME_DESIGN.md)
+  │   │   ├── TicTacToePlayer.swift        # GKGameModelPlayer
+  │   │   ├── TicTacToeMove.swift          # GKGameModelUpdate
+  │   │   ├── TicTacToeGameModel.swift     # GKGameModel, wraps TicTacToeBoard
+  │   │   ├── TicTacToeMatch.swift         # Difficulty, strategist selection, coin toss, GKStateMachine setup
+  │   │   ├── States/                      # GKState subclasses (TurnBeginState, HumanTurnState, ...)
+  │   │   └── Entities/                    # GKEntity/GKComponent — needs GKSKBridge, see GAME_DESIGN.md
+  │   │       ├── TicTacToeMarkEntity.swift     # GKEntity: one per placed mark
+  │   │       └── TicTacToeMarkComponent.swift  # GKComponent: player + cellIndex
+  │   ├── Scenes/                   # SpriteKit layer
+  │   │   ├── MenuScene.swift
+  │   │   └── GameScene.swift
+  │   └── Resources/
+  │       └── Localizable.xcstrings # String Catalog, en base + ja — see "Localization" below
+  └── TicTacToeTests/             # XCTest — see "Verifying parity" below
   ```
 
 - **Localization:** a String Catalog (`Localizable.xcstrings`) holding the `en` base strings plus a
@@ -229,4 +232,47 @@ uses for its own `FourInARowTests`:
 - iOS: XCTest, run via Xcode or `xcodebuild test`.
 - Android: JUnit via `./gradlew testDebugUnitTest`, run from `android/`.
 
-See `docs/ROADMAP.md` Phase 4 for when this happens in the implementation plan.
+See `docs/ROADMAP.md` Phase 4 for the full parity sign-off pass. But the more valuable check
+happens earlier and continuously, not just at Phase 4 — see the next section.
+
+## Finding OSS/Apple discrepancies: iOS first, then Android
+
+This is one of this repo's actual purposes, not just a side effect of implementation order (see
+`docs/ROADMAP.md`'s intro): **within every phase, the iOS half is built and its tests verified
+green first, against Apple's real SpriteKit/GameplayKit — establishing ground truth for how that
+phase's APIs actually behave — before the Android half is implemented against
+`bitzgroup/SpriteKit`/`GameplayKit`/`GKSKBridge`.** Writing Android second, with working,
+Apple-verified iOS code already in hand as the reference, is what turns "port this feature" into an
+active check on the OSS libraries rather than a blind reimplementation: a class that's missing, a
+method with a different signature, or behavior that diverges from what the already-passing iOS
+tests demonstrate all surface immediately as a concrete build/test failure on the Android side,
+instead of staying latent until some later, harder-to-diagnose point.
+
+Three categories of discrepancy come up this way, handled differently:
+
+- **A real bug or gap in the OSS library** — fix it upstream in that library's own repo (branch
+  off its `develop`, PR, same as any other change there), the way
+  [SpriteKit#24](https://github.com/bitzgroup/SpriteKit/pull/24) fixed the
+  `spritekit-compose`/`GKSKBridge` nested-project-path conflict found while wiring up Phase 0.
+  `docs/ROADMAP.md` records what was found and links to the fix, in the phase where it surfaced.
+- **A documented, intentional deviation left as-is** (Apple leaves some behavior undocumented,
+  e.g. minmax tie-break order, and the OSS library made a defensible choice that isn't a "bug" to
+  fix) — no upstream change needed; note it in `docs/GAME_DESIGN.md` instead, the way the
+  tie-break-order note in its "AI difficulty → GameplayKit strategist" section does, so this app's
+  own spec stays accurate about where bit-for-bit identity isn't guaranteed.
+- **A documented, intentional deviation revisited anyway** — the same starting point as the
+  category above (a real, defensible design choice, not a bug), but changed upstream regardless
+  once it had a concrete cost: `bitzgroup/GameplayKit`'s `GKMinmaxStrategist`/
+  `GKMonteCarloStrategist` originally always branched their search by copying the model rather
+  than mutating-and-backtracking via `apply`/`unapplyGameModelUpdate` like Apple's real
+  `GKMinmaxStrategist` documents itself doing — a legitimate simplicity/safety tradeoff on its own
+  terms (see `docs/API_COMPATIBILITY.md`'s reasoning at the time). But it meant a `GKGameModel`
+  correct against the OSS library could still ship with a broken `unapplyGameModelUpdate` that
+  only breaks against Apple's real framework — exactly what happened to this app's own iOS
+  implementation (see `docs/GAME_DESIGN.md`'s "Game model" section). Once that gap was concrete,
+  not hypothetical, the OSS library was revised to match Apple's real strategy exactly, closing it
+  for every future consumer instead of leaving each one to rediscover it independently.
+
+Each OSS repo's own `docs/API_COMPATIBILITY.md` is the authoritative, permanent record of every
+such deviation for that library, independent of this app; this repo's docs only need to note the
+ones that were actually *found* via this app's own implementation work, for traceability.
