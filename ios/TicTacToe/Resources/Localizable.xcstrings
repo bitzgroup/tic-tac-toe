@@ -1,0 +1,72 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "difficulty_easy" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Easy" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "やさしい" } }
+      }
+    },
+    "difficulty_hard" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Hard" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "むずかしい" } }
+      }
+    },
+    "difficulty_normal" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Normal" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ふつう" } }
+      }
+    },
+    "menu_title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tic-Tac-Toe" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "三目並べ" } }
+      }
+    },
+    "new_game" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "New Game" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "もう一度" } }
+      }
+    },
+    "score_row" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "X: %d  O: %d  Draws: %d" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "X: %d  O: %d  引き分け: %d" } }
+      }
+    },
+    "status_cpu_thinking" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "CPU thinking…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "CPU思考中…" } }
+      }
+    },
+    "status_cpu_wins" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "CPU wins" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "CPUの勝ち" } }
+      }
+    },
+    "status_draw" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Draw" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "引き分け" } }
+      }
+    },
+    "status_you_win" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "You win!" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "あなたの勝ち！" } }
+      }
+    },
+    "status_your_turn" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your turn (%@)" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "あなたの番（%@）" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

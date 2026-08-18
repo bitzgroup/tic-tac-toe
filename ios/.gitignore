@@ -1,0 +1,7 @@
+.DS_Store
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.swiftpm/
+TicTacToe.xcodeproj/project.xcworkspace/xcuserdata/

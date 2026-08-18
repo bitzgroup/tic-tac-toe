@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">三目並べ</string>
+
+    <string name="menu_title">三目並べ</string>
+    <string name="difficulty_easy">やさしい</string>
+    <string name="difficulty_normal">ふつう</string>
+    <string name="difficulty_hard">むずかしい</string>
+    <string name="status_your_turn">あなたの番（%1$s）</string>
+    <string name="status_cpu_thinking">CPU思考中…</string>
+    <string name="status_you_win">あなたの勝ち！</string>
+    <string name="status_cpu_wins">CPUの勝ち</string>
+    <string name="status_draw">引き分け</string>
+    <string name="score_row">X: %1$d \u0020O: %2$d \u0020引き分け: %3$d</string>
+    <string name="new_game">もう一度</string>
+</resources>

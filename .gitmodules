@@ -1,0 +1,12 @@
+[submodule "android/SpriteKit"]
+	path = android/SpriteKit
+	url = https://github.com/bitzgroup/SpriteKit.git
+	branch = develop
+[submodule "android/GameplayKit"]
+	path = android/GameplayKit
+	url = https://github.com/bitzgroup/GameplayKit.git
+	branch = develop
+[submodule "android/GKSKBridge"]
+	path = android/GKSKBridge
+	url = https://github.com/bitzgroup/GKSKBridge.git
+	branch = develop
