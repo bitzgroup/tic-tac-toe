@@ -20,8 +20,9 @@ repo's own documentation stays English-only, as is conventional for public OSS. 
 
 ## Status
 
-Phase 0 (repository scaffolding) and Phase 1 (GameplayKit game model, AI, turn state machine) are
-complete, both fully unit-tested — no SpriteKit/UI wiring yet. See
+Phase 0 (repository scaffolding), Phase 1 (GameplayKit game model, AI, turn state machine), and
+Phase 2 (SpriteKit board rendering & input — `MenuScene`/`GameScene`, marks as entities, `en`/`ja`
+localization) are complete on both platforms, fully unit-tested and visually verified. See
 [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist.
 
 ## Repository layout

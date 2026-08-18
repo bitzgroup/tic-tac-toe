@@ -17,13 +17,18 @@ frameworks they mirror. See
 
 ## Project status
 
-Phase 0 (repository scaffolding) and Phase 1 (GameplayKit game model: `TicTacToeBoard`/
-`TicTacToeGameModel`/`TicTacToeMatch`, AI difficulty strategists, `GKStateMachine` turn flow) are
-complete, both fully unit-tested (16 tests/platform) — see `docs/ROADMAP.md` Phase 1 for a real
-OSS/Apple discrepancy the iOS-first implementation order caught, and fixed upstream in
-`bitzgroup/GameplayKit` itself. No SpriteKit/UI
-wiring yet — that's Phase 2. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and
-progress checklist; update this section (and that file's checkboxes) as phases land.
+Phase 0 (repository scaffolding), Phase 1 (GameplayKit game model: `TicTacToeBoard`/
+`TicTacToeGameModel`/`TicTacToeMatch`, AI difficulty strategists, `GKStateMachine` turn flow), and
+Phase 2 (SpriteKit board rendering & input: `MenuScene`/`GameScene`, marks as `GKEntity` +
+`GKSKNodeComponent`, touch handling, win-line pulse, `en`/`ja` localization) are complete on both
+platforms, both fully unit-tested (16 tests/platform) and visually verified (simulator/device
+screenshots). Phase 3's app-shell wiring (`TicTacToeApp.swift`/`MainActivity.kt` presenting
+`MenuScene` at launch) is also done; its "playable start-to-finish at all three difficulties" item
+is still open. See `docs/ROADMAP.md` Phase 1 for a real OSS/Apple discrepancy the iOS-first
+implementation order caught, fixed upstream in `bitzgroup/GameplayKit` itself, and Phase 2 for two
+more (`bitzgroup/GKSKBridge`'s `GKScene.entities`, `bitzgroup/SpriteKit`'s missing `SKScene.view`/
+`SKViewState` transition overload). See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan
+and progress checklist; update this section (and that file's checkboxes) as phases land.
 
 ## Project structure
 

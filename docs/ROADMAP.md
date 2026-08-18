@@ -101,28 +101,72 @@ Implemented independently against Apple's `SpriteKit.framework`/`GameplayKit.fra
 `jp.co.bitz.spritekit`/`jp.co.bitz.spritekit.compose`/`jp.co.bitz.gkskbridge` (Android) from
 `docs/GAME_DESIGN.md`'s "Presentation" and "Marks as entities" sections.
 
-- [ ] `GameScene`: 3×3 grid (`SKShapeNode` strokes), 9 tappable per-cell `SKShapeNode`s
-- [ ] `GameScene` owns a `GKScene` (`rootNode` = itself); `TicTacToeMarkEntity` (`GKEntity`) +
-      `TicTacToeMarkComponent` (`GKComponent`) + `GKSKNodeComponent` per placed mark, appended to
-      `gkScene.entities` — see `docs/GAME_DESIGN.md`'s "Marks as entities" section
-- [ ] `X`/`O` marks as stroked `SKShapeNode` paths (not label glyphs — see the rationale in
+**Both platforms implemented and verified.** iOS: `xcodebuild build`/`test` green, all 16 Phase 0/1
+unit tests still passing, visually confirmed via simulator screenshot — menu, empty board, the
+deferred "CPU thinking…" reveal when the coin toss gives the CPU the opening move, and a placed
+mark. Android: `./gradlew :app:ktlintCheck :app:detekt :app:assembleDebug :app:testDebugUnitTest`
+green, same 16 tests passing, visually confirmed on a physical device — menu, `crossFade` into
+`GameScene`, tap-to-place with the AI's deferred reveal, win-line-ready state, and New Game
+re-presenting a fresh board via `crossFade` again.
+
+**iOS finding, fixed upstream in `bitzgroup/GKSKBridge`:** Apple's real `GKScene.entities` is a
+get-only property — entities are added via `addEntity(_:)`/`removeEntity(_:)`, not by appending to
+the array directly. `bitzgroup/GKSKBridge`'s `GKScene.entities` was a plain `MutableList` (settable/
+appendable directly), a real API-shape gap from Apple's own shape — fixed there to match:
+`entities` is now `List<GKEntity>` (get-only), mutated via new `addEntity(_:)`/`removeEntity(_:)`
+methods. `docs/GAME_DESIGN.md`'s "Marks as entities" section was corrected to match.
+
+**Android finding, fixed upstream in `bitzgroup/SpriteKit`:** two real gaps surfaced getting
+`MenuScene`/`GameScene`'s `SKTransition.crossFade` navigation working the same way on both
+platforms (a scene calling `view?.presentScene(nextScene, transition)` on itself, matching iOS's
+`self.view?.presentScene(_:transition:)` exactly):
+
+1. `SKScene` had no `view: SKView?` back-reference at all — Apple's real `SKScene.view` (set by
+   whichever `SKView` is presenting it, `nil` once another scene replaces it) wasn't implemented,
+   so there was no way for a scene to reach its own presenting view from inside itself. Added
+   `SKScene.view` (get-only from outside; `SKView.presentScene`'s two overloads now keep it in
+   sync on both the outgoing and incoming scene).
+2. `:spritekit-compose`'s `SKViewState.presentScene(scene: SKScene)` had no
+   `presentScene(scene, transition)` overload — `docs/ARCHITECTURE.md` in that repo already
+   documented this call existing on `SKViewState`, but the implementation hadn't caught up. Added
+   the missing overload, delegating to the wrapped classic `SKView`'s own transition-aware
+   `presentScene`, matching what that doc already promised.
+
+**Android finding, fixed in this repo's own app code (not an OSS/Apple discrepancy — a bug in this
+app's Kotlin port):** `TicTacToeBoard` is a Kotlin `class` (a reference type) on Android, unlike
+iOS's Swift `struct` (a value type). `GameScene`'s "diff the board before/after to find the AI's
+newly-occupied cell" logic (needed because `AITurnState.didEnter` applies the AI's move
+synchronously — see Phase 1) relied on `val boardBefore = match.gameModel.board` capturing an
+independent snapshot, which is true on iOS (struct, copied on assignment) but not on Android (class
+reference — `boardBefore` silently aliased the same mutable object `match.start()`/
+`applyHumanMove` go on to mutate in place, making the diff always come up empty). Fixed by using
+`TicTacToeBoard.copy()` (already existed, used elsewhere for `GKGameModel.copy()`) to take a real
+snapshot. Caught by visual testing on a real device (the AI's move was applied to the model but
+never rendered) rather than by a unit test — a good argument for adding a `GameScene`-level test
+around this diffing logic if Phase 4's parity pass has room for one.
+
+- [x] `GameScene`: 3×3 grid (`SKShapeNode` strokes), 9 tappable per-cell `SKShapeNode`s
+- [x] `GameScene` owns a `GKScene` (`rootNode` = itself); `TicTacToeMarkEntity` (`GKEntity`) +
+      `TicTacToeMarkComponent` (`GKComponent`) + `GKSKNodeComponent` per placed mark, handed to the
+      `GKScene` via `addEntity(_:)` — see `docs/GAME_DESIGN.md`'s "Marks as entities" section
+- [x] `X`/`O` marks as stroked `SKShapeNode` paths (not label glyphs — see the rationale in
       `docs/GAME_DESIGN.md`), owned by their entity's `GKSKNodeComponent`, placement pop-in
       `SKAction`
-- [ ] Status `SKLabelNode` (turn / thinking / result) and score row (`X` / `O` / `Draws`,
+- [x] Status `SKLabelNode` (turn / thinking / result) and score row (`X` / `O` / `Draws`,
       in-memory only)
-- [ ] Win-line pulse animation on the three winning cells
-- [ ] `MenuScene`: difficulty picker, coin toss, `SKTransition.crossFade` into `GameScene`
-- [ ] New Game: re-present a fresh `GameScene` via `SKTransition.crossFade`
-- [ ] Wire `HumanTurnState`'s tap handling and `AITurnState`'s "thinking" delay (Phase 1) into the
+- [x] Win-line pulse animation on the three winning cells
+- [x] `MenuScene`: difficulty picker, coin toss, `SKTransition.crossFade` into `GameScene`
+- [x] New Game: re-present a fresh `GameScene` via `SKTransition.crossFade`
+- [x] Wire `HumanTurnState`'s tap handling and `AITurnState`'s "thinking" delay (Phase 1) into the
       scene
-- [ ] Localization: `en` base + `ja` translation for every key in `docs/GAME_DESIGN.md`'s
+- [x] Localization: `en` base + `ja` translation for every key in `docs/GAME_DESIGN.md`'s
       Localization table (iOS: `Localizable.xcstrings`; Android: `values/strings.xml` +
       `values-ja/strings.xml`) — no label hardcoded into a scene
 
 ## Phase 3 — Platform app shells
 
-- [ ] iOS: `TicTacToeApp.swift` presents `MenuScene` at launch inside an `SKView`/`SpriteView`
-- [ ] Android: `MainActivity.kt` presents `MenuScene` at launch inside `spritekit-compose`'s
+- [x] iOS: `TicTacToeApp.swift` presents `MenuScene` at launch inside an `SKView`/`SpriteView`
+- [x] Android: `MainActivity.kt` presents `MenuScene` at launch inside `spritekit-compose`'s
       `SKView`
 - [ ] Both apps are playable start-to-finish end to end (menu → game → win/loss/draw → new game)
       at all three difficulties

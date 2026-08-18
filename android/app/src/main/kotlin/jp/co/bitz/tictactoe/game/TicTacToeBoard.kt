@@ -33,15 +33,21 @@ public class TicTacToeBoard private constructor(
     public var activeMark: Mark = activeMark
         private set
 
+    /**
+     * The 3 cell indices of the completed winning line, or null if there isn't one yet. Lets the
+     * SpriteKit layer highlight the line that won — see docs/GAME_DESIGN.md's "Win highlight"
+     * bullet.
+     */
+    public val winningLine: List<Int>?
+        get() =
+            WINNING_LINES.firstOrNull { line ->
+                val first = cells[line[0]] ?: return@firstOrNull false
+                line.all { cells[it] == first }
+            }
+
     /** The mark occupying all three cells of a winning line, or null if there isn't one yet. */
     public val winner: Mark?
-        get() {
-            for (line in WINNING_LINES) {
-                val first = cells[line[0]] ?: continue
-                if (line.all { cells[it] == first }) return first
-            }
-            return null
-        }
+        get() = winningLine?.let { cells[it[0]] }
 
     /** Empty cell indices, in ascending order, or empty once the game has ended. */
     public val legalMoves: List<Int>
