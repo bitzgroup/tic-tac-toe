@@ -18,6 +18,25 @@ Both apps' UI is localized — base language English, with a full Japanese local
 repo's own documentation stays English-only, as is conventional for public OSS. See
 [`docs/GAME_DESIGN.md`](docs/GAME_DESIGN.md)'s "Localization" section for details.
 
+## Screenshots
+
+Same layout, same grid, same win/loss/draw logic, same AI — side by side, on Apple's real
+SpriteKit + GameplayKit and their Kotlin/Android ports.
+
+<table>
+<tr><th></th><th>iOS</th><th>Android</th></tr>
+<tr>
+<td><strong>Menu</strong></td>
+<td><img src="docs/screenshots/ios_menu.png" width="220" alt="iOS menu screen"></td>
+<td><img src="docs/screenshots/android_menu.png" width="220" alt="Android menu screen"></td>
+</tr>
+<tr>
+<td><strong>Gameplay</strong></td>
+<td><img src="docs/screenshots/ios_game.png" width="220" alt="iOS gameplay screen"></td>
+<td><img src="docs/screenshots/android_game.png" width="220" alt="Android gameplay screen"></td>
+</tr>
+</table>
+
 ## Status
 
 Phase 0 (repository scaffolding), Phase 1 (GameplayKit game model, AI, turn state machine),

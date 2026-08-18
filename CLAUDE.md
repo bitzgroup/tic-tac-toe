@@ -25,7 +25,9 @@ shells presenting `MenuScene` at launch; both apps verified playable start-to-fi
 difficulties), Phase 4 (parity verification: Hard-mode move-for-move parity tests, entity-lifecycle
 tests, and a full `en`/`ja` visual pass on an iOS Simulator and an Android Emulator), and Phase 5
 (polish: win-particle burst via `SKEmitterNode`, tap/win sound effects, app icons on both
-platforms) are complete on both platforms, both fully unit-tested (23 tests/platform on iOS incl.
+platforms), and Phase 6 (documentation & release — README screenshots, `v0.1.0` tagged and
+released, alongside `0.1.0` releases of `bitzgroup/SpriteKit`/`GameplayKit`/`GKSKBridge`) are
+complete on both platforms, both fully unit-tested (23 tests/platform on iOS incl.
 `GameScenePlaythroughTests`/`TicTacToeHardStrategistParityTests`, 20 on Android) and visually/
 manually verified (simulator/emulator screenshots, on-device playthroughs). See `docs/ROADMAP.md`
 Phase 1 for a real OSS/Apple discrepancy the iOS-first implementation order caught, fixed upstream
