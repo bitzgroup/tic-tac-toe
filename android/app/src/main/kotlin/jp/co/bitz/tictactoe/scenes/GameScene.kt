@@ -1,14 +1,19 @@
 package jp.co.bitz.tictactoe.scenes
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Path
 import jp.co.bitz.gkskbridge.GKScene
 import jp.co.bitz.spritekit.SKAction
+import jp.co.bitz.spritekit.SKEmitterNode
 import jp.co.bitz.spritekit.SKLabelNode
 import jp.co.bitz.spritekit.SKScene
 import jp.co.bitz.spritekit.SKSceneScaleMode
 import jp.co.bitz.spritekit.SKShapeNode
+import jp.co.bitz.spritekit.SKTexture
 import jp.co.bitz.spritekit.SKTransition
 import jp.co.bitz.spritekit.Vector2
 import jp.co.bitz.tictactoe.game.Difficulty
@@ -18,6 +23,7 @@ import jp.co.bitz.tictactoe.game.TicTacToeMatch
 import jp.co.bitz.tictactoe.game.TicTacToePlayer
 import jp.co.bitz.tictactoe.game.entities.TicTacToeMarkEntity
 import jp.co.bitz.tictactoe.game.states.HumanTurnState
+import java.io.File
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -53,12 +59,25 @@ public class GameScene(
         const val WIN_PULSE_SCALE = 1.15f
         val WIN_PULSE_DURATION = 150.milliseconds
         const val WIN_PULSE_COUNT = 2
+
+        // Win-particle burst — see docs/GAME_DESIGN.md's "Polish (Phase 5)" section.
+        const val PARTICLE_TEXTURE_DIAMETER = 12f
+        const val PARTICLE_BIRTH_RATE = 200f
+        const val NUM_PARTICLES_TO_EMIT = 16
+        const val PARTICLE_LIFETIME = 0.6f
+        const val PARTICLE_LIFETIME_RANGE = 0.2f
+        const val PARTICLE_SPEED = 120f
+        const val PARTICLE_SPEED_RANGE = 40f
+        const val PARTICLE_ALPHA_SPEED = -1.6f
+        val EMITTER_REMOVAL_DELAY = 800.milliseconds
     }
 
     private val strings = Strings(context)
     private val match = TicTacToeMatch.create(difficulty, humanMark)
     private val gkScene = GKScene()
     private val markNodesByCell = mutableMapOf<Int, SKShapeNode>()
+    private var cachedParticleTexture: SKTexture? = null
+    private val soundFilePathCache = mutableMapOf<String, String>()
 
     private lateinit var statusLabel: SKLabelNode
     private lateinit var scoreLabel: SKLabelNode
@@ -258,6 +277,7 @@ public class GameScene(
                 ),
             ),
         )
+        run(SKAction.playSoundFileNamed(soundFilePath("tap.mp3"), waitForCompletion = false))
     }
 
     private fun makeMarkNode(mark: Mark): SKShapeNode {
@@ -295,7 +315,11 @@ public class GameScene(
 
     private fun handleGameOver() {
         val board = match.gameModel.board
-        board.winningLine?.let { pulseWinningLine(it) }
+        board.winningLine?.let {
+            pulseWinningLine(it)
+            spawnWinParticles(it)
+            run(SKAction.playSoundFileNamed(soundFilePath("win.mp3"), waitForCompletion = false))
+        }
 
         when (val winner = board.winner) {
             Mark.X -> {
@@ -329,6 +353,77 @@ public class GameScene(
             markNodesByCell[cellIndex]?.run(repeated)
         }
     }
+
+    /**
+     * One [SKEmitterNode] burst per winning-line cell — see docs/GAME_DESIGN.md's
+     * "Polish (Phase 5)" section for the exact parameters and why each one was chosen.
+     */
+    private fun spawnWinParticles(line: List<Int>) {
+        for (cellIndex in line) {
+            val emitter =
+                SKEmitterNode().apply {
+                    particleTexture = particleTexture()
+                    particleSize = Vector2(Layout.PARTICLE_TEXTURE_DIAMETER, Layout.PARTICLE_TEXTURE_DIAMETER)
+                    particleBirthRate = Layout.PARTICLE_BIRTH_RATE
+                    numParticlesToEmit = Layout.NUM_PARTICLES_TO_EMIT
+                    particleLifetime = Layout.PARTICLE_LIFETIME
+                    particleLifetimeRange = Layout.PARTICLE_LIFETIME_RANGE
+                    particleSpeed = Layout.PARTICLE_SPEED
+                    particleSpeedRange = Layout.PARTICLE_SPEED_RANGE
+                    emissionAngleRange = (2.0 * Math.PI).toFloat()
+                    particleAlpha = 1f
+                    particleAlphaSpeed = Layout.PARTICLE_ALPHA_SPEED
+                    particleColor = Color.WHITE
+                    position = cellPosition(cellIndex)
+                }
+            addChild(emitter)
+            emitter.run(
+                SKAction.sequence(
+                    listOf(
+                        SKAction.wait(Layout.EMITTER_REMOVAL_DELAY),
+                        SKAction.removeFromParent(),
+                    ),
+                ),
+            )
+        }
+    }
+
+    /**
+     * A filled white circle, rendered once rather than shipped as an image asset — see
+     * docs/GAME_DESIGN.md's "Polish (Phase 5)" section.
+     */
+    private fun particleTexture(): SKTexture {
+        cachedParticleTexture?.let { return it }
+        val diameter = Layout.PARTICLE_TEXTURE_DIAMETER.toInt()
+        val bitmap = Bitmap.createBitmap(diameter, diameter, Bitmap.Config.ARGB_8888)
+        val paint =
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = Color.WHITE
+                style = Paint.Style.FILL
+            }
+        Canvas(bitmap).drawOval(0f, 0f, diameter.toFloat(), diameter.toFloat(), paint)
+        return SKTexture(bitmap).also { cachedParticleTexture = it }
+    }
+
+    /**
+     * Resolves [assetName] (e.g. `"tap.mp3"`) to a real filesystem path
+     * `SKAction.playSoundFileNamed` can hand to `android.media.MediaPlayer.setDataSource
+     * (String)` — see docs/GAME_DESIGN.md's "Polish (Phase 5)" section for why this is needed
+     * (bitzgroup/SpriteKit forwards the string as-is to `MediaPlayer`, which can't read
+     * `assets/` directly from a plain path string) rather than the `assets/` file itself.
+     * Copies once per launch into [Context.getCacheDir] — cheap for these two small clips, and
+     * avoids re-copying on every placed mark / game over.
+     */
+    private fun soundFilePath(assetName: String): String =
+        soundFilePathCache.getOrPut(assetName) {
+            val outFile = File(context.cacheDir, assetName)
+            if (!outFile.exists()) {
+                context.assets.open(assetName).use { input ->
+                    outFile.outputStream().use { output -> input.copyTo(output) }
+                }
+            }
+            outFile.absolutePath
+        }
 
     // endregion
 

@@ -22,17 +22,21 @@ Phase 0 (repository scaffolding), Phase 1 (GameplayKit game model: `TicTacToeBoa
 Phase 2 (SpriteKit board rendering & input: `MenuScene`/`GameScene`, marks as `GKEntity` +
 `GKSKNodeComponent`, touch handling, win-line pulse, `en`/`ja` localization), Phase 3 (platform app
 shells presenting `MenuScene` at launch; both apps verified playable start-to-finish at all three
-difficulties), and Phase 4 (parity verification: Hard-mode move-for-move parity tests, entity-
-lifecycle tests, and a full `en`/`ja` visual pass on an iOS Simulator and an Android Emulator) are
-complete on both platforms, both fully unit-tested (23 tests/platform on iOS incl.
+difficulties), Phase 4 (parity verification: Hard-mode move-for-move parity tests, entity-lifecycle
+tests, and a full `en`/`ja` visual pass on an iOS Simulator and an Android Emulator), and Phase 5
+(polish: win-particle burst via `SKEmitterNode`, tap/win sound effects, app icons on both
+platforms) are complete on both platforms, both fully unit-tested (23 tests/platform on iOS incl.
 `GameScenePlaythroughTests`/`TicTacToeHardStrategistParityTests`, 20 on Android) and visually/
 manually verified (simulator/emulator screenshots, on-device playthroughs). See `docs/ROADMAP.md`
 Phase 1 for a real OSS/Apple discrepancy the iOS-first implementation order caught, fixed upstream
 in `bitzgroup/GameplayKit` itself; Phase 2 for two more (`bitzgroup/GKSKBridge`'s
 `GKScene.entities`, `bitzgroup/SpriteKit`'s missing `SKScene.view`/`SKViewState` transition
-overload); and Phase 4 for a real Android-only bug the parity pass itself caught and fixed (the
+overload); Phase 4 for a real Android-only bug the parity pass itself caught and fixed (the
 `score_row` string's double spaces being collapsed to single spaces by Android's resource
-compiler). See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist;
+compiler); and Phase 5 for another Android-only bug on-device audio verification caught (the
+commonly-cited `file:///android_asset/…` `MediaPlayer` trick failing silently at runtime despite a
+clean build — fixed by copying sound assets to `Context.getCacheDir()` and playing from that real
+path instead). See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist;
 update this section (and that file's checkboxes) as phases land.
 
 ## Project structure
