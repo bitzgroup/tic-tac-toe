@@ -29,12 +29,17 @@ final class GameScene: SKScene {
 
     private let difficulty: Difficulty
     private let humanMark: Mark
-    private let match: TicTacToeMatch
+    /// Not `private`: `GameScenePlaythroughTests` (`@testable import`) drives full games by
+    /// polling this directly, the same way `GameScene` itself does, rather than needing OS-level
+    /// touch simulation the test environment doesn't have.
+    let match: TicTacToeMatch
     private let gkScene = GKScene()
     private let score: Score
 
-    private var statusLabel: SKLabelNode!
-    private var scoreLabel: SKLabelNode!
+    /// Not `private` — see `match`'s doc.
+    var statusLabel: SKLabelNode!
+    /// Not `private` — see `match`'s doc.
+    var scoreLabel: SKLabelNode!
     private var markNodesByCell: [Int: SKShapeNode] = [:]
 
     init(size: CGSize, difficulty: Difficulty, humanMark: Mark, score: Score = Score()) {
