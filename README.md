@@ -22,9 +22,12 @@ repo's own documentation stays English-only, as is conventional for public OSS. 
 
 Phase 0 (repository scaffolding), Phase 1 (GameplayKit game model, AI, turn state machine),
 Phase 2 (SpriteKit board rendering & input — `MenuScene`/`GameScene`, marks as entities, `en`/`ja`
-localization), and Phase 3 (platform app shells; both apps verified playable start-to-finish at
-all three difficulties) are complete on both platforms, fully unit-tested and visually/manually
-verified. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist.
+localization), Phase 3 (platform app shells; both apps verified playable start-to-finish at all
+three difficulties), Phase 4 (parity verification — Hard-mode move-for-move parity tests,
+entity-lifecycle tests, a full `en`/`ja` visual pass on both platforms), and Phase 5 (polish —
+win-particle burst, tap/win sound effects, app icons) are complete on both platforms, fully
+unit-tested and visually/manually verified, including on physical devices. See
+[`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist.
 
 ## Repository layout
 

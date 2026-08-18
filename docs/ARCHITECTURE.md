@@ -83,7 +83,7 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   ├── TicTacToe.xcodeproj/
   ├── TicTacToe/                 # app target sources
   │   ├── TicTacToeApp.swift        # SwiftUI App entry point, hosts the SKView
-  │   ├── ContentView.swift          # Phase 0 placeholder — replaced by MenuScene in Phase 2/3
+  │   ├── ContentView.swift          # hosts MenuScene via SwiftUI's SpriteView
   │   ├── Game/                     # GameplayKit layer
   │   │   ├── TicTacToeBoard.swift         # rules only — no GameplayKit dependency (see GAME_DESIGN.md)
   │   │   ├── TicTacToePlayer.swift        # GKGameModelPlayer
@@ -96,9 +96,14 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   │   │       └── TicTacToeMarkComponent.swift  # GKComponent: player + cellIndex
   │   ├── Scenes/                   # SpriteKit layer
   │   │   ├── MenuScene.swift
-  │   │   └── GameScene.swift
+  │   │   ├── GameScene.swift
+  │   │   ├── CellNode.swift            # one tappable SKShapeNode per board cell
+  │   │   ├── Score.swift               # in-memory X/O/draw session counter
+  │   │   └── Strings.swift             # String(localized:) lookups — see "Localization" below
   │   └── Resources/
-  │       └── Localizable.xcstrings # String Catalog, en base + ja — see "Localization" below
+  │       ├── Localizable.xcstrings     # String Catalog, en base + ja — see "Localization" below
+  │       ├── Sounds/                   # tap.mp3/win.mp3 — see GAME_DESIGN.md's "Polish (Phase 5)"
+  │       └── Assets.xcassets/          # AppIcon.appiconset — see GAME_DESIGN.md's "Polish (Phase 5)"
   └── TicTacToeTests/             # XCTest — see "Verifying parity" below
   ```
 
@@ -163,16 +168,27 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   │   │   ├── TicTacToePlayer.kt          # GKGameModelPlayer
   │   │   ├── TicTacToeMove.kt            # GKGameModelUpdate
   │   │   ├── TicTacToeGameModel.kt       # GKGameModel, wraps TicTacToeBoard
+  │   │   ├── TicTacToeMatch.kt           # Difficulty, strategist selection, coin toss, GKStateMachine setup
   │   │   ├── states/                     # GKState subclasses
   │   │   └── entities/                   # GKEntity/GKComponent — needs GKSKBridge, see GAME_DESIGN.md
   │   │       ├── TicTacToeMarkEntity.kt       # GKEntity: one per placed mark
   │   │       └── TicTacToeMarkComponent.kt    # GKComponent: player + cellIndex
   │   └── scenes/                   # SpriteKit layer
   │       ├── MenuScene.kt
-  │       └── GameScene.kt
+  │       ├── GameScene.kt
+  │       ├── CellNode.kt               # one tappable SKShapeNode per board cell
+  │       ├── Score.kt                  # in-memory X/O/draw session counter
+  │       └── Strings.kt                # context.getString(...) lookups — see "Localization" below
+  ├── assets/                       # tap.mp3/win.mp3 — see GAME_DESIGN.md's "Polish (Phase 5)"
   └── res/
       ├── values/strings.xml       # en base strings — see "Localization" below
-      └── values-ja/strings.xml    # ja translations, same keys
+      ├── values-ja/strings.xml    # ja translations, same keys
+      ├── values/colors.xml        # ic_launcher_background/foreground
+      ├── mipmap-anydpi-v26/       # adaptive icon (API 26+) — background/foreground layers
+      ├── mipmap/                  # legacy non-adaptive icon fallback (API 24–25)
+      └── drawable/ic_launcher_foreground.xml  # adaptive icon's foreground vector
+
+  app/src/test/kotlin/jp/co/bitz/tictactoe/game/   # JUnit — see "Verifying parity" below
   ```
 
 - `minSdk` 24 / `compileSdk`/`targetSdk` 34, Kotlin 2.0+ — matching the submodules' own
