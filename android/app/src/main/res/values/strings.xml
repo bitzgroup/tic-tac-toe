@@ -10,6 +10,11 @@
     <string name="status_you_win">You win!</string>
     <string name="status_cpu_wins">CPU wins</string>
     <string name="status_draw">Draw</string>
-    <string name="score_row">X: %1$d  O: %2$d  Draws: %3$d</string>
+    <!-- Two literal spaces separate each score, matching docs/GAME_DESIGN.md's Localization
+         table and iOS's Localizable.xcstrings exactly. A plain second space here would be
+         collapsed to one by Android's string-resource whitespace normalization at build time
+         (a real Android/iOS rendering discrepancy this app's own Phase 4 parity pass caught —
+         see docs/ROADMAP.md), so the second space of each pair is escaped as \u0020 to survive that normalization. -->
+    <string name="score_row">X: %1$d \u0020O: %2$d \u0020Draws: %3$d</string>
     <string name="new_game">New Game</string>
 </resources>

@@ -33,7 +33,9 @@ final class GameScene: SKScene {
     /// polling this directly, the same way `GameScene` itself does, rather than needing OS-level
     /// touch simulation the test environment doesn't have.
     let match: TicTacToeMatch
-    private let gkScene = GKScene()
+    /// Not `private` — see `match`'s doc; lets `GameScenePlaythroughTests` assert the "no stale
+    /// entities" half of `docs/GAME_DESIGN.md`'s "Marks as entities" parity checklist item.
+    let gkScene = GKScene()
     private let score: Score
 
     /// Not `private` — see `match`'s doc.

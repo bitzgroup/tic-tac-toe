@@ -11,6 +11,7 @@
 		0FFAC7CC789B87B77C4B0F32 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B58F32345774E4B9660BA8F /* GameplayKit.framework */; };
 		127BA6C817366DD44AE80793 /* TicTacToeBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450F612B1AA82CC46C2AAB46 /* TicTacToeBoardTests.swift */; };
 		14309156E2F4894F6BE38301 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 86E7EA53D85625E1CE54B073 /* Localizable.xcstrings */; };
+		153D8EC5AB42DB3428E9049E /* TicTacToeHardStrategistParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FBF29FF27F06565323EA76 /* TicTacToeHardStrategistParityTests.swift */; };
 		24E5D248C6B8B32D20DAC793 /* GameOverState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ADDAA98AC38282222B742A /* GameOverState.swift */; };
 		25262405C7AA219C37FD16FF /* TicTacToeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27183FDCF95623562E0C2741 /* TicTacToeApp.swift */; };
 		269C9521C233BB2EE5647912 /* TicTacToeMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3552B78124F8A02219AA6B /* TicTacToeMatch.swift */; };
@@ -49,6 +50,7 @@
 		0D80E2AEDEC022CD3F469426 /* TicTacToePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToePlayer.swift; sourceTree = "<group>"; };
 		10E0859E5DA7E389123B0A1A /* TicTacToeGameModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeGameModelTests.swift; sourceTree = "<group>"; };
 		13648B8A99BBB9D87D896C61 /* TurnBeginState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnBeginState.swift; sourceTree = "<group>"; };
+		24FBF29FF27F06565323EA76 /* TicTacToeHardStrategistParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeHardStrategistParityTests.swift; sourceTree = "<group>"; };
 		27183FDCF95623562E0C2741 /* TicTacToeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeApp.swift; sourceTree = "<group>"; };
 		347281F0057617CB6C554F86 /* TicTacToeMarkComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeMarkComponent.swift; sourceTree = "<group>"; };
 		450F612B1AA82CC46C2AAB46 /* TicTacToeBoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeBoardTests.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				71EE03437CC26EC038D4FC70 /* GameScenePlaythroughTests.swift */,
 				450F612B1AA82CC46C2AAB46 /* TicTacToeBoardTests.swift */,
 				10E0859E5DA7E389123B0A1A /* TicTacToeGameModelTests.swift */,
+				24FBF29FF27F06565323EA76 /* TicTacToeHardStrategistParityTests.swift */,
 				551CE0C21388F5EF0F5C9906 /* TicTacToeHardStrategistTests.swift */,
 			);
 			path = TicTacToeTests;
@@ -286,6 +289,7 @@
 				C763272B571696BA804B0BF6 /* GameScenePlaythroughTests.swift in Sources */,
 				127BA6C817366DD44AE80793 /* TicTacToeBoardTests.swift in Sources */,
 				9B7661BD3311E2A55B4DFBD9 /* TicTacToeGameModelTests.swift in Sources */,
+				153D8EC5AB42DB3428E9049E /* TicTacToeHardStrategistParityTests.swift in Sources */,
 				CAA1777D8292A93DBDF769C9 /* TicTacToeHardStrategistTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

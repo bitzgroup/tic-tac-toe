@@ -1,3 +1,4 @@
+import GameplayKit
 import XCTest
 @testable import TicTacToe
 
@@ -38,31 +39,60 @@ final class GameScenePlaythroughTests: XCTestCase {
         let newGame = GameScene(size: CGSize(width: 1080, height: 1920), difficulty: .hard, humanMark: .x)
         XCTAssertEqual(newGame.match.gameModel.board.legalMoves.count, 9, "New Game should start from an empty board")
         XCTAssertFalse(newGame.match.gameModel.board.isGameOver)
+        XCTAssertTrue(newGame.gkScene.entities.isEmpty, "New Game should leave no stale mark entities behind")
+    }
+
+    /// `docs/GAME_DESIGN.md`'s "Marks as entities" section, and its parity checklist item: every
+    /// placed mark is a `GKEntity` with a `GKSKNodeComponent` wrapping its node, added to the
+    /// scene's `GKScene.entities` — not a bare node. See `docs/ROADMAP.md` Phase 4.
+    ///
+    /// Only checks *human* moves' entities: the AI's own `placeMark` call is wrapped in the
+    /// deferred `SKAction` this headless test never runs (see the class doc), so an AI move's
+    /// entity is never created within this test even though `handleCellTapped`'s human-side
+    /// `placeMark` call — the one this test exercises — runs synchronously either way.
+    func testEveryPlacedMarkIsAnEntityWithAGKSKNodeComponent() {
+        let scene = GameScene(size: CGSize(width: 1080, height: 1920), difficulty: .hard, humanMark: .x)
+        let humanMoveCount = playToCompletion(scene, difficulty: .hard)
+
+        XCTAssertEqual(scene.gkScene.entities.count, humanMoveCount, "one GKEntity per placed (human) mark")
+        XCTAssertGreaterThan(humanMoveCount, 0)
+
+        for entity in scene.gkScene.entities {
+            guard let nodeComponent = entity.component(ofType: GKSKNodeComponent.self) else {
+                XCTFail("entity missing GKSKNodeComponent")
+                continue
+            }
+            XCTAssertTrue(scene.children.contains(nodeComponent.node), "entity's node should be in the scene's node tree")
+            XCTAssertNotNil(entity.component(ofType: TicTacToeMarkComponent.self), "entity missing TicTacToeMarkComponent")
+        }
     }
 
     /// Repeatedly taps the first legal cell whenever it's the human's turn, until the game ends.
     /// Always terminates within 9 moves — deterministic regardless of AI difficulty/randomness.
-    private func playToCompletion(_ scene: GameScene, difficulty: Difficulty, file: StaticString = #filePath, line: UInt = #line) {
+    /// Returns the number of human moves made.
+    @discardableResult
+    private func playToCompletion(_ scene: GameScene, difficulty: Difficulty, file: StaticString = #filePath, line: UInt = #line) -> Int {
         var safetyCounter = 0
         while !scene.match.gameModel.board.isGameOver {
             safetyCounter += 1
             guard safetyCounter <= 9 else {
                 XCTFail("\(difficulty): playthrough did not terminate within 9 human moves", file: file, line: line)
-                return
+                return safetyCounter - 1
             }
             guard scene.match.stateMachine.currentState is HumanTurnState else {
                 XCTFail("\(difficulty): expected HumanTurnState while the game isn't over", file: file, line: line)
-                return
+                return safetyCounter - 1
             }
             guard let cellIndex = scene.match.gameModel.board.legalMoves.first else {
                 XCTFail("\(difficulty): HumanTurnState but no legal moves left", file: file, line: line)
-                return
+                return safetyCounter - 1
             }
             guard let cellNode = scene.children.compactMap({ $0 as? CellNode }).first(where: { $0.cellIndex == cellIndex }) else {
                 XCTFail("\(difficulty): missing CellNode for cell \(cellIndex)", file: file, line: line)
-                return
+                return safetyCounter - 1
             }
             cellNode.touchesBegan([], with: nil)
         }
+        return safetyCounter
     }
 }

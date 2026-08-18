@@ -187,14 +187,73 @@ around this diffing logic if Phase 4's parity pass has room for one.
 
 ## Phase 4 — Parity verification
 
-- [ ] Walk the full checklist in `docs/GAME_DESIGN.md`'s "Parity checklist" section against both
-      apps, same device pixel density class on each side
-- [ ] Confirm Hard-mode AI is unbeatable and move-for-move identical to the other platform away
-      from documented ties
-- [ ] Confirm every localized string (`en` and `ja`) renders correctly on both apps
-- [ ] Confirm every placed mark is a `GKEntity`/`GKSKNodeComponent` (not a directly-added node) on
-      both apps, with no stale entities left after New Game
-- [ ] Side-by-side screenshots/recording of both apps for the README
+**Complete.** Both code-level/automated-test verification and an on-device visual pass (iOS
+Simulator `iPhone 16`/iOS 18.5, Android Emulator `tictactoe_test`) are done, at both `en` and `ja`
+locales, for all three difficulties.
+
+- [x] Walk the full checklist in `docs/GAME_DESIGN.md`'s "Parity checklist" section against both
+      apps. Code-level pieces (AI strategist config, `gameModelUpdates(for:)` ascending tie-break
+      order, the `en`/`ja` string tables, entity wiring) are covered by the items below; the visual
+      pass drove full games (menu → difficulty pick → coin toss → placing marks → block/win/draw →
+      score row → New Game) on both an iOS Simulator and an Android Emulator at `en` and `ja`,
+      screenshotting each step. Grid/mark/button layout, colors, and the `crossFade`
+      `MenuScene`→`GameScene`/New Game transition all matched. One real, non-obvious difference
+      observed and accepted rather than fixed: at the same nominal point size, iOS's default system
+      font (San Francisco) renders visibly thinner than Android's (Roboto) for the Latin `en`
+      strings — Japanese glyphs on both platforms read close in weight since CJK faces are
+      inherently heavier at a given size. Colors/values are identical (`fontColor` is `.white`/
+      `Color.WHITE` on both); the visible difference is each OS's own font rendering, not something
+      this app controls, so it's recorded here rather than chased.
+      **Real bug found and fixed by this pass:** Android's `score_row` string
+      (`X: %1$d  O: %2$d  Draws: %3$d`) rendered with single spaces between segments instead of the
+      double spaces `docs/GAME_DESIGN.md`'s Localization table specifies and iOS's
+      `Localizable.xcstrings` already renders correctly — confirmed via `aapt dump strings` that
+      Android's resource compiler collapses a run of 2+ literal whitespace characters in a plain
+      string resource down to one, a well-known Android/AAPT behavior with no iOS equivalent (`.xcstrings`
+      preserves whitespace exactly as authored). Fixed in both
+      `android/app/src/main/res/values/strings.xml` and `values-ja/strings.xml` by escaping the
+      second space of each pair as `\u0020`, which survives the collapse; re-verified byte-identical
+      to iOS via `aapt dump strings` after rebuilding, and visually confirmed on the emulator.
+- [x] Confirm Hard-mode AI is unbeatable and move-for-move identical to the other platform away
+      from documented ties. `TicTacToeHardStrategistTests`/`Test` (Phase 1) already prove Hard
+      never loses on each platform independently; added
+      `TicTacToeHardStrategistParityTests`/`Test` on both platforms, asserting
+      `GKMinmaxStrategist.bestMoveForActivePlayer()` picks the identical cell at four hand-verified
+      unambiguous positions (the opening move, the reply to a corner opening, and two "block the
+      only threat or lose" positions) — all pass on both platforms.
+      **Investigation finding, not an OSS/Apple discrepancy:** an earlier version of this test
+      compared entire played-out game move traces and found iOS and Android diverging partway
+      through a game. Investigating showed this wasn't a strategist bug: `score(for:)` has no depth
+      discount (`+1`/`-1`/`0` regardless of how many turns a win takes — see
+      `docs/GAME_DESIGN.md`'s "Game model" section), so once Hard has a forced win available, a
+      move that builds a fork scores identically to a move that wins immediately — a genuine tie
+      outside what the "strictly-best-move" parity guarantee promises, not a bug. The test was
+      redesigned around unambiguous positions instead of full-game traces for exactly this reason.
+- [x] Confirm every localized string (`en` and `ja`) renders correctly on both apps. The `en`/`ja`
+      string tables themselves are byte-identical to `docs/GAME_DESIGN.md`'s Localization table on
+      both platforms (`ios/TicTacToe/Resources/Localizable.xcstrings` vs.
+      `android/app/src/main/res/values{,-ja}/strings.xml` — the latter only after the `score_row`
+      fix above). Every key confirmed rendering correctly on-screen, both locales, both apps, via
+      the visual pass above: `menu_title`/`difficulty_*` on `MenuScene`; `status_your_turn`/
+      `status_cpu_thinking`/`status_you_win`/`status_cpu_wins`/`status_draw`/`score_row`/
+      `new_game` on `GameScene`, reached by playing full games (including deliberately losing, to
+      surface `status_cpu_wins`, and playing to a forced draw, to surface `status_draw`). No
+      truncation, wrapping, or missing-glyph boxes at either locale on either platform.
+- [x] Confirm every placed mark is a `GKEntity`/`GKSKNodeComponent` (not a directly-added node) on
+      both apps, with no stale entities left after New Game. iOS: confirmed by code
+      (`GameScene.placeMark`/`TicTacToeMarkEntity`) and by two new
+      `GameScenePlaythroughTests` cases — every human-placed mark is a `GKEntity` with a
+      `GKSKNodeComponent` wrapping its node in `gkScene.entities`, and a fresh New Game's
+      `gkScene.entities` is empty (`gkScene` exposed test-internal for this, same convention as
+      `match`/`statusLabel`/`scoreLabel`). Android: confirmed by the same code-level review of
+      `GameScene.placeMark`/`TicTacToeMarkEntity.kt` (identical shape to iOS); an equivalent
+      automated `GameScene`-level test isn't currently possible without adding Robolectric (plain
+      JVM unit tests can't construct a real `android.graphics.Path`-backed `GameScene`), so this
+      stays a manual/code-review confirmation on this platform rather than an automated test.
+- [x] Side-by-side screenshots/recording of both apps for the README. Captured during the visual
+      pass above: menu (`en`/`ja`), an in-progress board, a forced draw, and a CPU win, on both
+      platforms. Curating these into the actual README side-by-side layout is Phase 6's job (README
+      updated with screenshots/GIFs) — this item is the capture, not the publication.
 
 ## Phase 5 — Polish (stretch, optional)
 
