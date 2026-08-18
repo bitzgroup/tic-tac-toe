@@ -28,13 +28,19 @@ public struct TicTacToeBoard {
         activeMark = .x
     }
 
+    /// The 3 cell indices of the completed winning line, or `nil` if there isn't one yet. Lets
+    /// the SpriteKit layer highlight the line that won — see `docs/GAME_DESIGN.md`'s "Win
+    /// highlight" bullet.
+    public var winningLine: [Int]? {
+        Self.winningLines.first { line in
+            guard let first = cells[line[0]] else { return false }
+            return line.allSatisfy { cells[$0] == first }
+        }
+    }
+
     /// The mark occupying all three cells of a winning line, or `nil` if there isn't one yet.
     public var winner: Mark? {
-        for line in Self.winningLines {
-            guard let first = cells[line[0]], line.allSatisfy({ cells[$0] == first }) else { continue }
-            return first
-        }
-        return nil
+        winningLine.flatMap { cells[$0[0]] }
     }
 
     /// Empty cell indices, in ascending order, or empty once the game has ended.

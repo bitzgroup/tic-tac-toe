@@ -182,6 +182,8 @@ API (which mirrors Apple's real `GKScene`/`GKSKNodeComponent` — both plain, no
 no implicit scene-graph side effects):
 
 - **`GameScene` owns a `GKScene`** (`rootNode` set to the scene itself, `entities` starting empty).
+  `entities` itself is get-only on Apple's real `GKScene` — entities are added/removed via
+  `addEntity(_:)`/`removeEntity(_:)`, not by mutating the array directly.
   This is a plain container — `GKScene` does not add anything to the node tree on its own, and
   `GKSKNodeComponent` does not either: adding a `GKSKNodeComponent(node:)` to an entity only sets
   `node.entity` (and clears it again on removal) so the node can look its owning entity up, nothing
@@ -197,9 +199,9 @@ no implicit scene-graph side effects):
     records which player (`X`/`O`) and which `cellIndex` this entity's mark belongs to. Exists to
     show an entity carrying more than just its node component, not only the bridge itself.
 - On placement: create the entity, add both components, add the node to `GameScene` via `addChild`,
-  append the entity to `gkScene.entities`. On New Game: both `gkScene.entities` and the node tree
-  are discarded together with the old `GameScene` (see "New Game" below) — a new game never reuses
-  an old entity.
+  hand the entity to `gkScene` via `addEntity(_:)`. On New Game: both `gkScene`'s entities and the
+  node tree are discarded together with the old `GameScene` (see "New Game" below) — a new game
+  never reuses an old entity.
 - **`GKAgent`/`GKAgentDelegate` steering and `GKAgentNodeComponent` — GKSKBridge's other documented
   feature — are not used here.** Marks are placed, not moved; there's nothing for an agent to steer
   toward. See `docs/ROADMAP.md`'s "Explicitly out of scope."

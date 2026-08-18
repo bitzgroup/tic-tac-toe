@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Tic-Tac-Toe</string>
+
+    <string name="menu_title">Tic-Tac-Toe</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_normal">Normal</string>
+    <string name="difficulty_hard">Hard</string>
+    <string name="status_your_turn">Your turn (%1$s)</string>
+    <string name="status_cpu_thinking">CPU thinking…</string>
+    <string name="status_you_win">You win!</string>
+    <string name="status_cpu_wins">CPU wins</string>
+    <string name="status_draw">Draw</string>
+    <string name="score_row">X: %1$d  O: %2$d  Draws: %3$d</string>
+    <string name="new_game">New Game</string>
 </resources>
