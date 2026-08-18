@@ -308,9 +308,19 @@ section for the full spec each implementation is written against.
 
 ## Phase 6 — Documentation & release
 
-- [ ] README updated with screenshots/GIFs of both apps side by side
-- [ ] This file's phase checkboxes fully checked, `## Status` in `CLAUDE.md` updated to match
-- [ ] Tag `v0.1.0` once Phases 0–4 are complete and verified
+**Complete.**
+
+- [x] README updated with screenshots/GIFs of both apps side by side — a `## Screenshots` section
+      (menu + gameplay, iOS and Android side by side) with fresh screenshots taken from the actual
+      `v0.1.0` build, saved under `docs/screenshots/`.
+- [x] This file's phase checkboxes fully checked, `## Status` in `CLAUDE.md` updated to match
+- [x] Tag `v0.1.0` once Phases 0–4 are complete and verified. Cut for all four repos this sample
+      depends on, each via its own `release/<version>` branch merged into both `main` and
+      `develop` per the Gitflow table above: `bitzgroup/tic-tac-toe` (`v0.1.0`, its first release),
+      and `bitzgroup/SpriteKit`/`GameplayKit`/`GKSKBridge` (`0.1.0` each, re-cut from their prior
+      `0.1.0` tags to include everything merged into `develop` since — see each release's own notes
+      for exactly what that was). This app's own `android/SpriteKit`/`GameplayKit`/`GKSKBridge`
+      submodule pointers now resolve to those three `0.1.0` tags.
 
 ## Explicitly out of scope
 
