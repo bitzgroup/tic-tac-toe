@@ -168,8 +168,22 @@ around this diffing logic if Phase 4's parity pass has room for one.
 - [x] iOS: `TicTacToeApp.swift` presents `MenuScene` at launch inside an `SKView`/`SpriteView`
 - [x] Android: `MainActivity.kt` presents `MenuScene` at launch inside `spritekit-compose`'s
       `SKView`
-- [ ] Both apps are playable start-to-finish end to end (menu → game → win/loss/draw → new game)
-      at all three difficulties
+- [x] Both apps are playable start-to-finish end to end (menu → game → win/loss/draw → new game)
+      at all three difficulties. **iOS:** `GameScenePlaythroughTests.swift` (new), driving
+      `GameScene` end to end via `CellNode.touchesBegan` directly — real OS-level touch simulation
+      isn't available in a unit test target, but this exercises the actual production path
+      (`HumanTurnState.applyHumanMove` → `GKStateMachine` cascade → `AITurnState`) at all three
+      difficulties, asserting each reaches `board.isGameOver`, plus a New Game check. Required
+      loosening `GameScene.match`/`statusLabel`/`scoreLabel` from `private` to internal for test
+      visibility (`@testable import`) — no behavior change. Note: `AITurnState`'s move applies to
+      `match` synchronously (Phase 1), but revealing it is deferred via `SKAction.wait` (Phase 2),
+      driven by a real `SKView` frame loop this headless test has none of — so a game that ends on
+      the AI's move doesn't fire `handleGameOver()`/update `statusLabel` within the test itself,
+      even though `match`'s model state is already correctly terminal; that visual reveal path was
+      separately verified via simulator screenshots when Phase 2 landed. **Android:** verified
+      manually on a physical device — all three difficulties played to a real terminal outcome (Easy:
+      human win, Normal/Hard: CPU win) via actual touch input, each followed by a working New Game
+      (fresh board, `humanMark`/`difficulty` preserved, running score carried forward correctly).
 
 ## Phase 4 — Parity verification
 
