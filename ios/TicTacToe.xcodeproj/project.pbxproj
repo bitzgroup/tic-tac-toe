@@ -20,6 +20,8 @@
 		5DA956EA9895B51B86154D77 /* HumanTurnState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF4A1F1B90B88970C6463DF /* HumanTurnState.swift */; };
 		5FC0C6D8E22118E4F04CE54D /* AITurnState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69653BC11D1FDB79827C605 /* AITurnState.swift */; };
 		6E2584D340BE71CDF65E6E14 /* TurnBeginState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13648B8A99BBB9D87D896C61 /* TurnBeginState.swift */; };
+		71482F4015CE759EC6089A61 /* tap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 73BFDCB8143C82FB6163547E /* tap.mp3 */; };
+		899B0B14AE832A1C47A478BF /* win.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 03B22FF31CE48E6C457E66DD /* win.mp3 */; };
 		9B7661BD3311E2A55B4DFBD9 /* TicTacToeGameModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E0859E5DA7E389123B0A1A /* TicTacToeGameModelTests.swift */; };
 		9F14DDA3816FB595D2FAE561 /* CellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915C0125B3F2DABAC680B2E3 /* CellNode.swift */; };
 		AFA196D2F2D3C6FE21231E70 /* TicTacToeMarkComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347281F0057617CB6C554F86 /* TicTacToeMarkComponent.swift */; };
@@ -27,6 +29,7 @@
 		C763272B571696BA804B0BF6 /* GameScenePlaythroughTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EE03437CC26EC038D4FC70 /* GameScenePlaythroughTests.swift */; };
 		C84D3CF64A73DE800145554E /* TicTacToeGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B540D838B7AA2005430785 /* TicTacToeGameModel.swift */; };
 		CAA1777D8292A93DBDF769C9 /* TicTacToeHardStrategistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551CE0C21388F5EF0F5C9906 /* TicTacToeHardStrategistTests.swift */; };
+		CCB200C75C464AB7342DB604 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDCE13A25607F0FE15417537 /* Assets.xcassets */; };
 		DB4E775A67F12256EC92A21A /* TicTacToeBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C1EE08157DACC314B392AD /* TicTacToeBoard.swift */; };
 		E356BBDFD193E93DF35E901E /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF73A1A71459487A2945FC98 /* SpriteKit.framework */; };
 		E657E8DD845AF783C9247A3D /* TurnEndState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69612EDD3B6395F4616294C /* TurnEndState.swift */; };
@@ -47,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		03B22FF31CE48E6C457E66DD /* win.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = win.mp3; sourceTree = "<group>"; };
 		0D80E2AEDEC022CD3F469426 /* TicTacToePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToePlayer.swift; sourceTree = "<group>"; };
 		10E0859E5DA7E389123B0A1A /* TicTacToeGameModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeGameModelTests.swift; sourceTree = "<group>"; };
 		13648B8A99BBB9D87D896C61 /* TurnBeginState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnBeginState.swift; sourceTree = "<group>"; };
@@ -61,6 +65,7 @@
 		654DA0F3FE1203B9CABA92A9 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		6BFAC04CE7E5EA75DE40B150 /* TicTacToeMove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeMove.swift; sourceTree = "<group>"; };
 		71EE03437CC26EC038D4FC70 /* GameScenePlaythroughTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScenePlaythroughTests.swift; sourceTree = "<group>"; };
+		73BFDCB8143C82FB6163547E /* tap.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = tap.mp3; sourceTree = "<group>"; };
 		7B58F32345774E4B9660BA8F /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
 		86E7EA53D85625E1CE54B073 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		8F394505B183A24C2007014F /* TicTacToe.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,6 +76,7 @@
 		AAF4A1F1B90B88970C6463DF /* HumanTurnState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumanTurnState.swift; sourceTree = "<group>"; };
 		BE3552B78124F8A02219AA6B /* TicTacToeMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeMatch.swift; sourceTree = "<group>"; };
 		D69612EDD3B6395F4616294C /* TurnEndState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnEndState.swift; sourceTree = "<group>"; };
+		DDCE13A25607F0FE15417537 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DFA95D532B75D863AF6DC3F8 /* TicTacToeMarkEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeMarkEntity.swift; sourceTree = "<group>"; };
 		E3C1EE08157DACC314B392AD /* TicTacToeBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeBoard.swift; sourceTree = "<group>"; };
 		E69653BC11D1FDB79827C605 /* AITurnState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITurnState.swift; sourceTree = "<group>"; };
@@ -115,6 +121,15 @@
 			path = Scenes;
 			sourceTree = "<group>";
 		};
+		174BE1B09C0C7C1AD2962782 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				73BFDCB8143C82FB6163547E /* tap.mp3 */,
+				03B22FF31CE48E6C457E66DD /* win.mp3 */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		269591EBEFECBF184EFDEDB0 /* TicTacToe */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,7 +154,9 @@
 		7E565F6F78BFB79227037F83 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DDCE13A25607F0FE15417537 /* Assets.xcassets */,
 				86E7EA53D85625E1CE54B073 /* Localizable.xcstrings */,
+				174BE1B09C0C7C1AD2962782 /* Sounds */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -275,7 +292,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCB200C75C464AB7342DB604 /* Assets.xcassets in Resources */,
 				14309156E2F4894F6BE38301 /* Localizable.xcstrings in Resources */,
+				71482F4015CE759EC6089A61 /* tap.mp3 in Resources */,
+				899B0B14AE832A1C47A478BF /* win.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -253,14 +253,90 @@ description below produces the same look on both platforms.
   mutating the existing scene's nodes in place, so "new game" always starts from a genuinely clean
   `TicTacToeGameModel` + `GKStateMachine` + mark-entity list.
 
+### Polish (Phase 5)
+
+Optional, stretch-goal presentation detail on top of the MVP above — see `docs/ROADMAP.md` Phase
+5. Specified here, not just in code, for the same reason as the rest of this document: iOS and
+Android share no code, so anything that must look/sound identical on both has to be a spec both
+implementations are written against, not left to drift.
+
+- **Win-particle burst (`SKEmitterNode`):** fires alongside the existing win-line pulse (not
+  instead of it) — `handleGameOver()`/`pulseWinningLine` triggers one `SKEmitterNode` positioned at
+  each of the three winning-line cells' centers (same three positions the pulse already animates),
+  auto-removed once its burst finishes.
+  - **Particle texture:** a filled white circle, 12pt diameter, rendered at runtime (`SKTexture`
+    from a small `UIImage`/`Bitmap` this app draws itself) rather than an imported image asset —
+    consistent with marks themselves being vector shapes, not glyphs or sprites (see "Marks are
+    vector shapes" above), so there's still no binary image-asset dependency to keep in sync
+    between the two apps.
+  - **Emission:** `particleBirthRate = 200`, `numParticlesToEmit = 16` (a ~0.08s burst, not a
+    sustained stream), `particleLifetime = 0.6`, `particleLifetimeRange = 0.2`.
+  - **Motion:** `particleSpeed = 120`, `particleSpeedRange = 40`, `emissionAngleRange = 2π` (a full
+    radial burst, no directional bias), no acceleration (`xAcceleration`/`yAcceleration = 0` — a
+    clean pop, not falling confetti, matching the snappy ~0.15s timing used elsewhere in this
+    section rather than a longer decorative flourish).
+  - **Fade:** `particleAlpha = 1`, `particleAlphaSpeed = -1.6` (reaches 0 well before the ~0.8s
+    worst-case particle lifetime, so nothing pops out of existence still visible); `particleColor`
+    = white, blend factor irrelevant since the texture itself is already white.
+  - The emitter node is removed from its parent via `SKAction.sequence([.wait(forDuration: 0.8),
+    .removeFromParent()])` run on itself — 0.8s covers the birth window plus the longest possible
+    particle lifetime (`0.6 + 0.2`), matching the "no stale entities/nodes left behind" spirit of
+    [Marks as entities](#marks-as-entities-gkscene--gkentity--gksknodecomponent) above (this is a
+    plain decorative node, not a `GKEntity`, so no `GKScene` bookkeeping applies to it).
+- **Tap/win sound effects (`SKAudioNode`/`playSoundFileNamed`):**
+  - **`tap.mp3`:** plays once per placed mark — human or AI, via the same `placeMark` call path
+    both go through (see [Marks as entities](#marks-as-entities-gkscene--gkentity--gksknodecomponent)) —
+    a short ~80ms 880Hz sine blip with a fast linear fade-out (click-like, not a musical tone).
+  - **`win.mp3`:** plays once whenever `handleGameOver()` finds a winner (`board.winner != nil`) —
+    either player, not only the human — a three-note ascending chime (660Hz → 880Hz → 1320Hz,
+    ~120ms each, linear fade-out on the last note). A draw plays no sound; the existing
+    `status_draw` label change is enough of a cue for that (comparatively unremarkable) outcome.
+  - **Format: MP3, mono, 44.1kHz, 64kbps CBR.** Both clips are synthesized tones (raw PCM rendered
+    in Python, no recorded/sourced audio), then encoded to MP3 — license-free either way, and small
+    enough either way that size wasn't the deciding factor. MP3 specifically (over the source WAV,
+    or a more "gamey" codec like Opus/Ogg Vorbis) because it's the actual common denominator both
+    platforms play natively with zero extra plumbing: Android's `MediaPlayer` and iOS's real
+    `SKAction`/`AVFoundation` both decode MP3 out of the box. Ogg Vorbis has no decoder on iOS at
+    all — Core Audio doesn't ship one, so playing `.ogg` there means bundling a third-party decoder.
+    Opus is closer but still not simple: iOS (since iOS 11) only decodes Opus muxed inside a `.caf`
+    container, not the `.opus`/Ogg-Opus files every standard encoder produces, so using it would
+    mean remuxing for iOS and keeping *two different container files* per sound — undermining the
+    "byte-identical asset" parity story below before it starts. WAV (this section's original
+    format) works natively everywhere too, but MP3 gets the same zero-plumbing property at a
+    fraction of the size, which is the only axis WAV loses on for clips this short. The two apps
+    ship byte-identical copies of each file — `ios/TicTacToe/Resources/Sounds/` and
+    `android/app/src/main/assets/` — the strongest form of parity available for a binary asset.
+  - **Known, unavoidable non-identical detail:** the string each platform passes to
+    `playSoundFileNamed`/`SKAudioNode`'s `fileNamed` differs, because each platform's own
+    underlying playback mechanism resolves that string differently. Apple's real `SKAction`
+    resolves a plain filename (`"tap.mp3"`) against the app bundle automatically. Android needs a
+    real filesystem path: `bitzgroup/SpriteKit`'s implementation forwards the string as-is to
+    `android.media.MediaPlayer.setDataSource(String)`, which cannot read the APK's `assets/`
+    folder directly from a plain path string — **an on-device finding, not an assumption:** an
+    earlier version of this app tried the commonly-cited `"file:///android_asset/…"` URI form
+    first, since `MediaPlayer` special-cases it in some Android versions/media backends, but it
+    failed on-device (`MediaPlayer` logged `error (-38, 0)`, no sound, no crash — the library's own
+    `runCatching` wrapper around every native call, see `SKMediaPlayerHandle`, swallows the
+    resulting `IOException` silently, so this needs real playback verification to catch, not just a
+    successful build). `GameScene` instead copies `tap.mp3`/`win.mp3` from `assets/` into
+    `Context.getCacheDir()` once per launch (on first use, cached by filename) and passes that real
+    absolute path to `playSoundFileNamed` — a plain filesystem path `MediaPlayer.setDataSource`
+    reads directly, no special URI scheme involved. So iOS passes `"tap.mp3"`/`"win.mp3"` and
+    Android passes an absolute `cacheDir` path — different strings, same audio file, same
+    triggering logic either side of that one call.
+- **App icon:** both platforms ship the same icon design — a dark background (`#1A1A1A`, not pure
+  black, matching `android/app/src/main/res/values/colors.xml`'s existing `ic_launcher_background`,
+  which predates this section) with a white 2×2 tic-tac-toe grid (rounded line caps), the same
+  motif `GameScene`'s own board grid uses, just cropped to a single square icon rather than a full
+  3×3 board. iOS ships one 1024×1024 App Icon (Xcode's single-size `AppIcon.appiconset` format);
+  Android ships a proper adaptive icon (`mipmap-anydpi-v26`, background + foreground layers, grid
+  inset to the adaptive-icon safe zone) rather than the flat, non-adaptive vector it originally
+  shipped with.
+
 ### Deliberately out of scope for the MVP
 
-Listed here (rather than silently omitted) so it's clear these were a choice, not an oversight —
-see `docs/ROADMAP.md`'s Phase 5 for the stretch-goal version of this list:
+Listed here (rather than silently omitted) so it's clear these were a choice, not an oversight:
 
-- Win-particle burst (`SKEmitterNode`) and tap/win sound effects (`SKAudioNode`/
-  `playSoundFileNamed`) — both libraries support these, but they're not needed to demonstrate the
-  core parity story and are deferred to keep the MVP small.
 - Physics, tile maps, camera/crop, shaders — no relevance to a static 3×3 board game; exercising
   them here would be arbitrary rather than motivated by the game itself.
 - Persistence (win/loss record across launches), accounts, networking/multiplayer.

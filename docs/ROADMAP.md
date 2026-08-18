@@ -257,11 +257,54 @@ locales, for all three difficulties.
 
 ## Phase 5 — Polish (stretch, optional)
 
-Not required for the parity story in Phase 4; only pursued if the MVP above is solid first.
+**Complete.** Not required for the parity story in Phase 4, but both `bitzgroup/SpriteKit`
+(`SKEmitterNode`, `SKAudioNode`/`playSoundFileNamed`) already implemented everything needed, so all
+three stretch items landed on both platforms. See `docs/GAME_DESIGN.md`'s new "Polish (Phase 5)"
+section for the full spec each implementation is written against.
 
-- [ ] Win-particle burst (`SKEmitterNode`)
-- [ ] Tap/win sound effects (`SKAudioNode` / `SKAction.playSoundFileNamed`)
-- [ ] App icons
+- [x] Win-particle burst (`SKEmitterNode`) — fires alongside the existing win-line pulse, one
+      emitter per winning cell, particle texture rendered at runtime (a small white circle) rather
+      than an imported image asset, auto-removed after its burst finishes. Verified on both an iOS
+      Simulator and an Android Emulator: triggers on a CPU win with no crash, and the full test
+      suites (23 iOS / 20 Android) still pass with the emitter code running inline in
+      `handleGameOver()`.
+- [x] Tap/win sound effects (`SKAudioNode` / `SKAction.playSoundFileNamed`) — `tap.mp3` on every
+      placed mark, `win.mp3` on a decided game (not a draw); both files synthesized (sine-tone
+      generation, not sourced) so they're license-free, then encoded to MP3 — the one format both
+      platforms decode natively with no extra plumbing (Ogg Vorbis has no iOS decoder at all; Opus
+      on iOS only decodes from a `.caf` container, not the `.opus`/Ogg-Opus files standard encoders
+      produce, which would mean two different container files per sound and no true byte-identical
+      asset — see `docs/GAME_DESIGN.md`'s "Polish (Phase 5)" section for the full comparison).
+      Byte-identical between `ios/TicTacToe/Resources/Sounds/` and `android/app/src/main/assets/`
+      (confirmed via `md5`).
+      **Real bug found and fixed by on-device verification, not just a successful build:** the
+      first Android implementation passed `"file:///android_asset/tap.wav"` to
+      `playSoundFileNamed`, following the commonly-cited trick for playing APK assets via
+      `MediaPlayer` — it built and ran clean, but on-device logcat showed `MediaPlayer error
+      (-38, 0)` and no audible sound, silently swallowed by `SKMediaPlayerHandle`'s own
+      `runCatching` wrapper around every native call (safe-by-design against crashing the render
+      thread, but that also means a failure here has zero build-time or test-time signal). Fixed by
+      having `GameScene` copy each asset to `Context.getCacheDir()` once per launch and pass that
+      real absolute path instead.
+      **Second finding: logcat alone wasn't sufficient verification either.** After the fix, the
+      Android Emulator logged no more `MediaPlayer error` lines, but genuinely played no audible
+      sound (confirmed by ear) — while the same build was clearly audible on the iOS Simulator. AVD
+      config (`hw.audioOutput=yes`), the device's `STREAM_MUSIC` volume/mute state, and the host
+      Mac's own output volume all checked out fine, pointing at the emulator's own QEMU/host audio
+      passthrough (a known rough edge on Apple Silicon Mac hosts) rather than the app or
+      `bitzgroup/SpriteKit`. Confirmed by re-testing on a physical device (Pixel 4a) — audible there,
+      matching iOS. Same lesson as Phase 2's `GameScene` visual verification needing a physical
+      device over the emulator: some fidelity gaps only the emulator has, and only a physical device
+      settles them. `docs/GAME_DESIGN.md`'s spec was corrected to describe the real playback
+      mechanism instead of the assumption that turned out wrong.
+- [x] App icons — both platforms ship the same design (`#1A1A1A` background, white 2×2 grid,
+      `GameScene`'s own board motif). iOS: added a 1024×1024 single-size `AppIcon.appiconset` (no
+      icon existed before this phase). Android: upgraded from a flat non-adaptive vector to a real
+      adaptive icon (`mipmap-anydpi-v26` background/foreground layers, foreground grid inset to the
+      adaptive-icon safe zone) with a legacy `mipmap/ic_launcher(_round).xml` fallback for API
+      24–25 (`minSdk = 24`, below adaptive icons' API 26 floor). Verified on an Android Emulator
+      home screen — the system correctly derived a themed/monochrome icon from the foreground
+      layer's alpha channel with no explicit `<monochrome>` layer needed.
 
 ## Phase 6 — Documentation & release
 

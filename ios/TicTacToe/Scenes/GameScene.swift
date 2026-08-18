@@ -1,5 +1,6 @@
 import GameplayKit
 import SpriteKit
+import UIKit
 
 /// The 3×3 board scene: grid, tappable cells, mark entities, status/score labels, win-line
 /// pulse, and the New Game button. See `docs/GAME_DESIGN.md`'s "Presentation" and "Marks as
@@ -25,6 +26,16 @@ final class GameScene: SKScene {
         static let winPulseScale: CGFloat = 1.15
         static let winPulseDuration: TimeInterval = 0.15
         static let winPulseCount = 2
+        // Win-particle burst — see docs/GAME_DESIGN.md's "Polish (Phase 5)" section.
+        static let particleTextureDiameter: CGFloat = 12
+        static let particleBirthRate: CGFloat = 200
+        static let numParticlesToEmit = 16
+        static let particleLifetime: CGFloat = 0.6
+        static let particleLifetimeRange: CGFloat = 0.2
+        static let particleSpeed: CGFloat = 120
+        static let particleSpeedRange: CGFloat = 40
+        static let particleAlphaSpeed: CGFloat = -1.6
+        static let emitterRemovalDelay: TimeInterval = 0.8
     }
 
     private let difficulty: Difficulty
@@ -208,6 +219,7 @@ final class GameScene: SKScene {
             SKAction.scale(to: 1, duration: Layout.placementDuration),
             SKAction.fadeAlpha(to: 1, duration: Layout.placementDuration),
         ]))
+        run(.playSoundFileNamed("tap.mp3", waitForCompletion: false))
     }
 
     private func makeMarkNode(for mark: Mark) -> SKShapeNode {
@@ -244,6 +256,8 @@ final class GameScene: SKScene {
         let board = match.gameModel.board
         if let winningLine = board.winningLine {
             pulseWinningLine(winningLine)
+            spawnWinParticles(at: winningLine)
+            run(.playSoundFileNamed("win.mp3", waitForCompletion: false))
         }
 
         switch board.winner {
@@ -274,6 +288,44 @@ final class GameScene: SKScene {
             markNodesByCell[cellIndex]?.run(repeated)
         }
     }
+
+    /// One `SKEmitterNode` burst per winning-line cell — see `docs/GAME_DESIGN.md`'s
+    /// "Polish (Phase 5)" section for the exact parameters and why each one was chosen.
+    private func spawnWinParticles(at line: [Int]) {
+        for cellIndex in line {
+            let emitter = SKEmitterNode()
+            emitter.particleTexture = Self.particleTexture
+            emitter.particleSize = CGSize(width: Layout.particleTextureDiameter, height: Layout.particleTextureDiameter)
+            emitter.particleBirthRate = Layout.particleBirthRate
+            emitter.numParticlesToEmit = Layout.numParticlesToEmit
+            emitter.particleLifetime = Layout.particleLifetime
+            emitter.particleLifetimeRange = Layout.particleLifetimeRange
+            emitter.particleSpeed = Layout.particleSpeed
+            emitter.particleSpeedRange = Layout.particleSpeedRange
+            emitter.emissionAngleRange = 2 * .pi
+            emitter.particleAlpha = 1
+            emitter.particleAlphaSpeed = Layout.particleAlphaSpeed
+            emitter.particleColor = .white
+            emitter.position = cellPosition(cellIndex)
+            addChild(emitter)
+            emitter.run(.sequence([
+                .wait(forDuration: Layout.emitterRemovalDelay),
+                .removeFromParent(),
+            ]))
+        }
+    }
+
+    /// A filled white circle, rendered once at launch rather than shipped as an image asset —
+    /// see `docs/GAME_DESIGN.md`'s "Polish (Phase 5)" section.
+    private static let particleTexture: SKTexture = {
+        let diameter = Layout.particleTextureDiameter
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: diameter, height: diameter))
+        let image = renderer.image { context in
+            UIColor.white.setFill()
+            context.cgContext.fillEllipse(in: CGRect(x: 0, y: 0, width: diameter, height: diameter))
+        }
+        return SKTexture(image: image)
+    }()
 
     // MARK: - New Game
 
