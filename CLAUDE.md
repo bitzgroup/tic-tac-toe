@@ -17,8 +17,12 @@ frameworks they mirror. See
 
 ## Project status
 
-Phase 0 (repository scaffolding) is complete: both apps build and launch to a blank scene. No game
-logic yet — that's Phase 1+. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and
+Phase 0 (repository scaffolding) and Phase 1 (GameplayKit game model: `TicTacToeBoard`/
+`TicTacToeGameModel`/`TicTacToeMatch`, AI difficulty strategists, `GKStateMachine` turn flow) are
+complete, both fully unit-tested (16 tests/platform) — see `docs/ROADMAP.md` Phase 1 for a real
+OSS/Apple discrepancy the iOS-first implementation order caught, and fixed upstream in
+`bitzgroup/GameplayKit` itself. No SpriteKit/UI
+wiring yet — that's Phase 2. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and
 progress checklist; update this section (and that file's checkboxes) as phases land.
 
 ## Project structure

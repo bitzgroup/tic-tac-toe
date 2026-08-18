@@ -5,6 +5,17 @@ Phased implementation plan for the iOS and Android Tic-Tac-Toe apps described in
 is implemented on **both platforms before moving to the next phase**, so the two apps never drift
 far apart in capability — that running-side-by-side comparison is the entire point of this repo.
 
+**Within each phase, iOS is implemented and verified first, then Android.** iOS runs against
+Apple's real, official frameworks, so a phase's iOS half — once it builds and its tests pass — is
+ground truth for exactly how that phase's APIs actually behave. Implementing Android second against
+that already-verified reference is what makes this repo useful as a *check* on the OSS ports, not
+just a demo: any place `bitzgroup/SpriteKit`/`GameplayKit`/`GKSKBridge`'s API shape or behavior
+doesn't yet match Apple's real one surfaces immediately as "the Android port of code that already
+works on iOS doesn't compile/behave the same," rather than staying latent. See
+`docs/ARCHITECTURE.md`'s "Verifying parity" section for where discrepancies found this way get
+recorded and fixed — the `spritekit-compose`/`GKSKBridge` nested-project-path bug found during
+Phase 0 is the first example.
+
 Checklist items are marked `[ ]` until done; update this file as work lands, the same convention
 `bitzgroup/SpriteKit` and `bitzgroup/GameplayKit` use in their own `docs/ROADMAP.md`.
 
@@ -47,24 +58,42 @@ Implemented independently in Swift (iOS, against Apple's `GameplayKit.framework`
 (Android, against `jp.co.bitz.gameplaykit`) from the same spec — see `docs/GAME_DESIGN.md`'s
 "GameplayKit layer" section for the exact type/method shapes both must match.
 
-- [ ] `TicTacToeBoard`: pure rules, no GameplayKit dependency — 9-cell state, move legality/
+- [x] `TicTacToeBoard`: pure rules, no GameplayKit dependency — 9-cell state, move legality/
       application, win/loss/draw detection (all 8 lines), matching the FourInARow-precedent split
-      in `docs/GAME_DESIGN.md`'s "Game model" section
-- [ ] Unit tests directly against `TicTacToeBoard`: win detection (all 8 lines), loss detection,
+      in `docs/GAME_DESIGN.md`'s "Game model" section. Also owns `unapplyMove(at:)` — see below.
+- [x] Unit tests directly against `TicTacToeBoard`: win detection (all 8 lines), loss detection,
       draw detection, legal-move generation at various board states — on both platforms, no
-      GameplayKit fixture needed
-- [ ] `TicTacToePlayer` (`GKGameModelPlayer`), `TicTacToeMove` (`GKGameModelUpdate`)
-- [ ] `TicTacToeGameModel` (`GKGameModel`): wraps `TicTacToeBoard`, adds `copy()`/
+      GameplayKit fixture needed (8 tests per platform)
+- [x] `TicTacToePlayer` (`GKGameModelPlayer`), `TicTacToeMove` (`GKGameModelUpdate`)
+- [x] `TicTacToeGameModel` (`GKGameModel`): wraps `TicTacToeBoard`, adds `copy()`/
       `setGameModel(_:)`, `gameModelUpdates(for:)` (ascending cell-index order — see the tie-break
       note in `docs/GAME_DESIGN.md`), `apply(_:)`, `score(for:)`, `isWin(for:)`, `isLoss(for:)`
-- [ ] Unit test: `TicTacToeGameModel.copy()` independence (mutating the copy never affects the
-      original) — on both platforms
-- [ ] AI difficulty wiring: Easy (`GKRandomDistribution`), Normal (`GKMonteCarloStrategist`,
+- [x] Unit test: `TicTacToeGameModel.copy()` independence (mutating the copy never affects the
+      original) — on both platforms (6 `TicTacToeGameModel` tests per platform total)
+- [x] AI difficulty wiring: Easy (`GKRandomDistribution`), Normal (`GKMonteCarloStrategist`,
       `budget = 200`), Hard (`GKMinmaxStrategist`, `maxLookAheadDepth = 9`)
-- [ ] Unit test: Hard AI never loses, across a representative set of opening/mid-game board states
-      — on both platforms
-- [ ] `GKStateMachine`/`GKState` turn flow: `TurnBeginState`, `HumanTurnState`, `AITurnState`,
-      `TurnEndState`, `GameOverState`, with `isValidNextState(_:)` gating
+- [x] Unit test: Hard AI never loses, across a representative set of opening/mid-game board states
+      — on both platforms. **iOS finding, later closed on both platforms:** this test caught a
+      real bug in the first iOS implementation — a no-op `unapplyGameModelUpdate` corrupted the
+      shared model mid-search and crashed, because Apple's real `GKMinmaxStrategist` backtracks
+      via `unapplyGameModelUpdate` instead of always copying, unlike `bitzgroup/GameplayKit`
+      `v0.1.0` at the time. Fixed on iOS by giving `TicTacToeBoard` a real `unapplyMove(at:)`.
+      Rather than leave the platforms permanently asymmetric, `bitzgroup/GameplayKit` itself was
+      then revised to match Apple's real mutate-and-backtrack strategy, so `TicTacToeGameModel` on
+      Android now implements the identical real `unapplyGameModelUpdate` too. See
+      `docs/GAME_DESIGN.md`'s "Game model" section and `docs/ARCHITECTURE.md`'s "Finding OSS/Apple
+      discrepancies" section for the full story.
+- [x] `GKStateMachine`/`GKState` turn flow: `TurnBeginState`, `HumanTurnState`, `AITurnState`,
+      `TurnEndState`, `GameOverState`, with `isValidNextState(_:)` gating, coordinated by a new
+      `TicTacToeMatch` type (game model + human/AI seat assignment from the coin toss +
+      difficulty's strategist + the state machine itself) not called out as its own file in
+      `docs/ARCHITECTURE.md`'s original source-layout sketch but added there now
+      (`TicTacToeMatch.swift`/`.kt`)
+
+**All 16 unit tests pass on both platforms** (8 `TicTacToeBoard` + 7 `TicTacToeGameModel` + 1 Hard
+strategist, run via `xcodebuild test` / `./gradlew :app:testDebugUnitTest`), and both apps still
+build clean (`./gradlew :app:ktlintCheck :app:detekt :app:assembleDebug` /
+`xcodebuild ... build`). No SpriteKit/UI wiring yet — Phase 2.
 
 ## Phase 2 — Board rendering & input (SpriteKit + GKSKBridge)
 

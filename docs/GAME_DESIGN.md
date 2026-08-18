@@ -77,11 +77,29 @@ GameplayKit in the loop at all, mirroring FourInARow's own `AAPLBoard` (rules) /
     simplest possible heuristic, sufficient here because `GKMinmaxStrategist` searches the
     *entire* game tree (9 plies) rather than needing a mid-game evaluation function.
   - **`isWin(for:)` / `isLoss(for:)`:** delegate straight to `TicTacToeBoard`.
-  - **`copy()` must be a true deep copy** (deep-copies the wrapped `TicTacToeBoard`) — both
-    strategists branch their search tree by copying the model at every node rather than mutating
-    one shared instance via `apply`/`unapplyGameModelUpdate` (this is documented behavior of the
-    OSS port and how Apple's own strategists are commonly implemented against this protocol;
-    `unapplyGameModelUpdate` is implemented for protocol conformance but never relied upon).
+  - **`copy()` must be a true deep copy** (deep-copies the wrapped `TicTacToeBoard`) — required by
+    `GKGameModel`/`NSCopying` conformance on both platforms regardless of the point below, even
+    though neither strategist calls it during search anymore (see next point).
+  - **`apply(_:)`/`unapplyGameModelUpdate(_:)` must be true inverses of each other, identically on
+    both platforms.** Both `GKMinmaxStrategist` and `GKMonteCarloStrategist` — on iOS (Apple's real
+    frameworks) *and* on Android (`bitzgroup/GameplayKit`) — search by mutating the one shared
+    model in place: `apply` a candidate move, recurse/roll out, `unapplyGameModelUpdate` it back
+    off before trying the next one, rather than branching by copying at every node. `TicTacToeMove`
+    delegates to `TicTacToeBoard`'s own `unapplyMove(at:)` (clears the cell, reverts `activeMark`)
+    on both platforms.
+    **This wasn't always symmetric — a real Apple/OSS discrepancy this app's own Phase 1
+    implementation found and fixed, not just documented:** `bitzgroup/GameplayKit`'s `v0.1.0`
+    originally always branched by copying and never called `unapplyGameModelUpdate` at all, unlike
+    Apple's real `GKMinmaxStrategist`, which documents backtracking via unapply as its own
+    implementation strategy. Leaving `unapplyGameModelUpdate` a no-op (safe against `v0.1.0`) is
+    exactly what broke on iOS first: this app's own Hard-mode unit tests crashed with a "cell
+    already occupied" precondition failure — a stale mark left behind by a failed backtrack —
+    until `TicTacToeBoard` grew a real `unapplyMove(at:)`. Rather than leave the platforms
+    permanently asymmetric (a no-op-is-fine Android vs. a must-be-real iOS), `bitzgroup/GameplayKit`
+    itself was revised post-`v0.1.0` to match Apple's real mutate-and-backtrack behavior, so both
+    platforms now have the identical requirement — see `docs/ARCHITECTURE.md`'s "Finding OSS/Apple
+    discrepancies" section for the full story, including why the fix went upstream into the library
+    rather than staying a workaround in this app.
 
 `TicTacToeMove` conforms to `GKGameModelUpdate`: just a `cellIndex` plus the mutable `value` a
 strategist stamps with the move's evaluated score while it searches.
@@ -110,11 +128,17 @@ move, since minmax's *value* for a solved game like this is unambiguous.
 
 ### Randomization (Easy AI & coin toss)
 
-Both the coin toss (who plays `X`) and Easy-mode move choice use `GKRandomSource`/
-`GKRandomDistribution` (`GKRandomDistribution.d2()` for the coin toss; `GKARC4RandomSource` seeded
-per app launch is fine for both — no reproducibility requirement here, unlike the OSS port's own
-test suite which verifies these sources bit-for-bit/contract-conformant against Apple's algorithms
-independently of this app).
+- **Coin toss (who plays `X`):** `GKRandomSource.sharedRandom().nextBool()` — Apple ships no
+  `d2()` convenience (only `d6()`/`d20()`), and a coin toss is exactly what the `GKRandom`
+  protocol's `nextBool()` is documented for, so there's no need to reach for
+  `GKRandomDistribution` here at all.
+- **Easy-mode move choice:** `GKRandomDistribution(lowestValue: 0, highestValue: n - 1)` (`n` =
+  `gameModelUpdates(for:)`'s count that turn), used to index uniformly into that move list.
+
+Neither needs a specific seed — `GKRandomSource.sharedRandom()`'s default seeding is fine for
+both, no reproducibility requirement here, unlike the OSS port's own test suite which verifies
+these sources bit-for-bit/contract-conformant against Apple's algorithms independently of this
+app.
 
 ### Turn flow: `GKStateMachine`
 
