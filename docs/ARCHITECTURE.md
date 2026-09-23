@@ -278,10 +278,9 @@ Three categories of discrepancy come up this way, handled differently:
   own spec stays accurate about where bit-for-bit identity isn't guaranteed.
 - **A documented, intentional deviation revisited anyway** — the same starting point as the
   category above (a real, defensible design choice, not a bug), but changed upstream regardless
-  once it had a concrete cost: `bitzgroup/GameplayKit`'s `GKMinmaxStrategist`/
-  `GKMonteCarloStrategist` originally always branched their search by copying the model rather
-  than mutating-and-backtracking via `apply`/`unapplyGameModelUpdate` like Apple's real
-  `GKMinmaxStrategist` documents itself doing — a legitimate simplicity/safety tradeoff on its own
+  once it had a concrete cost: `bitzgroup/GameplayKit`'s `GKMinmaxStrategist` originally always
+  branched its search by copying the model rather than mutating-and-backtracking via
+  `apply`/`unapplyGameModelUpdate` like Apple's real `GKMinmaxStrategist` documents itself doing — a legitimate simplicity/safety tradeoff on its own
   terms (see `docs/API_COMPATIBILITY.md`'s reasoning at the time). But it meant a `GKGameModel`
   correct against the OSS library could still ship with a broken `unapplyGameModelUpdate` that
   only breaks against Apple's real framework — exactly what happened to this app's own iOS

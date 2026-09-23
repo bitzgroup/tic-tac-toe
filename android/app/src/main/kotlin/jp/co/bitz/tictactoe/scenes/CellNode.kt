@@ -3,6 +3,7 @@ package jp.co.bitz.tictactoe.scenes
 import android.graphics.Color
 import android.graphics.Path
 import android.graphics.RectF
+import jp.co.bitz.spritekit.SKEvent
 import jp.co.bitz.spritekit.SKLabelNode
 import jp.co.bitz.spritekit.SKLabelVerticalAlignmentMode
 import jp.co.bitz.spritekit.SKShapeNode
@@ -23,7 +24,10 @@ public class CellNode(
         isUserInteractionEnabled = true
     }
 
-    override fun touchesBegan(touch: SKTouch) {
+    override fun touchesBegan(
+        touches: Set<SKTouch>,
+        event: SKEvent?,
+    ) {
         onTap?.invoke(cellIndex)
     }
 }
@@ -45,7 +49,7 @@ public class ButtonNode(
         path =
             Path().apply {
                 addRoundRect(
-                    RectF(-size.x / 2f, -size.y / 2f, size.x / 2f, size.y / 2f),
+                    RectF(-size.width / 2f, -size.height / 2f, size.width / 2f, size.height / 2f),
                     cornerRadius,
                     cornerRadius,
                     Path.Direction.CW,
@@ -64,7 +68,10 @@ public class ButtonNode(
         addChild(text)
     }
 
-    override fun touchesBegan(touch: SKTouch) {
+    override fun touchesBegan(
+        touches: Set<SKTouch>,
+        event: SKEvent?,
+    ) {
         onTap?.invoke()
     }
 }

@@ -55,10 +55,11 @@ public final class TicTacToeGameModel: NSObject, GKGameModel {
     }
 
     public func unapplyGameModelUpdate(_ gameModelUpdate: GKGameModelUpdate) {
-        // GKMinmaxStrategist/GKMonteCarloStrategist mutate-and-backtrack a shared model instance
-        // during search — apply a candidate move, recurse, unapply it again — identically on
-        // Android's bitzgroup/GameplayKit port, so this must be a real inverse of apply(_:) here,
-        // matching TicTacToeGameModel.kt exactly. See docs/GAME_DESIGN.md's "Game model" section.
+        // GKMinmaxStrategist mutates-and-backtracks a shared model instance during search — apply
+        // a candidate move, recurse, unapply it again — identically on Android's
+        // bitzgroup/GameplayKit port, so this must be a real inverse of apply(_:) here, matching
+        // TicTacToeGameModel.kt exactly. (GKMonteCarloStrategist copies instead and never calls
+        // this.) See docs/GAME_DESIGN.md's "Game model" section.
         guard let move = gameModelUpdate as? TicTacToeMove else { return }
         board.unapplyMove(at: move.cellIndex)
     }

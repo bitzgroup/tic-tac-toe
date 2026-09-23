@@ -41,7 +41,7 @@ public class MenuScene(
             SKLabelNode(strings.menuTitle).apply {
                 fontSize = Layout.TITLE_FONT_SIZE
                 fontColor = Color.WHITE
-                position = Vector2(size.x / 2f, Layout.TITLE_Y)
+                position = Vector2(size.width / 2f, Layout.TITLE_Y)
             }
         addChild(title)
 
@@ -59,7 +59,7 @@ public class MenuScene(
                     label = label,
                     fontSize = Layout.BUTTON_FONT_SIZE,
                 )
-            button.position = Vector2(size.x / 2f, Layout.FIRST_BUTTON_Y - index * Layout.BUTTON_SPACING)
+            button.position = Vector2(size.width / 2f, Layout.FIRST_BUTTON_Y - index * Layout.BUTTON_SPACING)
             button.onTap = { startGame(difficulty) }
             addChild(button)
         }
