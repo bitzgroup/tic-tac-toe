@@ -37,8 +37,9 @@ overload); Phase 4 for a real Android-only bug the parity pass itself caught and
 `score_row` string's double spaces being collapsed to single spaces by Android's resource
 compiler); and Phase 5 for another Android-only bug on-device audio verification caught (the
 commonly-cited `file:///android_asset/…` `MediaPlayer` trick failing silently at runtime despite a
-clean build — fixed by copying sound assets to `Context.getCacheDir()` and playing from that real
-path instead). See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist;
+clean build — originally worked around by copying sound assets to `Context.getCacheDir()`; since
+fixed upstream in `bitzgroup/SpriteKit` by Phase 7's Apple-parity audit, so both apps now pass the
+same plain file name). See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist;
 update this section (and that file's checkboxes) as phases land.
 
 ## Project structure

@@ -9,10 +9,10 @@ import jp.co.bitz.gameplaykit.GKGameModelUpdate
  * model" section for why this is a separate type from the board's own rules.
  *
  * `apply`/`unapplyGameModelUpdate` are true inverses of each other, matching `TicTacToeGameModel`
- * on iOS exactly: `bitzgroup/GameplayKit`'s `GKMinmaxStrategist`/`GKMonteCarloStrategist` mutate
- * one shared model in place during search — `apply` a candidate move, recurse/roll out,
- * `unapplyGameModelUpdate` it back off — the same strategy Apple's own `GKMinmaxStrategist`
- * documents itself using. See `GKGameModel`'s own KDoc in that library.
+ * on iOS exactly: `GKMinmaxStrategist` mutates one shared model in place during search — `apply` a
+ * candidate move, recurse, `unapplyGameModelUpdate` it back off — the same strategy Apple's own
+ * `GKMinmaxStrategist` documents itself using. (`GKMonteCarloStrategist` branches via [copy]
+ * instead and never calls `unapplyGameModelUpdate`.) See `GKGameModel`'s own KDoc in that library.
  */
 public class TicTacToeGameModel(
     public var board: TicTacToeBoard = TicTacToeBoard(),

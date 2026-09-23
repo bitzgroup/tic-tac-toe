@@ -23,7 +23,6 @@ import jp.co.bitz.tictactoe.game.TicTacToeMatch
 import jp.co.bitz.tictactoe.game.TicTacToePlayer
 import jp.co.bitz.tictactoe.game.entities.TicTacToeMarkEntity
 import jp.co.bitz.tictactoe.game.states.HumanTurnState
-import java.io.File
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -77,7 +76,6 @@ public class GameScene(
     private val gkScene = GKScene()
     private val markNodesByCell = mutableMapOf<Int, SKShapeNode>()
     private var cachedParticleTexture: SKTexture? = null
-    private val soundFilePathCache = mutableMapOf<String, String>()
 
     private lateinit var statusLabel: SKLabelNode
     private lateinit var scoreLabel: SKLabelNode
@@ -118,7 +116,7 @@ public class GameScene(
             SKLabelNode("").apply {
                 fontSize = Layout.STATUS_FONT_SIZE
                 fontColor = Color.WHITE
-                position = Vector2(size.x / 2f, Layout.STATUS_Y)
+                position = Vector2(size.width / 2f, Layout.STATUS_Y)
             }
         addChild(statusLabel)
 
@@ -126,7 +124,7 @@ public class GameScene(
             SKLabelNode("").apply {
                 fontSize = Layout.SCORE_FONT_SIZE
                 fontColor = Color.WHITE
-                position = Vector2(size.x / 2f, Layout.SCORE_Y)
+                position = Vector2(size.width / 2f, Layout.SCORE_Y)
             }
         addChild(scoreLabel)
         refreshScoreLabel()
@@ -138,7 +136,7 @@ public class GameScene(
                 label = strings.newGame,
                 fontSize = Layout.NEW_GAME_FONT_SIZE,
             )
-        newGameButton.position = Vector2(size.x / 2f, Layout.NEW_GAME_BUTTON_Y)
+        newGameButton.position = Vector2(size.width / 2f, Layout.NEW_GAME_BUTTON_Y)
         newGameButton.onTap = { startNewGame() }
         addChild(newGameButton)
     }
@@ -159,7 +157,7 @@ public class GameScene(
         return SKShapeNode(path).apply {
             strokeColor = Color.WHITE
             lineWidth = Layout.GRID_LINE_WIDTH
-            position = Vector2(size.x / 2f, Layout.BOARD_CENTER_Y)
+            position = Vector2(size.width / 2f, Layout.BOARD_CENTER_Y)
         }
     }
 
@@ -167,7 +165,7 @@ public class GameScene(
         val row = cellIndex / 3
         val col = cellIndex % 3
         val half = Layout.BOARD_SIZE / 2f
-        val x = size.x / 2f - half + Layout.CELL_SIZE * (col + 0.5f)
+        val x = size.width / 2f - half + Layout.CELL_SIZE * (col + 0.5f)
         val y = Layout.BOARD_CENTER_Y + half - Layout.CELL_SIZE * (row + 0.5f)
         return Vector2(x, y)
     }
@@ -261,8 +259,7 @@ public class GameScene(
     ) {
         val markNode = makeMarkNode(player.mark)
         markNode.position = cellPosition(cellIndex)
-        markNode.xScale = 0f
-        markNode.yScale = 0f
+        markNode.setScale(0f)
         markNode.alpha = 0f
         addChild(markNode)
         markNodesByCell[cellIndex] = markNode
@@ -277,7 +274,7 @@ public class GameScene(
                 ),
             ),
         )
-        run(SKAction.playSoundFileNamed(soundFilePath("tap.mp3"), waitForCompletion = false))
+        run(SKAction.playSoundFileNamed("tap.mp3", waitForCompletion = false))
     }
 
     private fun makeMarkNode(mark: Mark): SKShapeNode {
@@ -318,7 +315,7 @@ public class GameScene(
         board.winningLine?.let {
             pulseWinningLine(it)
             spawnWinParticles(it)
-            run(SKAction.playSoundFileNamed(soundFilePath("win.mp3"), waitForCompletion = false))
+            run(SKAction.playSoundFileNamed("win.mp3", waitForCompletion = false))
         }
 
         when (val winner = board.winner) {
@@ -404,26 +401,6 @@ public class GameScene(
         Canvas(bitmap).drawOval(0f, 0f, diameter.toFloat(), diameter.toFloat(), paint)
         return SKTexture(bitmap).also { cachedParticleTexture = it }
     }
-
-    /**
-     * Resolves [assetName] (e.g. `"tap.mp3"`) to a real filesystem path
-     * `SKAction.playSoundFileNamed` can hand to `android.media.MediaPlayer.setDataSource
-     * (String)` — see docs/GAME_DESIGN.md's "Polish (Phase 5)" section for why this is needed
-     * (bitzgroup/SpriteKit forwards the string as-is to `MediaPlayer`, which can't read
-     * `assets/` directly from a plain path string) rather than the `assets/` file itself.
-     * Copies once per launch into [Context.getCacheDir] — cheap for these two small clips, and
-     * avoids re-copying on every placed mark / game over.
-     */
-    private fun soundFilePath(assetName: String): String =
-        soundFilePathCache.getOrPut(assetName) {
-            val outFile = File(context.cacheDir, assetName)
-            if (!outFile.exists()) {
-                context.assets.open(assetName).use { input ->
-                    outFile.outputStream().use { output -> input.copyTo(output) }
-                }
-            }
-            outFile.absolutePath
-        }
 
     // endregion
 

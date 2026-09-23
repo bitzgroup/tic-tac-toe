@@ -78,15 +78,19 @@ GameplayKit in the loop at all, mirroring FourInARow's own `AAPLBoard` (rules) /
     *entire* game tree (9 plies) rather than needing a mid-game evaluation function.
   - **`isWin(for:)` / `isLoss(for:)`:** delegate straight to `TicTacToeBoard`.
   - **`copy()` must be a true deep copy** (deep-copies the wrapped `TicTacToeBoard`) — required by
-    `GKGameModel`/`NSCopying` conformance on both platforms regardless of the point below, even
-    though neither strategist calls it during search anymore (see next point).
+    `GKGameModel`/`NSCopying` conformance on both platforms, and actually exercised during search:
+    `GKMonteCarloStrategist` (Normal) branches by copying the model at every tree node.
   - **`apply(_:)`/`unapplyGameModelUpdate(_:)` must be true inverses of each other, identically on
-    both platforms.** Both `GKMinmaxStrategist` and `GKMonteCarloStrategist` — on iOS (Apple's real
-    frameworks) *and* on Android (`bitzgroup/GameplayKit`) — search by mutating the one shared
-    model in place: `apply` a candidate move, recurse/roll out, `unapplyGameModelUpdate` it back
-    off before trying the next one, rather than branching by copying at every node. `TicTacToeMove`
-    delegates to `TicTacToeBoard`'s own `unapplyMove(at:)` (clears the cell, reverts `activeMark`)
-    on both platforms.
+    both platforms.** `GKMinmaxStrategist` (Hard) — on iOS (Apple's real framework) *and* on
+    Android (`bitzgroup/GameplayKit`) — searches by mutating the one shared model in place: `apply`
+    a candidate move, recurse, `unapplyGameModelUpdate` it back off before trying the next one.
+    `TicTacToeMove` delegates to `TicTacToeBoard`'s own `unapplyMove(at:)` (clears the cell,
+    reverts `activeMark`) on both platforms. `GKMonteCarloStrategist` doesn't need this — it never
+    calls `unapplyGameModelUpdate` at all, on either platform: verified against Apple's real
+    framework by `GKMonteCarloUnapplyCompatibilityTests` (iOS), after `bitzgroup/GameplayKit` had
+    briefly required it for Monte Carlo too on the (wrong) assumption that the Minmax finding below
+    generalized — reverted upstream in
+    [GameplayKit#18](https://github.com/bitzgroup/GameplayKit/pull/18).
     **This wasn't always symmetric — a real Apple/OSS discrepancy this app's own Phase 1
     implementation found and fixed, not just documented:** `bitzgroup/GameplayKit`'s `v0.1.0`
     originally always branched by copying and never called `unapplyGameModelUpdate` at all, unlike
@@ -96,8 +100,8 @@ GameplayKit in the loop at all, mirroring FourInARow's own `AAPLBoard` (rules) /
     already occupied" precondition failure — a stale mark left behind by a failed backtrack —
     until `TicTacToeBoard` grew a real `unapplyMove(at:)`. Rather than leave the platforms
     permanently asymmetric (a no-op-is-fine Android vs. a must-be-real iOS), `bitzgroup/GameplayKit`
-    itself was revised post-`v0.1.0` to match Apple's real mutate-and-backtrack behavior, so both
-    platforms now have the identical requirement — see `docs/ARCHITECTURE.md`'s "Finding OSS/Apple
+    itself was revised post-`v0.1.0` to match Apple's real mutate-and-backtrack behavior for
+    `GKMinmaxStrategist`, so both platforms now have the identical requirement — see `docs/ARCHITECTURE.md`'s "Finding OSS/Apple
     discrepancies" section for the full story, including why the fix went upstream into the library
     rather than staying a workaround in this app.
 
@@ -306,24 +310,15 @@ implementations are written against, not left to drift.
     fraction of the size, which is the only axis WAV loses on for clips this short. The two apps
     ship byte-identical copies of each file — `ios/TicTacToe/Resources/Sounds/` and
     `android/app/src/main/assets/` — the strongest form of parity available for a binary asset.
-  - **Known, unavoidable non-identical detail:** the string each platform passes to
-    `playSoundFileNamed`/`SKAudioNode`'s `fileNamed` differs, because each platform's own
-    underlying playback mechanism resolves that string differently. Apple's real `SKAction`
-    resolves a plain filename (`"tap.mp3"`) against the app bundle automatically. Android needs a
-    real filesystem path: `bitzgroup/SpriteKit`'s implementation forwards the string as-is to
-    `android.media.MediaPlayer.setDataSource(String)`, which cannot read the APK's `assets/`
-    folder directly from a plain path string — **an on-device finding, not an assumption:** an
-    earlier version of this app tried the commonly-cited `"file:///android_asset/…"` URI form
-    first, since `MediaPlayer` special-cases it in some Android versions/media backends, but it
-    failed on-device (`MediaPlayer` logged `error (-38, 0)`, no sound, no crash — the library's own
-    `runCatching` wrapper around every native call, see `SKMediaPlayerHandle`, swallows the
-    resulting `IOException` silently, so this needs real playback verification to catch, not just a
-    successful build). `GameScene` instead copies `tap.mp3`/`win.mp3` from `assets/` into
-    `Context.getCacheDir()` once per launch (on first use, cached by filename) and passes that real
-    absolute path to `playSoundFileNamed` — a plain filesystem path `MediaPlayer.setDataSource`
-    reads directly, no special URI scheme involved. So iOS passes `"tap.mp3"`/`"win.mp3"` and
-    Android passes an absolute `cacheDir` path — different strings, same audio file, same
-    triggering logic either side of that one call.
+  - **Both platforms pass the identical plain file name** (`"tap.mp3"`/`"win.mp3"`) to
+    `SKAction.playSoundFileNamed`. Apple resolves it against the app bundle; `bitzgroup/SpriteKit`
+    resolves it against the app's `assets/` folder, its main-bundle equivalent. This wasn't always
+    so: `bitzgroup/SpriteKit`'s `v0.1.0` had no bundle lookup and forwarded the string straight to
+    `MediaPlayer.setDataSource(String)`, whose commonly-cited `"file:///android_asset/…"` form
+    failed silently on-device (`MediaPlayer error (-38, 0)`, swallowed by the library's
+    `runCatching` wrappers), so Phase 5 shipped with `GameScene` copying each asset into
+    `Context.getCacheDir()` and passing that absolute path. The post-`v0.1.0` Apple-parity audit
+    (`docs/ROADMAP.md` Phase 7) fixed the lookup upstream and removed that workaround.
 - **App icon:** both platforms ship the same icon design — a dark background (`#1A1A1A`, not pure
   black, matching `android/app/src/main/res/values/colors.xml`'s existing `ic_launcher_background`,
   which predates this section) with a white 2×2 tic-tac-toe grid (rounded line caps), the same

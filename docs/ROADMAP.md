@@ -322,6 +322,45 @@ section for the full spec each implementation is written against.
       for exactly what that was). This app's own `android/SpriteKit`/`GameplayKit`/`GKSKBridge`
       submodule pointers now resolve to those three `0.1.0` tags.
 
+## Phase 7 — Apple-parity audit (post-`v0.1.0`)
+
+**In progress.** A pass over both apps' code, comments, and docs, looking for every place the
+Android app has to be written differently from the iOS app because `bitzgroup/SpriteKit`/
+`GameplayKit`/`GKSKBridge` behave or are shaped differently from Apple's frameworks. Each such
+difference is treated as an OSS compatibility bug and fixed upstream, then the Android app is
+changed back to match the iOS code — rather than being kept as a documented workaround.
+
+- [x] `GKMonteCarloStrategist` must not require `unapplyGameModelUpdate` — verified against
+      Apple's real framework on an iOS Simulator (`GKMonteCarloUnapplyCompatibilityTests`: a model
+      with a no-op `unapplyGameModelUpdate` searches correctly, branching via `copy(with:)`
+      exclusively). `bitzgroup/GameplayKit` had extended `GKMinmaxStrategist`'s mutate-and-backtrack
+      requirement to Monte Carlo for symmetry; reverted in
+      [GameplayKit#18](https://github.com/bitzgroup/GameplayKit/pull/18). `GKMinmaxStrategist`'s
+      requirement (verified by Phase 1's on-device crash) is unchanged.
+- [x] `SKAction.playSoundFileNamed`/`SKAudioNode(fileNamed:)` resolve a plain file name against
+      the app's `assets/` folder in `bitzgroup/SpriteKit`
+      ([SpriteKit#31](https://github.com/bitzgroup/SpriteKit/pull/31)), the way Apple resolves one
+      against the app bundle. `GameScene.kt` now passes `"tap.mp3"`/`"win.mp3"` exactly like `GameScene.swift`,
+      and its `cacheDir`-copy workaround (Phase 5) is gone. Verified on a physical Pixel 4a:
+      `dumpsys audio` shows each clip's player going `started` → routed to the speaker → `stopped`
+      after the clip's natural length, with no `MediaPlayer` errors in logcat.
+- [x] `SKNode.setScale(_:)` added to `bitzgroup/SpriteKit` (same PR); `GameScene.kt` calls
+      `markNode.setScale(0f)` like `GameScene.swift` instead of setting `xScale`/`yScale` separately.
+- [x] Touch callbacks take Apple's shape in `bitzgroup/SpriteKit`
+      ([SpriteKit#32](https://github.com/bitzgroup/SpriteKit/pull/32)) —
+      `touchesBegan(touches: Set<SKTouch>, event: SKEvent?)` and siblings, with a persistent
+      `UITouch`-like `SKTouch` queried via `location(node)` — instead of one pre-converted
+      `SKTouch` per call. `CellNode.kt`/`ButtonNode` override the same signature as their Swift
+      twins. Along the way this fixed `SKView` dropping every pointer but the first on a
+      multi-touch move/cancel. Verified by playing on a physical Pixel 4a.
+- [x] `Vector2.width`/`height` added to `bitzgroup/SpriteKit` (same PR; for its `CGSize` role), so the
+      Android scenes read `size.width` like the iOS ones instead of `size.x`.
+- [x] `SKTexture.size()` added (same PR), and texture-derived sizing matched to Apple's real defaults
+      (checked on an iOS Simulator first): `SKSpriteNode(texture:)` sizes to its texture,
+      `SKEmitterNode.particleSize` defaults to `(0, 0)` meaning "use the texture's size", and
+      `SKAction.animate` gained Apple's `resize` parameter. Doesn't change this app's code (both
+      apps set `particleSize` explicitly), but closes the gap for any other consumer.
+
 ## Explicitly out of scope
 
 - Persistence (win/loss record across app launches), accounts, networking/multiplayer — see
