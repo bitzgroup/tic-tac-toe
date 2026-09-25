@@ -150,7 +150,7 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   `:SpriteKit:spritekit` via the same kind of project-path reference — it carries no submodules of
   its own (see its `docs/ARCHITECTURE.md`), so those two project paths must exist under those exact
   names in whichever `settings.gradle.kts` includes it, which the include block above guarantees.
-  All three submodules' Gradle version catalogs (`agp` 8.5.2, `kotlin` 2.0.20, `detekt` 1.23.6,
+  All three submodules' Gradle version catalogs (`agp` 9.4.1, `kotlin` 2.2.10, `detekt` 1.23.6,
   `ktlint-gradle` 12.1.1) agree, so `android/gradle/libs.versions.toml` can declare one shared set
   of versions/plugins for the whole build — Gradle only reads the *including* project's version
   catalog, not each submodule's own `gradle/libs.versions.toml`, so this repo's own catalog is what
@@ -191,7 +191,7 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   app/src/test/kotlin/jp/co/bitz/tictactoe/game/   # JUnit — see "Verifying parity" below
   ```
 
-- `minSdk` 24 / `compileSdk`/`targetSdk` 34, Kotlin 2.0+ — matching the submodules' own
+- `minSdk` 24 / `compileSdk`/`targetSdk` 37, Kotlin 2.2+ — matching the submodules' own
   `Requirements` so the app and its dependencies always build against the same SDK/Kotlin baseline.
 - **Localization:** `res/values/strings.xml` holds the `en` base strings (Android's default
   resource set doubles as the base locale) and `res/values-ja/strings.xml` overrides them with a
