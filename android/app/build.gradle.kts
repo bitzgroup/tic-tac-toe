@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "jp.co.bitz.tictactoe"
-    compileSdk = 34
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "jp.co.bitz.tictactoe"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 37
         versionCode = 1
         versionName = "0.1.0"
     }
