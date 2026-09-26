@@ -59,6 +59,10 @@ tic-tac-toe/
   app, and how the Android app wires `SpriteKit`/`GameplayKit`/`GKSKBridge` in as git submodules.
 - `docs/ROADMAP.md` — phased implementation plan; each phase lands on both platforms before the
   next phase starts, so the two apps never drift far apart in capability.
+- `docs/RELEASE_PROCESS.md` — the step-by-step process for cutting a new version of the
+  `SpriteKit`/`GameplayKit`/`GKSKBridge` OSS submodules (audit → fix → regression-check via this
+  app → version bump → tag/release), including the per-action git approval and subagent-safety
+  rules that process runs under.
 
 ## Commands
 

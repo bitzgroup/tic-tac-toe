@@ -226,6 +226,9 @@ git submodule update --remote android/GameplayKit
 git submodule update --remote android/GKSKBridge
 ```
 
+See [`docs/RELEASE_PROCESS.md`](RELEASE_PROCESS.md) for the full process of cutting a new version
+of one of these three libraries (audit, fix, regression-check via this app, tag, release).
+
 ## Why two GameplayKit strategists and not just one
 
 `docs/GAME_DESIGN.md`'s three difficulty levels (`GKRandomDistribution` / `GKMonteCarloStrategist`
