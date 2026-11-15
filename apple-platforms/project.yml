@@ -98,7 +98,32 @@ targets:
     dependencies:
       - target: SpriteKitParityHost
 
+  # GameplayKit parity probes: same idea as the SpriteKit ones, for bitzgroup/GameplayKit (and the
+  # GameplayKit-SpriteKit glue bitzgroup/GKSKBridge mirrors). No view needed, so a host-less
+  # unit-test bundle is enough.
+  GameplayKitParityTests:
+    type: bundle.unit-test
+    supportedDestinations: [iOS, tvOS]
+    sources:
+      - path: GameplayKitParity/Tests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.co.bitz.gameplaykitparity.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1,2,3"
+    dependencies:
+      - sdk: GameplayKit.framework
+      - sdk: SpriteKit.framework
+
 schemes:
+  GameplayKitParity:
+    build:
+      targets:
+        GameplayKitParityTests: [test]
+    test:
+      config: Debug
+      targets:
+        - GameplayKitParityTests
   SpriteKitParity:
     build:
       targets:

@@ -33,6 +33,15 @@ jobs:
             -destination 'generic/platform=iOS Simulator' \
             build-for-testing
 
+      - name: Build GameplayKit parity probes
+        working-directory: apple-platforms
+        run: |
+          xcodebuild \
+            -project TicTacToe.xcodeproj \
+            -scheme GameplayKitParity \
+            -destination 'generic/platform=iOS Simulator' \
+            build-for-testing
+
   android:
     runs-on: ubuntu-latest
     steps:
