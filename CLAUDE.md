@@ -57,7 +57,8 @@ checklist; update this section (and that file's checkboxes) as phases land.
 ```text
 tic-tac-toe/
 ├── docs/          # GAME_DESIGN.md, ARCHITECTURE.md, ROADMAP.md
-├── ios/           # Xcode project (XcodeGen-generated), Swift, Apple's SpriteKit + GameplayKit
+├── apple-platforms/  # Xcode project (XcodeGen-generated), Swift, Apple's SpriteKit + GameplayKit:
+│                     # the iOS game app plus iOS/tvOS SpriteKit parity probes
 └── android/       # Gradle project, Kotlin, SpriteKit/GameplayKit/GKSKBridge as git submodules
 ```
 
@@ -76,7 +77,7 @@ tic-tac-toe/
 
 ## Commands
 
-- **iOS** (from `ios/`):
+- **iOS / Apple platforms** (from `apple-platforms/`):
   - Regenerate the Xcode project after adding/removing files: `xcodegen generate` (needs
     [XcodeGen](https://github.com/yonaskolb/XcodeGen); `project.yml` is the source of truth, the
     generated `.xcodeproj` is committed too — see `docs/ARCHITECTURE.md`).
@@ -85,8 +86,14 @@ tic-tac-toe/
   - Run a single test: add `-only-testing:TicTacToeTests/TicTacToeBoardTests/testSomeCase` to the
     command above.
   - Or open `TicTacToe.xcodeproj` in Xcode directly (build/run/test from there).
-  - **CI (`.github/workflows/ci.yml`) only builds the iOS app — it does not run
-    `TicTacToeTests`.** Unlike Android, an iOS regression won't be caught by CI; run the test
+  - SpriteKit parity probes (records of Apple's real SpriteKit behavior that `bitzgroup/SpriteKit`
+    mirrors — see `docs/ARCHITECTURE.md`'s "SpriteKit parity probes"): `xcodebuild test -project
+    TicTacToe.xcodeproj -scheme SpriteKitParity -destination 'platform=tvOS Simulator,name=<Apple
+    TV simulator>'` (and again with an iOS Simulator destination). Add a probe here before
+    implementing an Apple behavior in `bitzgroup/SpriteKit`.
+  - **CI (`.github/workflows/ci.yml`) only builds the iOS app and the parity probes — it runs
+    neither `TicTacToeTests` nor `SpriteKitParity`.** (The CI job is still named `ios`: it's a
+    required status check in branch protection.) Unlike Android, an iOS regression won't be caught by CI; run the test
     command above (or Xcode's Test navigator) yourself before considering an iOS change done.
 - **Android** (from `android/`): `./gradlew :app:assembleDebug`, `./gradlew :app:testDebugUnitTest`,
   `./gradlew :app:ktlintCheck`, `./gradlew :app:detekt` — scoped to `:app` for the same reason
@@ -147,7 +154,7 @@ branching model, the same convention `bitzgroup/SpriteKit` and `bitzgroup/Gamepl
   release tag) for the duration of active co-development across the four repos — see
   `docs/ARCHITECTURE.md`'s "Working with the submodules" section for why and how to switch back to
   tag-pinning later.
-- **`.gitignore`** (root) covers macOS `.DS_Store`; `ios/.gitignore` and `android/.gitignore` cover
+- **`.gitignore`** (root) covers macOS `.DS_Store`; `apple-platforms/.gitignore` and `android/.gitignore` cover
   each platform's own build artifacts — same split as the `SpriteKit`/`GameplayKit`/`GKSKBridge`
   sibling repos.
 - **Git operations require an explicit request, every time.** This covers the whole workflow —

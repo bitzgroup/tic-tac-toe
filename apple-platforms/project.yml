@@ -1,0 +1,129 @@
+name: TicTacToe
+options:
+  bundleIdPrefix: jp.co.bitz
+  deploymentTarget:
+    iOS: "15.0"
+    tvOS: "17.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+
+targets:
+  TicTacToe:
+    type: application
+    platform: iOS
+    sources:
+      - path: TicTacToe
+    info:
+      path: Generated/Info.plist
+      properties:
+        UILaunchScreen: {}
+        CFBundleDisplayName: $(PRODUCT_NAME)
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.co.bitz.tictactoe
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    dependencies:
+      - sdk: SpriteKit.framework
+      - sdk: GameplayKit.framework
+
+  TicTacToeTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: TicTacToeTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.co.bitz.tictactoe.tests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: TicTacToe
+
+  # SpriteKit parity probes: record what Apple's real SpriteKit does, so bitzgroup/SpriteKit's
+  # Android behavior is checked against the framework itself. Not part of the game; see
+  # docs/ARCHITECTURE.md's "SpriteKit parity probes" section.
+  SpriteKitParityHost:
+    type: application
+    supportedDestinations: [iOS, tvOS]
+    sources:
+      - path: SpriteKitParity/Host
+    info:
+      path: Generated/SpriteKitParityHost-Info.plist
+      properties:
+        UILaunchScreen: {}
+        CFBundleDisplayName: SpriteKit Parity
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.co.bitz.spritekitparity
+        TARGETED_DEVICE_FAMILY: "1,2,3"
+    dependencies:
+      - sdk: SpriteKit.framework
+
+  SpriteKitParityTests:
+    type: bundle.unit-test
+    supportedDestinations: [iOS, tvOS]
+    sources:
+      - path: SpriteKitParity/Tests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.co.bitz.spritekitparity.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1,2,3"
+    dependencies:
+      - target: SpriteKitParityHost
+
+  SpriteKitParityUITests:
+    type: bundle.ui-testing
+    supportedDestinations: [iOS, tvOS]
+    sources:
+      - path: SpriteKitParity/UITests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.co.bitz.spritekitparity.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1,2,3"
+        TEST_TARGET_NAME: SpriteKitParityHost
+    dependencies:
+      - target: SpriteKitParityHost
+
+schemes:
+  SpriteKitParity:
+    build:
+      targets:
+        SpriteKitParityHost: all
+        SpriteKitParityTests: [test]
+        SpriteKitParityUITests: [test]
+    test:
+      config: Debug
+      targets:
+        - SpriteKitParityTests
+        - SpriteKitParityUITests
+  TicTacToe:
+    build:
+      targets:
+        TicTacToe: all
+        TicTacToeTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - TicTacToeTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release

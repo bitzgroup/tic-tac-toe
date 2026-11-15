@@ -9,19 +9,29 @@ permissions:
   contents: read
 
 jobs:
+  # Named `ios` for branch protection's required status check; builds apple-platforms/.
   ios:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 
       - name: Build
-        working-directory: ios
+        working-directory: apple-platforms
         run: |
           xcodebuild \
             -project TicTacToe.xcodeproj \
             -scheme TicTacToe \
             -destination 'generic/platform=iOS Simulator' \
             build
+
+      - name: Build SpriteKit parity probes
+        working-directory: apple-platforms
+        run: |
+          xcodebuild \
+            -project TicTacToe.xcodeproj \
+            -scheme SpriteKitParity \
+            -destination 'generic/platform=iOS Simulator' \
+            build-for-testing
 
   android:
     runs-on: ubuntu-latest
