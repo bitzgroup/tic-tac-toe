@@ -53,7 +53,7 @@ unit-tested and visually/manually verified, including on physical devices. See
 ```text
 tic-tac-toe/
 ├── docs/          # game design, architecture, and roadmap — read these first
-├── apple-platforms/  # Swift app — Apple's official SpriteKit + GameplayKit, plus SpriteKit parity probes
+├── apple-platforms/  # Swift app — Apple's official SpriteKit + GameplayKit, plus SpriteKit/GameplayKit parity probes
 └── android/       # Kotlin app — bitzgroup/SpriteKit + GameplayKit + GKSKBridge as git submodules
 ```
 

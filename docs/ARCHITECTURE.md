@@ -105,7 +105,8 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   │       ├── Sounds/                   # tap.mp3/win.mp3 — see GAME_DESIGN.md's "Polish (Phase 5)"
   │       └── Assets.xcassets/          # AppIcon.appiconset — see GAME_DESIGN.md's "Polish (Phase 5)"
   ├── TicTacToeTests/             # XCTest — see "Verifying parity" below
-  └── SpriteKitParity/            # not part of the game — see "SpriteKit parity probes" below
+  ├── SpriteKitParity/            # not part of the game — see "SpriteKit parity probes" below
+  └── GameplayKitParity/          # not part of the game — see "GameplayKit parity probes" below
   ```
 
 - **Localization:** a String Catalog (`Localizable.xcstrings`) holding the `en` base strings plus a
@@ -136,6 +137,14 @@ implementing an Apple behavior in `bitzgroup/SpriteKit`, record it here first �
 the probes already caught a wrong assumption (`presentScene` un-pausing the view) and a wrong design
 (presses being delivered to the scene automatically) before they shipped. tvOS is here for
 verification only; the game itself is iOS-only.
+
+## GameplayKit parity probes (`apple-platforms/GameplayKitParity/`)
+
+The same idea for `bitzgroup/GameplayKit` and for the GameplayKit ↔ SpriteKit glue
+`bitzgroup/GKSKBridge` mirrors (`GKSKNodeComponent` as an agent delegate,
+`SKNode.obstacles(fromNodeBounds:)`). Nothing here needs a view, so it's a single host-less unit
+test target, `GameplayKitParityTests` (iOS + tvOS), run with the `GameplayKitParity` scheme. The
+expectations match the corresponding unit tests in those two libraries.
 
 ## Android app (`android/`)
 

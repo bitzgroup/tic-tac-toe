@@ -58,7 +58,7 @@ checklist; update this section (and that file's checkboxes) as phases land.
 tic-tac-toe/
 ├── docs/          # GAME_DESIGN.md, ARCHITECTURE.md, ROADMAP.md
 ├── apple-platforms/  # Xcode project (XcodeGen-generated), Swift, Apple's SpriteKit + GameplayKit:
-│                     # the iOS game app plus iOS/tvOS SpriteKit parity probes
+│                     # the iOS game app plus iOS/tvOS SpriteKit/GameplayKit parity probes
 └── android/       # Gradle project, Kotlin, SpriteKit/GameplayKit/GKSKBridge as git submodules
 ```
 
@@ -91,8 +91,11 @@ tic-tac-toe/
     TicTacToe.xcodeproj -scheme SpriteKitParity -destination 'platform=tvOS Simulator,name=<Apple
     TV simulator>'` (and again with an iOS Simulator destination). Add a probe here before
     implementing an Apple behavior in `bitzgroup/SpriteKit`.
+  - GameplayKit parity probes (the same for `bitzgroup/GameplayKit`, plus the GameplayKit ↔
+    SpriteKit glue `bitzgroup/GKSKBridge` mirrors): the same command with `-scheme
+    GameplayKitParity`.
   - **CI (`.github/workflows/ci.yml`) only builds the iOS app and the parity probes — it runs
-    neither `TicTacToeTests` nor `SpriteKitParity`.** (The CI job is still named `ios`: it's a
+    neither `TicTacToeTests` nor the parity probes.** (The CI job is still named `ios`: it's a
     required status check in branch protection.) Unlike Android, an iOS regression won't be caught by CI; run the test
     command above (or Xcode's Test navigator) yourself before considering an iOS change done.
 - **Android** (from `android/`): `./gradlew :app:assembleDebug`, `./gradlew :app:testDebugUnitTest`,

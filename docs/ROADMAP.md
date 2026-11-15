@@ -384,6 +384,17 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       handled keeps the app in the foreground, one passed on up the responder chain leaves it.
       This reshapes `bitzgroup/SpriteKit`'s planned `presses*` support (its `PARITY_GAP_PLAN.md`
       I1 had assumed automatic delivery to the scene).
+- [x] `GameplayKitParity` scheme (host-less unit tests, iOS + tvOS) for `bitzgroup/GameplayKit`
+      and `bitzgroup/GKSKBridge`. Settled what GameplayKit's `PARITY_GAP_PLAN.md` section 1.3 had
+      left open, and fixed three gaps upstream: `GKRandomDistribution.nextInt(upperBound:)` is a
+      uniform draw over `lowestValue..min(highestValue, upperBound - 1)` (the port had capped
+      `nextInt()`, piling excess onto the top value); `GKShuffledDistribution` never repeats a
+      value across a reshuffle; `GKGraph.remove` cuts the removed nodes' connections and
+      `GKGridGraph` also clears its lookup (the port had left removed nodes routable). Also found:
+      Apple's `GKStateMachine` "successfully" enters an *unregistered* state, dropping to a `nil`
+      current state — kept as a recorded deviation. For GKSKBridge: `GKSKNodeComponent`'s
+      delegate behavior and `obstacles(fromNodeBounds:)`'s vertices (the rotated rectangle,
+      through every ancestor's transform, the root's included).
 
 ## Explicitly out of scope
 
