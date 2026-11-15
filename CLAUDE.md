@@ -27,20 +27,30 @@ tests, and a full `en`/`ja` visual pass on an iOS Simulator and an Android Emula
 (polish: win-particle burst via `SKEmitterNode`, tap/win sound effects, app icons on both
 platforms), and Phase 6 (documentation & release — README screenshots, `v0.1.0` tagged and
 released, alongside `0.1.0` releases of `bitzgroup/SpriteKit`/`GameplayKit`/`GKSKBridge`) are
-complete on both platforms, both fully unit-tested (23 tests/platform on iOS incl.
-`GameScenePlaythroughTests`/`TicTacToeHardStrategistParityTests`, 20 on Android) and visually/
-manually verified (simulator/emulator screenshots, on-device playthroughs). See `docs/ROADMAP.md`
+complete on both platforms, both fully unit-tested (26 tests on iOS incl.
+`GameScenePlaythroughTests`/`TicTacToeHardStrategistParityTests`/
+`GKMonteCarloUnapplyCompatibilityTests`, 20 on Android) and visually/manually verified (simulator/
+emulator screenshots, on-device playthroughs). Phase 7 (post-`v0.1.0` Apple-parity audit: a
+systematic pass looking for every place the Android app had to diverge from the iOS app because a
+bitzgroup library behaved or was shaped differently from Apple's — each treated as an OSS
+compatibility bug and fixed upstream, then the Android app changed back to match iOS) is also
+complete, and drove the `0.2.0` releases of all three bitzgroup libraries. See `docs/ROADMAP.md`
 Phase 1 for a real OSS/Apple discrepancy the iOS-first implementation order caught, fixed upstream
 in `bitzgroup/GameplayKit` itself; Phase 2 for two more (`bitzgroup/GKSKBridge`'s
 `GKScene.entities`, `bitzgroup/SpriteKit`'s missing `SKScene.view`/`SKViewState` transition
 overload); Phase 4 for a real Android-only bug the parity pass itself caught and fixed (the
 `score_row` string's double spaces being collapsed to single spaces by Android's resource
-compiler); and Phase 5 for another Android-only bug on-device audio verification caught (the
+compiler); Phase 5 for another Android-only bug on-device audio verification caught (the
 commonly-cited `file:///android_asset/…` `MediaPlayer` trick failing silently at runtime despite a
 clean build — originally worked around by copying sound assets to `Context.getCacheDir()`; since
-fixed upstream in `bitzgroup/SpriteKit` by Phase 7's Apple-parity audit, so both apps now pass the
-same plain file name). See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist;
-update this section (and that file's checkboxes) as phases land.
+fixed upstream in `bitzgroup/SpriteKit` by Phase 7's audit, so both apps now pass the same plain
+file name); and Phase 7 itself for the `GKMonteCarloStrategist`/`GKMinmaxStrategist` distinction
+(only `GKMinmaxStrategist` requires `unapplyGameModelUpdate` to be a true inverse — `bitzgroup/
+GameplayKit` had briefly unified the two, reverted after `GKMonteCarloUnapplyCompatibilityTests`
+checked the real on-device framework) plus several `bitzgroup/SpriteKit` gaps (touch-callback
+shape, sprite/particle texture-derived sizing, `zPosition` accumulation, `.aspectFit`/`.aspectFill`
+anchor centering). See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress
+checklist; update this section (and that file's checkboxes) as phases land.
 
 ## Project structure
 
@@ -71,7 +81,13 @@ tic-tac-toe/
     [XcodeGen](https://github.com/yonaskolb/XcodeGen); `project.yml` is the source of truth, the
     generated `.xcodeproj` is committed too — see `docs/ARCHITECTURE.md`).
   - Build: `xcodebuild -project TicTacToe.xcodeproj -scheme TicTacToe -destination 'platform=iOS Simulator,name=<simulator>' build`
+  - Run all tests: `xcodebuild test -project TicTacToe.xcodeproj -scheme TicTacToe -destination 'platform=iOS Simulator,name=<simulator>'`
+  - Run a single test: add `-only-testing:TicTacToeTests/TicTacToeBoardTests/testSomeCase` to the
+    command above.
   - Or open `TicTacToe.xcodeproj` in Xcode directly (build/run/test from there).
+  - **CI (`.github/workflows/ci.yml`) only builds the iOS app — it does not run
+    `TicTacToeTests`.** Unlike Android, an iOS regression won't be caught by CI; run the test
+    command above (or Xcode's Test navigator) yourself before considering an iOS change done.
 - **Android** (from `android/`): `./gradlew :app:assembleDebug`, `./gradlew :app:testDebugUnitTest`,
   `./gradlew :app:ktlintCheck`, `./gradlew :app:detekt` — scoped to `:app` for the same reason
   `bitzgroup/GKSKBridge` scopes its own commands to `:gkskbridge` (see its `CLAUDE.md`): an
@@ -79,6 +95,9 @@ tic-tac-toe/
   projects, whose build scripts resolve `$rootDir`-relative paths (their own
   `config/detekt/detekt.yml` overrides) against *this* repo's root once included here, not their
   own.
+  - Run a single test: `./gradlew :app:testDebugUnitTest --tests "jp.co.bitz.tictactoe.game.TicTacToeGameModelTest"`.
+  - All four checks above (`ktlintCheck`, `detekt`, `assembleDebug`, `testDebugUnitTest`) are what
+    CI runs and what `docs/RELEASE_PROCESS.md` calls the regression check for the OSS submodules.
 
 ## Git Branching Workflow
 
@@ -96,9 +115,10 @@ branching model, the same convention `bitzgroup/SpriteKit` and `bitzgroup/Gamepl
 - Every merge goes through a PR — `main`/`develop` branch protection is live (no direct pushes, no
   force-push/deletion), matching `bitzgroup/SpriteKit`/`GameplayKit`'s settings including their
   required CI status checks (`.github/workflows/ci.yml`'s `ios`/`android` jobs).
-- `release/*`/`hotfix/*` don't exist yet: the first release is cut once Phases 0–4 of
-  `docs/ROADMAP.md` are complete. Until then, all work happens on `feature/*` branches merged into
-  `develop` — `main` isn't touched again until that first release.
+- `release/*`/`hotfix/*` are short-lived: this repo's own `v0.1.0` was cut this way once Phases
+  0–6 of `docs/ROADMAP.md` were complete. Day-to-day work (including Phase 7 and later) happens on
+  `feature/*` branches merged into `develop`; `main` is only touched again for the next
+  `release/*`/`hotfix/*`.
 
 ## Working in this repo
 
@@ -111,6 +131,11 @@ branching model, the same convention `bitzgroup/SpriteKit` and `bitzgroup/Gamepl
   `docs/ARCHITECTURE.md` for the file mechanism on each platform. This applies to in-app labels
   only; it does not relax the English-only rule above for docs/comments/commit messages.
 - **Documentation location:** project docs beyond the root `README.md` live under `docs/`.
+- **Never name a private/unreleased consumer app.** This repo and the three OSS submodules it
+  demonstrates are all public; some upstream fixes originate from other, unrelated apps built
+  against those submodules, and those apps may be private. Never reference such an app by name
+  anywhere in this repo or the submodule repos — commit messages, PR text, comments, or docs. Use
+  generic phrasing instead ("a host app", "a consumer app"). See `docs/RELEASE_PROCESS.md`.
 - **Design changes go in `docs/GAME_DESIGN.md` first.** Since the iOS and Android apps share no
   code, anything that must stay identical between them (rules, AI behavior, layout, animation
   timing) needs to be a spec change there before it's implemented on either platform — otherwise
