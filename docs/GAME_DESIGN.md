@@ -308,7 +308,7 @@ implementations are written against, not left to drift.
     "byte-identical asset" parity story below before it starts. WAV (this section's original
     format) works natively everywhere too, but MP3 gets the same zero-plumbing property at a
     fraction of the size, which is the only axis WAV loses on for clips this short. The two apps
-    ship byte-identical copies of each file — `ios/TicTacToe/Resources/Sounds/` and
+    ship byte-identical copies of each file — `apple-platforms/TicTacToe/Resources/Sounds/` and
     `android/app/src/main/assets/` — the strongest form of parity available for a binary asset.
   - **Both platforms pass the identical plain file name** (`"tap.mp3"`/`"win.mp3"`) to
     `SKAction.playSoundFileNamed`. Apple resolves it against the app bundle; `bitzgroup/SpriteKit`

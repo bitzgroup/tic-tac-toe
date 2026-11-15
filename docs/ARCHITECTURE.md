@@ -45,7 +45,7 @@ matching `SpriteKit`'s `:spritekit` and `GameplayKit`'s `:gameplaykit` in shape.
 ```text
 tic-tac-toe/
 ├── docs/                    # this document, GAME_DESIGN.md, ROADMAP.md
-├── ios/                     # Xcode project root — Swift, Apple's own SpriteKit + GameplayKit
+├── apple-platforms/         # Xcode project root — Swift, Apple's own SpriteKit + GameplayKit
 └── android/
     ├── app/                 # Jetpack Compose host app — Kotlin
     ├── SpriteKit/           # git submodule → github.com/bitzgroup/SpriteKit
@@ -58,7 +58,7 @@ The two platform directories are siblings and neither depends on the other; ther
 code between them (Swift and Kotlin can't share source here), only a shared *design* — everything
 that must stay in sync between them is written down once in `docs/GAME_DESIGN.md` instead.
 
-## iOS app (`ios/`)
+## iOS app (`apple-platforms/`)
 
 - A standard Xcode project/app target, Swift, targeting Apple's own `SpriteKit` and `GameplayKit`
   system frameworks directly (`import SpriteKit`, `import GameplayKit`) — no third-party
@@ -67,18 +67,18 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   newer SpriteKit/GameplayKit feature).
 - App shell: a SwiftUI `App` presenting an `SKView` (directly, or via `SpriteView` — either hosts
   the same `MenuScene`/`GameScene` from `docs/GAME_DESIGN.md`).
-- **Project file generation:** `ios/project.yml` ([XcodeGen](https://github.com/yonaskolb/XcodeGen)
-  spec) is the source of truth for `ios/TicTacToe.xcodeproj`'s targets/settings — regenerate after
-  adding files with `xcodegen generate` (run from `ios/`). `ios/` is the Xcode project root
+- **Project file generation:** `apple-platforms/project.yml` ([XcodeGen](https://github.com/yonaskolb/XcodeGen)
+  spec) is the source of truth for `apple-platforms/TicTacToe.xcodeproj`'s targets/settings — regenerate after
+  adding files with `xcodegen generate` (run from `apple-platforms/`). `apple-platforms/` is the Xcode project root
   directly (no extra nesting level), mirroring how `android/` is the Gradle project root directly.
   XcodeGen itself is a dev-time-only tool (not an app dependency, not linked into the binary); the
   generated `.xcodeproj` is committed alongside `project.yml` so anyone without XcodeGen installed
   can still open and build the project directly in Xcode.
-- Suggested source layout inside the app target (`ios/TicTacToe/`, the app target's source
+- Suggested source layout inside the app target (`apple-platforms/TicTacToe/`, the app target's source
   folder — analogous to `android/app/`):
 
   ```text
-  ios/
+  apple-platforms/
   ├── project.yml                # XcodeGen spec — source of truth for TicTacToe.xcodeproj
   ├── TicTacToe.xcodeproj/
   ├── TicTacToe/                 # app target sources
@@ -104,7 +104,8 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   │       ├── Localizable.xcstrings     # String Catalog, en base + ja — see "Localization" below
   │       ├── Sounds/                   # tap.mp3/win.mp3 — see GAME_DESIGN.md's "Polish (Phase 5)"
   │       └── Assets.xcassets/          # AppIcon.appiconset — see GAME_DESIGN.md's "Polish (Phase 5)"
-  └── TicTacToeTests/             # XCTest — see "Verifying parity" below
+  ├── TicTacToeTests/             # XCTest — see "Verifying parity" below
+  └── SpriteKitParity/            # not part of the game — see "SpriteKit parity probes" below
   ```
 
 - **Localization:** a String Catalog (`Localizable.xcstrings`) holding the `en` base strings plus a
@@ -112,6 +113,29 @@ that must stay in sync between them is written down once in `docs/GAME_DESIGN.md
   look up every label via `String(localized:)` — nothing is a literal string in `MenuScene`/
   `GameScene`. Xcode picks the active language from the device/simulator's system language
   automatically; no in-app switcher.
+
+## SpriteKit parity probes (`apple-platforms/SpriteKitParity/`)
+
+`bitzgroup/SpriteKit` mirrors Apple's SpriteKit *behavior*, not just its API shape, and Apple's
+documentation is often silent on the details that matter (edge inclusivity of `contains`, what
+`presentScene` does to a paused view, whether a scene receives remote presses at all). These
+targets record what the real framework does, so each such behavior is settled once, on Apple's
+side, and stays checkable:
+
+- `SpriteKitParityHost` — a tiny iOS/tvOS app presenting one probe scene; a UI test picks a
+  scenario with the `-scenario <name>` launch argument and reads the outcome from an on-screen
+  label.
+- `SpriteKitParityTests` — hosted unit tests for behavior that needs no user input (point
+  queries, pause interactions). Expected values match the corresponding `bitzgroup/SpriteKit`
+  unit tests one for one.
+- `SpriteKitParityUITests` — what needs the system involved: backgrounding (iOS and tvOS) and
+  Siri Remote presses via `XCUIRemote` (tvOS only).
+
+Run them with the `SpriteKitParity` scheme against both an iOS and a tvOS Simulator. When
+implementing an Apple behavior in `bitzgroup/SpriteKit`, record it here first — that order is how
+the probes already caught a wrong assumption (`presentScene` un-pausing the view) and a wrong design
+(presses being delivered to the scene automatically) before they shipped. tvOS is here for
+verification only; the game itself is iOS-only.
 
 ## Android app (`android/`)
 

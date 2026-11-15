@@ -25,7 +25,7 @@ Checklist items are marked `[ ]` until done; update this file as work lands, the
 - [x] `main`/`develop` branch protection (PR required, no direct pushes, no force-push/deletion) —
       matching `bitzgroup/SpriteKit`/`GameplayKit`'s settings; required CI status checks added once
       `.github/workflows/ci.yml` existed (see below)
-- [x] `ios/` — Xcode project (project root, no extra nesting — mirrors `android/` being the Gradle
+- [x] `ios/` (since renamed `apple-platforms/`, Phase 8) — Xcode project (project root, no extra nesting — mirrors `android/` being the Gradle
       root directly) generated via [XcodeGen](https://github.com/yonaskolb/XcodeGen) from
       `project.yml`, iOS 15+ deployment target, SwiftUI `App` presenting a blank `SKScene` via
       `SpriteView`, no game logic yet
@@ -231,7 +231,7 @@ locales, for all three difficulties.
       redesigned around unambiguous positions instead of full-game traces for exactly this reason.
 - [x] Confirm every localized string (`en` and `ja`) renders correctly on both apps. The `en`/`ja`
       string tables themselves are byte-identical to `docs/GAME_DESIGN.md`'s Localization table on
-      both platforms (`ios/TicTacToe/Resources/Localizable.xcstrings` vs.
+      both platforms (`apple-platforms/TicTacToe/Resources/Localizable.xcstrings` vs.
       `android/app/src/main/res/values{,-ja}/strings.xml` — the latter only after the `score_row`
       fix above). Every key confirmed rendering correctly on-screen, both locales, both apps, via
       the visual pass above: `menu_title`/`difficulty_*` on `MenuScene`; `status_your_turn`/
@@ -275,7 +275,7 @@ section for the full spec each implementation is written against.
       on iOS only decodes from a `.caf` container, not the `.opus`/Ogg-Opus files standard encoders
       produce, which would mean two different container files per sound and no true byte-identical
       asset — see `docs/GAME_DESIGN.md`'s "Polish (Phase 5)" section for the full comparison).
-      Byte-identical between `ios/TicTacToe/Resources/Sounds/` and `android/app/src/main/assets/`
+      Byte-identical between `apple-platforms/TicTacToe/Resources/Sounds/` and `android/app/src/main/assets/`
       (confirmed via `md5`).
       **Real bug found and fixed by on-device verification, not just a successful build:** the
       first Android implementation passed `"file:///android_asset/tap.wav"` to
@@ -360,6 +360,30 @@ changed back to match the iOS code — rather than being kept as a documented wo
       `SKEmitterNode.particleSize` defaults to `(0, 0)` meaning "use the texture's size", and
       `SKAction.animate` gained Apple's `resize` parameter. Doesn't change this app's code (both
       apps set `particleSize` explicitly), but closes the gap for any other consumer.
+
+## Phase 8 — Apple-platforms parity probes
+
+`ios/` became `apple-platforms/`, and its XcodeGen project gained a `SpriteKitParity` scheme
+(iOS + tvOS): a small host app, hosted unit tests, and UI tests that **record what Apple's real
+SpriteKit does** for behavior `bitzgroup/SpriteKit` mirrors, so that behavior is checked against
+the framework rather than against documentation, and the evidence stays in the repo instead of a
+one-off simulator session. See `docs/ARCHITECTURE.md`'s "SpriteKit parity probes". tvOS was added
+because Siri Remote presses — the Apple counterpart of Android TV remotes and D-pads — only exist
+there. The game itself stays iOS-only; a tvOS/Android TV version of the game would be a
+`docs/GAME_DESIGN.md` change first.
+
+- [x] Point queries (`frame`, `contains`, `nodes(at:)`, `atPoint`) — the expectations of
+      `bitzgroup/SpriteKit`'s `SKNodePointQueryTest`.
+- [x] `SKView.isPaused`/`SKScene.isPaused` interaction, including across backgrounding. Caught a
+      parity bug before release: Apple's `presentScene(_:)` also un-pauses a paused *view* and
+      always un-pauses the incoming scene; `bitzgroup/SpriteKit` had kept a paused view paused.
+- [x] Presses on tvOS: SpriteKit never delivers `UIPress`es to a scene by itself (not even with
+      the `SKView` as first responder) — a tvOS game forwards them from its view controller.
+      Forwarded remote buttons arrive as one `began` and one `ended` per press (also when held),
+      with `up`/`down`/`left`/`right`/`select`/`playPause`/`menu` types; a `menu` press that's
+      handled keeps the app in the foreground, one passed on up the responder chain leaves it.
+      This reshapes `bitzgroup/SpriteKit`'s planned `presses*` support (its `PARITY_GAP_PLAN.md`
+      I1 had assumed automatic delivery to the scene).
 
 ## Explicitly out of scope
 
