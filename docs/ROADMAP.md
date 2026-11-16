@@ -395,6 +395,9 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       current state — kept as a recorded deviation. For GKSKBridge: `GKSKNodeComponent`'s
       delegate behavior and `obstacles(fromNodeBounds:)`'s vertices (the rotated rectangle,
       through every ancestor's transform, the root's included).
+- [x] These fixes, with the rest of the libraries' post-`0.2.0` work, shipped as the `0.3.0`
+      releases of all three bitzgroup libraries; the submodules were bumped to their `develop`
+      at that release.
 
 ## Explicitly out of scope
 
