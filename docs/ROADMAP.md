@@ -398,6 +398,14 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
 - [x] These fixes, with the rest of the libraries' post-`0.2.0` work, shipped as the `0.3.0`
       releases of all three bitzgroup libraries; the submodules were bumped to their `develop`
       at that release.
+- [x] `bitzgroup/SpriteKit`'s "everyday API, batch 1" (its `PARITY_GAP_PLAN.md` H1, N1, N2,
+      A1–A4, A8, T5, C1): actions, node speed, the child-list API, sprite `scale(to:)`, shape
+      initializers, `containedNodeSet()`. Recording them caught three long-shipped differences,
+      fixed upstream: `scale(by:)` multiplies (the port added), `rotate(toAngle:)` interpolates
+      straight to the target unless `shortestUnitArc` is set (the port always took the short way,
+      ending on an equivalent angle rather than the target), and a sprite's `size` includes its
+      scale (the port's ignored it). Also: `move(toParent:)` keeps only the position in place, not
+      the rotation or scale.
 
 ## Explicitly out of scope
 
