@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		01B3021E366A0D7FB61829D2 /* TicTacToeMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFAC04CE7E5EA75DE40B150 /* TicTacToeMove.swift */; };
+		04A4E30ED356BF27ACA2886F /* SKLabelMultilineParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF85891F13D915A92C6C3AB3 /* SKLabelMultilineParityTests.swift */; };
 		0FFAC7CC789B87B77C4B0F32 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B58F32345774E4B9660BA8F /* GameplayKit.framework */; };
 		127BA6C817366DD44AE80793 /* TicTacToeBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450F612B1AA82CC46C2AAB46 /* TicTacToeBoardTests.swift */; };
 		14309156E2F4894F6BE38301 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 86E7EA53D85625E1CE54B073 /* Localizable.xcstrings */; };
@@ -23,6 +24,7 @@
 		3A158268B2CD9F56D39526C9 /* GKRandomParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6038F9FDAE3EF08975E8A39 /* GKRandomParityTests.swift */; };
 		3CD1C2ABCD9B6C3DF346A26E /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46792D05C0105B6639F51427 /* GameScene.swift */; };
 		4138E63AA4D3B5A0668B2C8F /* SKShapeNodeInitParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013B25D3D170D3E5811FEE3 /* SKShapeNodeInitParityTests.swift */; };
+		47176D784D3785CB4293983F /* SKTextureNamedParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F675CE0AC18A7E14CCA1316 /* SKTextureNamedParityTests.swift */; };
 		4947F9002103F1DAFF8C0EE5 /* GKMonteCarloUnapplyCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767084C0525713618A6EEAC3 /* GKMonteCarloUnapplyCompatibilityTests.swift */; };
 		573B8EBC6F253A00C00548B8 /* TicTacToePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D80E2AEDEC022CD3F469426 /* TicTacToePlayer.swift */; };
 		5B26A235591B6BCCD046D488 /* GKSKBridgeParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A4B1C7A4B69CC1526BC78D /* GKSKBridgeParityTests.swift */; };
@@ -39,6 +41,8 @@
 		9FB9D009906CB0BACC02D24D /* GKStateMachineParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F09DAECD229CD90CE907D4 /* GKStateMachineParityTests.swift */; };
 		A2621176142539991F1C636A /* GKGraphParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580A26CDB4338C6EA38ACD92 /* GKGraphParityTests.swift */; };
 		A45C47D476075CE62F742F9A /* ParityHostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDFE8A7ADEEF82FDD61AE8A /* ParityHostApp.swift */; };
+		ACA6342E083D00775E3903D1 /* ParityProbe.png in Resources */ = {isa = PBXBuildFile; fileRef = 423D3C78889DB0A69DE57258 /* ParityProbe.png */; };
+		AD590AAA9C11247453468F50 /* SKRenderPixelParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5417E097026F21753C0F0247 /* SKRenderPixelParityTests.swift */; };
 		AFA196D2F2D3C6FE21231E70 /* TicTacToeMarkComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347281F0057617CB6C554F86 /* TicTacToeMarkComponent.swift */; };
 		B74A47ED93F6C2E547AD8B5D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9B6E0310E615E832D01DAD /* ContentView.swift */; };
 		C763272B571696BA804B0BF6 /* GameScenePlaythroughTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EE03437CC26EC038D4FC70 /* GameScenePlaythroughTests.swift */; };
@@ -51,6 +55,7 @@
 		E356BBDFD193E93DF35E901E /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF73A1A71459487A2945FC98 /* SpriteKit.framework */; };
 		E657E8DD845AF783C9247A3D /* TurnEndState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69612EDD3B6395F4616294C /* TurnEndState.swift */; };
 		EB5DF8E9CB7EB81F04DF52FD /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39A32CE6D3B822F52A9D425 /* MenuScene.swift */; };
+		EFE8C790FAFAD06377713E7F /* SKNodeSearchParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A790FC45CC1883E3AD5C46 /* SKNodeSearchParityTests.swift */; };
 		F7B19D1504FE26152701F9D0 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654DA0F3FE1203B9CABA92A9 /* Strings.swift */; };
 		F8CEE118E60C40BC514B9BF0 /* SKViewLifecycleParityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F34B3B56977CD8C1A3F81 /* SKViewLifecycleParityUITests.swift */; };
 		FCBBA59165C499FF88A5E6EB /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E062FA69A52AB47C092BD /* Score.swift */; };
@@ -92,8 +97,11 @@
 		24FBF29FF27F06565323EA76 /* TicTacToeHardStrategistParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeHardStrategistParityTests.swift; sourceTree = "<group>"; };
 		27183FDCF95623562E0C2741 /* TicTacToeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeApp.swift; sourceTree = "<group>"; };
 		347281F0057617CB6C554F86 /* TicTacToeMarkComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeMarkComponent.swift; sourceTree = "<group>"; };
+		423D3C78889DB0A69DE57258 /* ParityProbe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ParityProbe.png; sourceTree = "<group>"; };
 		450F612B1AA82CC46C2AAB46 /* TicTacToeBoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeBoardTests.swift; sourceTree = "<group>"; };
 		46792D05C0105B6639F51427 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		46A790FC45CC1883E3AD5C46 /* SKNodeSearchParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKNodeSearchParityTests.swift; sourceTree = "<group>"; };
+		5417E097026F21753C0F0247 /* SKRenderPixelParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKRenderPixelParityTests.swift; sourceTree = "<group>"; };
 		543261ECCBB6FFA25BE282DA /* TicTacToeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TicTacToeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		551CE0C21388F5EF0F5C9906 /* TicTacToeHardStrategistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeHardStrategistTests.swift; sourceTree = "<group>"; };
 		580A26CDB4338C6EA38ACD92 /* GKGraphParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKGraphParityTests.swift; sourceTree = "<group>"; };
@@ -106,6 +114,7 @@
 		73E03748AA8892618E17BD1F /* SKNodeHierarchyParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKNodeHierarchyParityTests.swift; sourceTree = "<group>"; };
 		767084C0525713618A6EEAC3 /* GKMonteCarloUnapplyCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKMonteCarloUnapplyCompatibilityTests.swift; sourceTree = "<group>"; };
 		7B58F32345774E4B9660BA8F /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
+		7F675CE0AC18A7E14CCA1316 /* SKTextureNamedParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKTextureNamedParityTests.swift; sourceTree = "<group>"; };
 		86E7EA53D85625E1CE54B073 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		8F394505B183A24C2007014F /* TicTacToe.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		915C0125B3F2DABAC680B2E3 /* CellNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellNode.swift; sourceTree = "<group>"; };
@@ -115,6 +124,7 @@
 		A39A32CE6D3B822F52A9D425 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		A73354CC61E7FA64558C5DC8 /* SKActionParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKActionParityTests.swift; sourceTree = "<group>"; };
 		AAF4A1F1B90B88970C6463DF /* HumanTurnState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumanTurnState.swift; sourceTree = "<group>"; };
+		AF85891F13D915A92C6C3AB3 /* SKLabelMultilineParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKLabelMultilineParityTests.swift; sourceTree = "<group>"; };
 		B0DBD1756E8D9124A967DDFA /* GameplayKitParityTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GameplayKitParityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6038F9FDAE3EF08975E8A39 /* GKRandomParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKRandomParityTests.swift; sourceTree = "<group>"; };
 		B89F34B3B56977CD8C1A3F81 /* SKViewLifecycleParityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKViewLifecycleParityUITests.swift; sourceTree = "<group>"; };
@@ -233,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				BBDFE8A7ADEEF82FDD61AE8A /* ParityHostApp.swift */,
+				423D3C78889DB0A69DE57258 /* ParityProbe.png */,
 			);
 			path = Host;
 			sourceTree = "<group>";
@@ -261,10 +272,14 @@
 			children = (
 				A73354CC61E7FA64558C5DC8 /* SKActionParityTests.swift */,
 				E0FF115C36BCAD16BBB83B7B /* SKCameraParityTests.swift */,
+				AF85891F13D915A92C6C3AB3 /* SKLabelMultilineParityTests.swift */,
 				73E03748AA8892618E17BD1F /* SKNodeHierarchyParityTests.swift */,
 				EC8A96FD54B635F728C4AFF5 /* SKNodePointQueryParityTests.swift */,
+				46A790FC45CC1883E3AD5C46 /* SKNodeSearchParityTests.swift */,
+				5417E097026F21753C0F0247 /* SKRenderPixelParityTests.swift */,
 				C013B25D3D170D3E5811FEE3 /* SKShapeNodeInitParityTests.swift */,
 				E08B1AF4267E8F264B3268BC /* SKSpriteSizeParityTests.swift */,
+				7F675CE0AC18A7E14CCA1316 /* SKTextureNamedParityTests.swift */,
 				BDCD19D034B196A3F78D12B9 /* SKViewPauseParityTests.swift */,
 			);
 			path = Tests;
@@ -358,6 +373,7 @@
 			buildConfigurationList = ACF03FC9096196E00D36A4D5 /* Build configuration list for PBXNativeTarget "SpriteKitParityHost" */;
 			buildPhases = (
 				56B88915262ACECB481A1F02 /* Sources */,
+				707719872431CEEB9995EE72 /* Resources */,
 				04549D01B3AC3931C4D5663B /* Frameworks */,
 			);
 			buildRules = (
@@ -502,6 +518,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		707719872431CEEB9995EE72 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ACA6342E083D00775E3903D1 /* ParityProbe.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C57CEFE21E7C69279DB9A5D4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -522,10 +546,14 @@
 			files = (
 				8B6ADB1B34686AA258516E62 /* SKActionParityTests.swift in Sources */,
 				1DECFDE4ED09A902FAA63F10 /* SKCameraParityTests.swift in Sources */,
+				04A4E30ED356BF27ACA2886F /* SKLabelMultilineParityTests.swift in Sources */,
 				CFE3EBC843ACD7E53852D773 /* SKNodeHierarchyParityTests.swift in Sources */,
 				E278D98CE8C673C94FC01C77 /* SKNodePointQueryParityTests.swift in Sources */,
+				EFE8C790FAFAD06377713E7F /* SKNodeSearchParityTests.swift in Sources */,
+				AD590AAA9C11247453468F50 /* SKRenderPixelParityTests.swift in Sources */,
 				4138E63AA4D3B5A0668B2C8F /* SKShapeNodeInitParityTests.swift in Sources */,
 				1E374A3CFB70926B5419BD4C /* SKSpriteSizeParityTests.swift in Sources */,
+				47176D784D3785CB4293983F /* SKTextureNamedParityTests.swift in Sources */,
 				2C6F743778F39D89CE66FAA4 /* SKViewPauseParityTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
