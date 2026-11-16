@@ -127,15 +127,20 @@ side, and stays checkable:
   scenario with the `-scenario <name>` launch argument and reads the outcome from an on-screen
   label.
 - `SpriteKitParityTests` — hosted unit tests for behavior that needs no user input (point
-  queries, pause interactions). Expected values match the corresponding `bitzgroup/SpriteKit`
-  unit tests one for one.
+  queries, pause interactions, the child-list API, sprite size vs. scale, shape initializers'
+  paths, camera containment). Expected values match the corresponding `bitzgroup/SpriteKit` unit
+  tests one for one. Actions run for real in a presented scene: frames do advance in a hosted test
+  while it waits on an expectation, so `SKActionParityTests` records each action's end state from
+  its completion block.
 - `SpriteKitParityUITests` — what needs the system involved: backgrounding (iOS and tvOS) and
   Siri Remote presses via `XCUIRemote` (tvOS only).
 
 Run them with the `SpriteKitParity` scheme against both an iOS and a tvOS Simulator. When
 implementing an Apple behavior in `bitzgroup/SpriteKit`, record it here first — that order is how
-the probes already caught a wrong assumption (`presentScene` un-pausing the view) and a wrong design
-(presses being delivered to the scene automatically) before they shipped. tvOS is here for
+the probes already caught a wrong assumption (`presentScene` un-pausing the view), a wrong design
+(presses being delivered to the scene automatically), and long-shipped differences (`scale(by:)`
+multiplies, `rotate(toAngle:)` doesn't take the short way by default, a sprite's `size` includes
+its scale) before they shipped or spread further. tvOS is here for
 verification only; the game itself is iOS-only.
 
 ## GameplayKit parity probes (`apple-platforms/GameplayKitParity/`)
