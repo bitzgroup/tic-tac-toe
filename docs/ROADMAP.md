@@ -406,6 +406,12 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       ending on an equivalent angle rather than the target), and a sprite's `size` includes its
       scale (the port's ignored it). Also: `move(toParent:)` keeps only the position in place, not
       the rotation or scale.
+- [x] `bitzgroup/SpriteKit`'s "everyday API, batch 2" (T1, T4, L2, N3 + A5, V2): named textures,
+      `centerRect`, multi-line labels, the full node-search syntax, `ignoresSiblingOrder`. The
+      probes pinned down what Apple doesn't document: `//` lists each node's children before
+      searching deeper, a one-line label ignores `preferredMaxLayoutWidth`, a multi-line block
+      aligns `.baseline` like `.bottom`, a missing image gives a 128×128 placeholder, and the
+      port's existing draw order already matched Apple's default.
 
 ## Explicitly out of scope
 

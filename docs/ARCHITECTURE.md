@@ -128,10 +128,13 @@ side, and stays checkable:
   label.
 - `SpriteKitParityTests` — hosted unit tests for behavior that needs no user input (point
   queries, pause interactions, the child-list API, sprite size vs. scale, shape initializers'
-  paths, camera containment). Expected values match the corresponding `bitzgroup/SpriteKit` unit
-  tests one for one. Actions run for real in a presented scene: frames do advance in a hosted test
-  while it waits on an expectation, so `SKActionParityTests` records each action's end state from
-  its completion block.
+  paths, camera containment, name search, named textures, multi-line label layout). Expected
+  values match the corresponding `bitzgroup/SpriteKit` unit tests one for one. Actions run for
+  real in a presented scene: frames do advance in a hosted test while it waits on an expectation,
+  so `SKActionParityTests` records each action's end state from its completion block. What only
+  shows up in pixels — draw order, `centerRect` 9-slice stretching — `SKRenderPixelParityTests`
+  reads back from `SKView.texture(from:)`. `SKTextureNamedParityTests` loads `ParityProbe.png`, a
+  4×2 image bundled with the host app.
 - `SpriteKitParityUITests` — what needs the system involved: backgrounding (iOS and tvOS) and
   Siri Remote presses via `XCUIRemote` (tvOS only).
 
