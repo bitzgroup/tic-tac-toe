@@ -426,6 +426,13 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
 - [x] These P1 items shipped as the `0.4.0` releases of `bitzgroup/SpriteKit` and
       `bitzgroup/GameplayKit` (`bitzgroup/GKSKBridge` had no changes and stays at `0.3.0`); the
       submodules were bumped to their `develop` at that release.
+- [ ] `bitzgroup/SpriteKit`'s scene lifecycle (S1, S2): `SKScene.sceneDidLoad()` and
+      `SKSceneDelegate`. Recorded on iOS/tvOS: `sceneDidLoad` runs once, inside the initializer
+      (the size already set; `SKScene()` is 1×1), never again on presenting or resizing. A delegate
+      replaces the scene's own frame callbacks *per method* — one it doesn't implement still
+      reaches the scene's override — in the order `update`, `didEvaluateActions`,
+      `didSimulatePhysics`, `didApplyConstraints`, `didFinishUpdate`; it is held weakly, and a
+      paused scene calls neither.
 
 ## Explicitly out of scope
 
