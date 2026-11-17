@@ -37,7 +37,8 @@ compatibility bug and fixed upstream, then the Android app changed back to match
 complete, and drove the `0.2.0` releases of all three bitzgroup libraries. Phase 8
 (Apple-platforms parity probes: `apple-platforms/`'s `SpriteKitParity`/`GameplayKitParity`
 schemes recording Apple's real behavior on iOS/tvOS) is complete too, and drove their `0.3.0`
-releases. See `docs/ROADMAP.md`
+releases; the probes then drove the libraries' P1 parity work, released as `bitzgroup/SpriteKit`/
+`GameplayKit` `0.4.0`. See `docs/ROADMAP.md`
 Phase 1 for a real OSS/Apple discrepancy the iOS-first implementation order caught, fixed upstream
 in `bitzgroup/GameplayKit` itself; Phase 2 for two more (`bitzgroup/GKSKBridge`'s
 `GKScene.entities`, `bitzgroup/SpriteKit`'s missing `SKScene.view`/`SKViewState` transition
