@@ -435,6 +435,14 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       paused scene calls neither. Implemented upstream with the same per-method replacement;
       `sceneDidLoad` runs right before the first `didMove` there (a Kotlin superclass constructor
       can't safely call an override), and the delegate is held strongly.
+- [x] `bitzgroup/GameplayKit`'s noise selection and remapping (G6, G7). Recorded on iOS/tvOS: every
+      sampled `GKNoise`/`GKNoiseMap` value is clamped to `-1..1` while intermediate results aren't
+      (the port clamped nothing — fixed upstream); the selection constructors squeeze the chosen
+      component's `-1..1` range into its band of the selection axis, with evenly spaced default
+      boundaries, the upper component on a boundary, and blend distances ignored. Apple's own
+      remapping is broken — the curve remap raises an exception for any dictionary, the terrace
+      remap isn't a terrace curve — so the port follows libnoise's curve/terrace modules there,
+      as a recorded deviation.
 
 ## Explicitly out of scope
 
