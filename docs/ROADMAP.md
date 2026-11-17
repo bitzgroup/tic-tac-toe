@@ -418,6 +418,11 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       150 points and applies gravity in m/s² (so it falls 150× faster than the port did), fixed
       upstream. Also recorded: `body(in:)` matches padded bounding boxes, ray normals have length
       150, and `isResting` is never set by the simulation.
+- [x] `bitzgroup/GameplayKit`'s P1 items (G1, G4): `GKCompositeBehavior`, and `GKObstacleGraph`
+      connection locks plus `connectUsingObstacles(node:ignoring:)`/`(node:ignoringBufferRadiusOf:)`.
+      Recorded: a member behavior's weight multiplies its goals' weights; a lock keeps only its own
+      direction of a connection and never creates one; adding an obstacle reconnects nodes linked
+      in from outside too. (A composite with goals of its own crashes Apple's agent update.)
 
 ## Explicitly out of scope
 

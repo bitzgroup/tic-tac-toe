@@ -154,7 +154,10 @@ The same idea for `bitzgroup/GameplayKit` and for the GameplayKit ↔ SpriteKit 
 `bitzgroup/GKSKBridge` mirrors (`GKSKNodeComponent` as an agent delegate,
 `SKNode.obstacles(fromNodeBounds:)`). Nothing here needs a view, so it's a single host-less unit
 test target, `GameplayKitParityTests` (iOS + tvOS), run with the `GameplayKitParity` scheme. The
-expectations match the corresponding unit tests in those two libraries.
+expectations match the corresponding unit tests in those two libraries. Where Apple's numbers
+aren't the point — `GKCompositeBehaviorParityTests` checks how weights combine, not the steering
+force itself — a probe compares two Apple results with each other (a composite against the
+equivalent plain `GKBehavior`) rather than recording raw values.
 
 ## Android app (`android/`)
 
