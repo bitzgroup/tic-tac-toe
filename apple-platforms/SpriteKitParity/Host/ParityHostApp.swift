@@ -29,6 +29,25 @@ final class ProbeScene: SKScene {
         log("began", presses)
     }
 
+    /// Every touch delivered, as `<phase initial><tapCount>` (`b1`, `m1`, `e2`, ...).
+    var touchLog: [String] = []
+    /// For each touch delivered: how old its `timestamp` was on delivery, against `systemUptime`.
+    var timestampLagsMs: [Int] = []
+    var forces: Set<String> = []
+
+    private func log(_ phase: String, _ touches: Set<UITouch>) {
+        for touch in touches {
+            touchLog.append("\(phase)\(touch.tapCount)")
+            timestampLagsMs.append(Int((ProcessInfo.processInfo.systemUptime - touch.timestamp) * 1000))
+            forces.insert("\(touch.force)/\(touch.maximumPossibleForce)")
+        }
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) { log("b", touches) }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) { log("m", touches) }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) { log("e", touches) }
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) { log("c", touches) }
+
     override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         log("changed", presses)
     }
@@ -134,6 +153,10 @@ final class ProbeViewController: UIViewController {
         case "presentPaused":
             scene.isPaused = true
             skView.presentScene(scene)
+        case "touches":
+            // Touches go to the scene itself, not the press-probe child covering it.
+            child.isUserInteractionEnabled = false
+            skView.presentScene(scene)
         case "forwardedPassedOn":
             scene.handlesPresses = false
             skView.presentScene(scene)
@@ -187,6 +210,10 @@ final class ProbeViewController: UIViewController {
             "presses=\(scene.pressLog.joined(separator: ","))",
             "childPresses=\(child.pressCount)",
             "becameFirstResponder=\(firstResponderResult.map(String.init) ?? "n/a")",
+            "touches=\(scene.touchLog.joined(separator: ","))",
+            "maxTimestampLagMs=\(scene.timestampLagsMs.max() ?? -1)",
+            "minTimestampLagMs=\(scene.timestampLagsMs.min() ?? -1)",
+            "forces=\(scene.forces.sorted().joined(separator: ","))",
         ].joined(separator: " ")
     }
 }
