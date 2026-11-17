@@ -412,6 +412,12 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       searching deeper, a one-line label ignores `preferredMaxLayoutWidth`, a multi-line block
       aligns `.baseline` like `.bottom`, a missing image gives a 128×128 placeholder, and the
       port's existing draw order already matched Apple's default.
+- [x] `bitzgroup/SpriteKit`'s physics queries (P1, P2): `SKPhysicsWorld.body(at:)`/`body(in:)`/
+      ray casts and `SKPhysicsBody.node`/`area`/`isResting`/`joints`/`allContactedBodies()`.
+      Recording them caught the port's physics units being off: Apple measures mass in meters of
+      150 points and applies gravity in m/s² (so it falls 150× faster than the port did), fixed
+      upstream. Also recorded: `body(in:)` matches padded bounding boxes, ray normals have length
+      150, and `isResting` is never set by the simulation.
 
 ## Explicitly out of scope
 

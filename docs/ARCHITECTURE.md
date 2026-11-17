@@ -134,7 +134,9 @@ side, and stays checkable:
   so `SKActionParityTests` records each action's end state from its completion block. What only
   shows up in pixels — draw order, `centerRect` 9-slice stretching — `SKRenderPixelParityTests`
   reads back from `SKView.texture(from:)`. `SKTextureNamedParityTests` loads `ParityProbe.png`, a
-  4×2 image bundled with the host app.
+  4×2 image bundled with the host app. The physics probes (`SKPhysicsQueryParityTests`,
+  `SKPhysicsBodyParityTests`) share `SKPhysicsParityTestCase`, a presented scene with zero
+  gravity.
 - `SpriteKitParityUITests` — what needs the system involved: backgrounding (iOS and tvOS) and
   Siri Remote presses via `XCUIRemote` (tvOS only).
 
