@@ -443,6 +443,17 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       remapping is broken — the curve remap raises an exception for any dictionary, the terrace
       remap isn't a terrace curve — so the port follows libnoise's curve/terrace modules there,
       as a recorded deviation.
+- [x] `bitzgroup/GameplayKit`'s `GKRTree`, `GKSphereObstacle` and custom node classes (G2, G3,
+      G5). Recorded on iOS/tvOS: a `GKRTree` query returns only elements its rect fully contains,
+      not every one it intersects, and removal searches only child nodes whose bounds contain the
+      rect passed; a `GKAgent3D` swerves around a `GKSphereObstacle` ahead and ignores one it would
+      clear, and since Apple keeps 2D agents in 3D at (x, 0, y), a 3D agent avoids a circle at
+      (x, 0, y) and a 2D agent a sphere at (x, z) — the port had 3D agents avoid circles as
+      cylinders along z, fixed upstream; the `nodeClass:` graph initializers build every node the
+      graph makes itself with the class's own initializer, while Swift's generic argument alone
+      changes nothing. Implemented upstream as `GKRTree`, `GKSphereObstacle` and a `nodeFactory`
+      parameter. Probing also found that setting an Apple agent's `speed` moves it along its
+      heading (+z for a new 3D agent), which the port doesn't do yet (G10).
 
 ## Explicitly out of scope
 
