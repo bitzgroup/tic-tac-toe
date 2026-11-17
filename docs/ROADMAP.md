@@ -423,6 +423,9 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       Recorded: a member behavior's weight multiplies its goals' weights; a lock keeps only its own
       direction of a connection and never creates one; adding an obstacle reconnects nodes linked
       in from outside too. (A composite with goals of its own crashes Apple's agent update.)
+- [x] These P1 items shipped as the `0.4.0` releases of `bitzgroup/SpriteKit` and
+      `bitzgroup/GameplayKit` (`bitzgroup/GKSKBridge` had no changes and stays at `0.3.0`); the
+      submodules were bumped to their `develop` at that release.
 
 ## Explicitly out of scope
 
