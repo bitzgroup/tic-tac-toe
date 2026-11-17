@@ -460,6 +460,13 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       0.5; a new `GKAgent2D` heads along +y with `rotation` wrapped into `0..<2π`, a new
       `GKAgent3D` along +z (its rotation matrix's first column). The port's `speed` was only a
       reading and its tunables defaulted to 0, so a default agent never moved — fixed upstream.
+- [x] `bitzgroup/SpriteKit`'s `SKTouch.tapCount`, `timestamp` and `force` (I5). Recorded on an iOS
+      simulator through the probe host app: quick taps close together count up (1, 2, 3), a pause
+      or a tap far away starts over, each finger of a two-finger tap counts on its own, and a drag
+      or long press keeps its count while it moves but ends with `tapCount` 0; `timestamp` is on the
+      `systemUptime` clock; `force`/`maximumPossibleForce` are 0 without force-sensing hardware.
+      Implemented upstream with Android's `ViewConfiguration` tap limits standing in for Apple's
+      undocumented ones.
 
 ## Explicitly out of scope
 
