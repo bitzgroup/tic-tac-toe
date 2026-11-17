@@ -128,7 +128,8 @@ side, and stays checkable:
   label.
 - `SpriteKitParityTests` — hosted unit tests for behavior that needs no user input (point
   queries, pause interactions, the child-list API, sprite size vs. scale, shape initializers'
-  paths, camera containment, name search, named textures, multi-line label layout). Expected
+  paths, camera containment, name search, named textures, multi-line label layout, scene
+  lifecycle and `SKSceneDelegate` callbacks). Expected
   values match the corresponding `bitzgroup/SpriteKit` unit tests one for one. Actions run for
   real in a presented scene: frames do advance in a hosted test while it waits on an expectation,
   so `SKActionParityTests` records each action's end state from its completion block. What only
