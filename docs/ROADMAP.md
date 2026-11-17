@@ -454,6 +454,12 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       changes nothing. Implemented upstream as `GKRTree`, `GKSphereObstacle` and a `nodeFactory`
       parameter. Probing also found that setting an Apple agent's `speed` moves it along its
       heading (+z for a new 3D agent), which the port doesn't do yet (G10).
+- [x] `bitzgroup/GameplayKit`'s agent speed and defaults (G10). Recorded on iOS/tvOS: an agent's
+      velocity is always its heading times `speed` (a negative speed points it backward), capped at
+      `maxSpeed` only on update; defaults are `maxSpeed`/`maxAcceleration`/`mass` 1 and `radius`
+      0.5; a new `GKAgent2D` heads along +y with `rotation` wrapped into `0..<2π`, a new
+      `GKAgent3D` along +z (its rotation matrix's first column). The port's `speed` was only a
+      reading and its tunables defaulted to 0, so a default agent never moved — fixed upstream.
 
 ## Explicitly out of scope
 
