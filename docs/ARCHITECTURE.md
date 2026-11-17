@@ -158,7 +158,8 @@ test target, `GameplayKitParityTests` (iOS + tvOS), run with the `GameplayKitPar
 expectations match the corresponding unit tests in those two libraries. Where Apple's numbers
 aren't the point — `GKCompositeBehaviorParityTests` checks how weights combine, not the steering
 force itself — a probe compares two Apple results with each other (a composite against the
-equivalent plain `GKBehavior`) rather than recording raw values. Where Apple's own behavior is
+equivalent plain `GKBehavior`) rather than recording raw values, or asserts only the direction of
+an effect (`GKSphereObstacleParityTests` checks which way an agent swerves). Where Apple's own behavior is
 broken, a probe records what it returns today (`GKNoiseParityTests`' terraces) or, when the call
 crashes the test process, a comment says so; the library then follows the documented intent and
 records the deviation.
