@@ -61,6 +61,7 @@
 		E278D98CE8C673C94FC01C77 /* SKNodePointQueryParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8A96FD54B635F728C4AFF5 /* SKNodePointQueryParityTests.swift */; };
 		E356BBDFD193E93DF35E901E /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF73A1A71459487A2945FC98 /* SpriteKit.framework */; };
 		E657E8DD845AF783C9247A3D /* TurnEndState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69612EDD3B6395F4616294C /* TurnEndState.swift */; };
+		E6D11AF1488866D9118BA628 /* GKAgentParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B78475E2B82B38E5908F6E9 /* GKAgentParityTests.swift */; };
 		E841EEF59231C672321F80CF /* SKSceneLifecycleParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0D07F94EE8B46027ED85F8 /* SKSceneLifecycleParityTests.swift */; };
 		EB5DF8E9CB7EB81F04DF52FD /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39A32CE6D3B822F52A9D425 /* MenuScene.swift */; };
 		EFE8C790FAFAD06377713E7F /* SKNodeSearchParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A790FC45CC1883E3AD5C46 /* SKNodeSearchParityTests.swift */; };
@@ -118,6 +119,7 @@
 		543261ECCBB6FFA25BE282DA /* TicTacToeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TicTacToeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		551CE0C21388F5EF0F5C9906 /* TicTacToeHardStrategistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeHardStrategistTests.swift; sourceTree = "<group>"; };
 		580A26CDB4338C6EA38ACD92 /* GKGraphParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKGraphParityTests.swift; sourceTree = "<group>"; };
+		5B78475E2B82B38E5908F6E9 /* GKAgentParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKAgentParityTests.swift; sourceTree = "<group>"; };
 		5E9B6E0310E615E832D01DAD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		654DA0F3FE1203B9CABA92A9 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		6815B91C3FEEBD53304172B4 /* GKSphereObstacleParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKSphereObstacleParityTests.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 		252E7566355C37FCAAA9D637 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				5B78475E2B82B38E5908F6E9 /* GKAgentParityTests.swift */,
 				32B8D3DF7C54470740322C93 /* GKCompositeBehaviorParityTests.swift */,
 				3FF3928EC00FDC527DB0E3FC /* GKCustomNodeClassParityTests.swift */,
 				580A26CDB4338C6EA38ACD92 /* GKGraphParityTests.swift */,
@@ -652,6 +655,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6D11AF1488866D9118BA628 /* GKAgentParityTests.swift in Sources */,
 				9AB0BE7601DFA3027C3B3C77 /* GKCompositeBehaviorParityTests.swift in Sources */,
 				0CDCA30504BFD4EA00C170EF /* GKCustomNodeClassParityTests.swift in Sources */,
 				A2621176142539991F1C636A /* GKGraphParityTests.swift in Sources */,
