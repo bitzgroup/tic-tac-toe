@@ -474,6 +474,13 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       port picks the nearest fraction (ties going up), which matches all but 24 and 45 (Apple: 30),
       recorded as a deviation. Checked on an Android emulator (host GPU) by temporarily setting the
       rate in this app: 30, 20, 15 and 50 ran at about 29, 19, 15 and 59 fps.
+- [x] `bitzgroup/SpriteKit`'s `SKLabelNode.color`/`colorBlendFactor`/`blendMode` (L1). Recorded on
+      iOS/tvOS by pixel probes (`SKLabelColorParityTests`): defaults white/0/`.alpha`; `color`
+      tints the text exactly as a sprite's tints its texture (each pixel multiplied by it, its
+      alpha included, mixed in by the clamped factor); `colorize` animates labels; and a label
+      alpha-blends whatever its `blendMode`. The same probes caught two sprite bugs in the port,
+      fixed with it: an untextured sprite drew white unless `colorBlendFactor` was raised (Apple
+      draws its color at any factor), and `color`'s alpha was ignored.
 
 ## Explicitly out of scope
 
