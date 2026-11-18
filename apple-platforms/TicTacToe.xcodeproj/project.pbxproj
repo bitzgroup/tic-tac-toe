@@ -36,6 +36,7 @@
 		6E2584D340BE71CDF65E6E14 /* TurnBeginState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13648B8A99BBB9D87D896C61 /* TurnBeginState.swift */; };
 		6EFC6594895E2F526CFB6C49 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF73A1A71459487A2945FC98 /* SpriteKit.framework */; };
 		71482F4015CE759EC6089A61 /* tap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 73BFDCB8143C82FB6163547E /* tap.mp3 */; };
+		749DE58CF843F1C803C065CA /* SKShapeNodeStyleParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1194ABAC7B6186D70E42B81E /* SKShapeNodeStyleParityTests.swift */; };
 		7B21D03D04523A98C68271D0 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF73A1A71459487A2945FC98 /* SpriteKit.framework */; };
 		899B0B14AE832A1C47A478BF /* win.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 03B22FF31CE48E6C457E66DD /* win.mp3 */; };
 		8B6ADB1B34686AA258516E62 /* SKActionParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73354CC61E7FA64558C5DC8 /* SKActionParityTests.swift */; };
@@ -106,6 +107,7 @@
 		0A1810662CBE38FBA1CAFACC /* SpriteKitParityTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SpriteKitParityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D80E2AEDEC022CD3F469426 /* TicTacToePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToePlayer.swift; sourceTree = "<group>"; };
 		10E0859E5DA7E389123B0A1A /* TicTacToeGameModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeGameModelTests.swift; sourceTree = "<group>"; };
+		1194ABAC7B6186D70E42B81E /* SKShapeNodeStyleParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKShapeNodeStyleParityTests.swift; sourceTree = "<group>"; };
 		13648B8A99BBB9D87D896C61 /* TurnBeginState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnBeginState.swift; sourceTree = "<group>"; };
 		15A4B1C7A4B69CC1526BC78D /* GKSKBridgeParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKSKBridgeParityTests.swift; sourceTree = "<group>"; };
 		1EADBD623B642EAC8FAC569D /* GKRTreeParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKRTreeParityTests.swift; sourceTree = "<group>"; };
@@ -318,6 +320,7 @@
 				5417E097026F21753C0F0247 /* SKRenderPixelParityTests.swift */,
 				AB0D07F94EE8B46027ED85F8 /* SKSceneLifecycleParityTests.swift */,
 				C013B25D3D170D3E5811FEE3 /* SKShapeNodeInitParityTests.swift */,
+				1194ABAC7B6186D70E42B81E /* SKShapeNodeStyleParityTests.swift */,
 				E08B1AF4267E8F264B3268BC /* SKSpriteSizeParityTests.swift */,
 				7F675CE0AC18A7E14CCA1316 /* SKTextureNamedParityTests.swift */,
 				54354E411CE8A29F25D01E1B /* SKViewFrameRateParityTests.swift */,
@@ -599,6 +602,7 @@
 				AD590AAA9C11247453468F50 /* SKRenderPixelParityTests.swift in Sources */,
 				E841EEF59231C672321F80CF /* SKSceneLifecycleParityTests.swift in Sources */,
 				4138E63AA4D3B5A0668B2C8F /* SKShapeNodeInitParityTests.swift in Sources */,
+				749DE58CF843F1C803C065CA /* SKShapeNodeStyleParityTests.swift in Sources */,
 				1E374A3CFB70926B5419BD4C /* SKSpriteSizeParityTests.swift in Sources */,
 				47176D784D3785CB4293983F /* SKTextureNamedParityTests.swift in Sources */,
 				A31FB7A2031F4143C6F54443 /* SKViewFrameRateParityTests.swift in Sources */,
