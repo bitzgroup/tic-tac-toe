@@ -467,6 +467,13 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       `systemUptime` clock; `force`/`maximumPossibleForce` are 0 without force-sensing hardware.
       Implemented upstream with Android's `ViewConfiguration` tap limits standing in for Apple's
       undocumented ones.
+- [x] `bitzgroup/SpriteKit`'s `SKView.preferredFramesPerSecond` (V3). Recorded on iOS/tvOS at 60 Hz:
+      the default is 60 and a set value reads back as set; the view runs at a whole fraction of the
+      display rate — every requested rate from 11 to 60 was swept — and 0 runs once a second, while
+      a negative rate or one above 60 runs at full rate. No simple rule fits the sweep exactly: the
+      port picks the nearest fraction (ties going up), which matches all but 24 and 45 (Apple: 30),
+      recorded as a deviation. Checked on an Android emulator (host GPU) by temporarily setting the
+      rate in this app: 30, 20, 15 and 50 ran at about 29, 19, 15 and 59 fps.
 
 ## Explicitly out of scope
 
