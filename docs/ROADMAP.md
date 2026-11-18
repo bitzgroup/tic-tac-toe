@@ -481,6 +481,13 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       alpha-blends whatever its `blendMode`. The same probes caught two sprite bugs in the port,
       fixed with it: an untextured sprite drew white unless `colorBlendFactor` was raised (Apple
       draws its color at any factor), and `color`'s alpha was ignored.
+- [x] `bitzgroup/SpriteKit`'s `SKShapeNode.isAntialiased`/`blendMode`/`lineLength` (H2). Recorded
+      on iOS/tvOS (`SKShapeNodeStyleParityTests`): antialiasing smooths outlines but never fills,
+      and widens a drawn outline's frame by 0.85 points a side; `blendMode` applies to fill and
+      outline like a sprite's; the frame includes a drawn outline (segments and caps, not
+      miters); and simulators report `lineLength` as 0, so the port returns the documented real
+      length instead. The probes also showed Apple's default `lineWidth` is 1 (the port's was 0),
+      fixed with it. The port still draws outlines unsmoothed, tracked as SpriteKit's H3.
 
 ## Explicitly out of scope
 
