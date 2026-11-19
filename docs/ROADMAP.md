@@ -521,6 +521,14 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       `copy()`; a host app's own subclass overrides it via `copyInto` to keep its class. Neither
       app copies nodes; an emulator pass with copied shapes and buttons added temporarily
       confirmed the port.
+- [x] `bitzgroup/SpriteKit`'s `SKView.delegate`, `shouldCullNonVisibleNodes` and
+      `isAsynchronous` (V5). Recorded on iOS/tvOS (`SKViewDelegateParityTests`): both flags
+      default to `true`; the delegate's `view(_:shouldRenderAtTime:)` is asked once a frame before
+      `update`, with the same time, and not while the view is paused; answering `false` skips the
+      frame's `update` and actions, and the next frame that runs catches up on the skipped time.
+      The port implements the delegate and accepts both flags with no effect. Neither app sets
+      them; an emulator pass with a delegate that skipped every other second confirmed the
+      catch-up.
 
 ## Explicitly out of scope
 
