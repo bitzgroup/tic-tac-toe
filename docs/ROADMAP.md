@@ -529,6 +529,15 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       The port implements the delegate and accepts both flags with no effect. Neither app sets
       them; an emulator pass with a delegate that skipped every other second confirmed the
       catch-up.
+- [x] `bitzgroup/SpriteKit`'s `SKTextureAtlas(named:)`, `SKTextureAtlas(dictionary:)` and texture
+      and atlas preloading (T2). Recorded on iOS/tvOS (`SKTextureAtlasParityTests`, against a
+      `ParityAtlas.atlas` folder bundled with the probe host): texture names keep their extensions
+      and are found with or without one; sizes are pixel sizes; an unknown name gives the 128×128
+      placeholder and a missing atlas is empty; every preload calls back off the main thread; a
+      stretched atlas texture keeps clean edges. The port packs an `assets/<name>.atlas/` folder at
+      runtime. Recording the edges caught a port bug, packed textures bleeding into their
+      neighbors when stretched, fixed with a border of repeated edge pixels. Neither app uses
+      atlases; an emulator pass with the same atlas added temporarily confirmed the port.
 
 ## Explicitly out of scope
 
