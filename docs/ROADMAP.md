@@ -512,6 +512,15 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       in black; ranges keep their own fonts and colors; `color` still tints; the multi-line and
       alignment settings apply. The port takes a `CharSequence` styled with Android spans. Neither
       app uses it; an emulator pass with styled labels added temporarily confirmed the port.
+- [x] `bitzgroup/SpriteKit`'s `SKNode.copy()` (N4). Recorded on iOS/tvOS
+      (`SKNodeCopyParityTests`): a deep copy of the subtree with no parent and every property
+      kept; a new physics body (settings and velocity kept) and `userData` dictionary; constraints
+      and textures shared; running actions copied but started over; a copied scene's camera and a
+      crop node's mask point at the copies, and a scene's delegates aren't copied; a subclass keeps
+      its class but not its own Swift properties. The port gives every node class an explicit
+      `copy()`; a host app's own subclass overrides it via `copyInto` to keep its class. Neither
+      app copies nodes; an emulator pass with copied shapes and buttons added temporarily
+      confirmed the port.
 
 ## Explicitly out of scope
 
