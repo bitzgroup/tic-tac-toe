@@ -16,7 +16,8 @@ final class SKPhysicsAngularParityTests: SKPhysicsParityTestCase {
         let body = add("a", SKPhysicsBody(circleOfRadius: 10), at: CGPoint(x: 200, y: 200)).physicsBody!
         body.applyImpulse(CGVector(dx: 0, dy: 10), at: CGPoint(x: 210, y: 200))
         XCTAssertEqual(body.velocity.dy, 10 / body.mass, accuracy: 0.01)
-        XCTAssertEqual(body.angularVelocity, (10.0 / 150) * (10.0 / 150) / circleInertia(body, radius: 10), accuracy: 0.01)
+        let leverTimesImpulse: CGFloat = (10.0 / 150) * (10.0 / 150)
+        XCTAssertEqual(body.angularVelocity, leverTimesImpulse / circleInertia(body, radius: 10), accuracy: 0.01)
         XCTAssertEqual(body.angularVelocity, 143.239, accuracy: 0.01)
 
         let holder = SKNode()
@@ -61,7 +62,9 @@ final class SKPhysicsAngularParityTests: SKPhysicsParityTestCase {
         body.applyTorque(1)
         runFrames(0.2)
         let dt = body.velocity.dx / (10 / body.mass)
-        let inertia = body.mass * (pow(40.0 / 150, 2) + pow(20.0 / 150, 2)) / 12
+        let width: CGFloat = 40.0 / 150
+        let height: CGFloat = 20.0 / 150
+        let inertia: CGFloat = body.mass * (width * width + height * height) / 12
         XCTAssertEqual(body.angularVelocity / (dt / inertia), 1, accuracy: 0.001)
     }
 
@@ -75,7 +78,8 @@ final class SKPhysicsAngularParityTests: SKPhysicsParityTestCase {
         runFrames(0.3)
         XCTAssertEqual(node.physicsBody!.angularVelocity, .pi * 60, accuracy: 0.01)
         XCTAssertEqual(node.physicsBody!.velocity, .zero)
-        let center = CGPoint(x: node.position.x + 20 * cos(node.zRotation), y: node.position.y + 20 * sin(node.zRotation))
+        let angle: CGFloat = node.zRotation
+        let center = CGPoint(x: node.position.x + 20 * cos(angle), y: node.position.y + 20 * sin(angle))
         XCTAssertEqual(center.x, 320, accuracy: 0.01)
         XCTAssertEqual(center.y, 100, accuracy: 0.01)
         XCTAssertNotEqual(node.position, CGPoint(x: 300, y: 100))
@@ -130,7 +134,9 @@ final class SKPhysicsAngularParityTests: SKPhysicsParityTestCase {
         XCTAssertEqual(t1 - t0, 0.05, accuracy: 0.001)
         XCTAssertEqual(v1 - v0, -73.5, accuracy: 0.01)
         // Six steps, each adding 12.25 points/s and then moving: (Σ 1…6) × 12.25 / 120 past v0.
-        let sixSteps = -(6 * -v0 + 21 * 12.25) / 120
+        let startFall: CGFloat = 6 * -v0
+        let gained: CGFloat = 21 * 12.25
+        let sixSteps: CGFloat = -(startFall + gained) / 120
         XCTAssertEqual(y1 - y0, sixSteps, accuracy: 0.001)
 
         let floor = SKNode()
