@@ -488,6 +488,14 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       miters); and simulators report `lineLength` as 0, so the port returns the documented real
       length instead. The probes also showed Apple's default `lineWidth` is 1 (the port's was 0),
       fixed with it. The port still draws outlines unsmoothed, tracked as SpriteKit's H3.
+- [x] `bitzgroup/SpriteKit`'s antialiased `SKShapeNode` outlines (H3). Recorded on iOS/tvOS
+      (`SKShapeNodeStyleParityTests`): each outline edge fades linearly over 1.7 screen pixels,
+      opaque 1.12 inside the edge to clear 0.58 outside, and the fade scales with the node's own
+      scale and with the scene's `scaleMode` (read back from the view, since `texture(from:)`
+      ignores `scaleMode`). The port builds the same fade into the outline's geometry. Since both
+      apps draw a 1080×1920 scene aspect-fit onto a phone, the fade spans well under a pixel
+      there, so outlines change only by a partial pixel along diagonal and curved edges —
+      matching iOS — as an emulator pass confirmed.
 
 ## Explicitly out of scope
 
