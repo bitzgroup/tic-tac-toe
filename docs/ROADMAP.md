@@ -496,6 +496,15 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       apps draw a 1080×1920 scene aspect-fit onto a phone, the fade spans well under a pixel
       there, so outlines change only by a partial pixel along diagonal and curved edges —
       matching iOS — as an emulator pass confirmed.
+- [x] `bitzgroup/SpriteKit`'s `SKView` debug overlays (V4). Recorded on iOS/tvOS
+      (`SKViewDebugOverlayParityTests`): every overlay is off by default; the statistics
+      (`showsFPS`/`showsNodeCount`/`showsDrawCount`/`showsQuadCount`) share one line at the
+      bottom right, `nodes:7 draws:3 quads:334  58.9 fps`, in white 10-point Menlo over black at
+      30% opacity, 5 points in from the right; the node count includes the scene and hidden or
+      plain nodes; `showsPhysics` outlines bodies with opaque (0.4, 0.8, 0.8) lines one pixel wide
+      above the content. Apple draws `showsFields` broken on simulators, so the port accepts it
+      but draws nothing. Neither app turns these on; an emulator pass with them switched on
+      temporarily confirmed the port's overlays.
 
 ## Explicitly out of scope
 
