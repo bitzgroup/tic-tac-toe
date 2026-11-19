@@ -505,6 +505,13 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       above the content. Apple draws `showsFields` broken on simulators, so the port accepts it
       but draws nothing. Neither app turns these on; an emulator pass with them switched on
       temporarily confirmed the port's overlays.
+- [x] `bitzgroup/SpriteKit`'s `SKLabelNode.attributedText` (L3). Recorded on iOS/tvOS
+      (`SKLabelAttributedTextParityTests`): it is `nil` by default; while set, it alone is drawn
+      and sized — `text`, `fontName`, `fontSize` and `fontColor` are ignored, even for an empty
+      string, and setting `text` doesn't clear it; text without attributes is 12-point Helvetica
+      in black; ranges keep their own fonts and colors; `color` still tints; the multi-line and
+      alignment settings apply. The port takes a `CharSequence` styled with Android spans. Neither
+      app uses it; an emulator pass with styled labels added temporarily confirmed the port.
 
 ## Explicitly out of scope
 
