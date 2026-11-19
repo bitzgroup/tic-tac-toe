@@ -538,6 +538,17 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       runtime. Recording the edges caught a port bug, packed textures bleeding into their
       neighbors when stretched, fixed with a border of repeated edge pixels. Neither app uses
       atlases; an emulator pass with the same atlas added temporarily confirmed the port.
+- [x] `bitzgroup/SpriteKit`'s off-center `applyForce(_:at:)`/`applyImpulse(_:at:)` and spin from
+      off-center contacts (P3). Recorded on iOS/tvOS (`SKPhysicsAngularParityTests`): a force or
+      impulse at a point (in scene coordinates) turns the body by `r × F` with lengths in meters;
+      bodies turn about their center of mass, so an off-center shape swings its node around it; a
+      box landing on a corner turns flat and a sliding ball starts rolling. Recording it also
+      showed Apple simulates in steps of 1/120 of a second whatever the frame rate, moving at most
+      300 points and turning at most π/2 a step. The port gained clipped two-point contacts, an
+      angular contact solver and the same substeps, so scenes now settle the same way at any frame
+      rate (before, a box on a floor kept hopping at 20 frames a second and fell through it at 5).
+      Neither app uses physics; an emulator pass with a tilted box, a sliding ball and an
+      off-center impulse added temporarily confirmed the port.
 
 ## Explicitly out of scope
 

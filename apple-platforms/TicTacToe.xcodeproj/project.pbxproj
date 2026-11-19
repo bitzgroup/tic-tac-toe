@@ -39,6 +39,7 @@
 		6EFC6594895E2F526CFB6C49 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF73A1A71459487A2945FC98 /* SpriteKit.framework */; };
 		71482F4015CE759EC6089A61 /* tap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 73BFDCB8143C82FB6163547E /* tap.mp3 */; };
 		749DE58CF843F1C803C065CA /* SKShapeNodeStyleParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1194ABAC7B6186D70E42B81E /* SKShapeNodeStyleParityTests.swift */; };
+		7A2DDB3B1BAC3C90C8630B1C /* SKPhysicsAngularParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51D29EA9F7C6B8CCB69A7E3 /* SKPhysicsAngularParityTests.swift */; };
 		7B21D03D04523A98C68271D0 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF73A1A71459487A2945FC98 /* SpriteKit.framework */; };
 		82D024A006BEE4FCBFBE92C0 /* SKTextureAtlasParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A8225255641317A14E44A6 /* SKTextureAtlasParityTests.swift */; };
 		899B0B14AE832A1C47A478BF /* win.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 03B22FF31CE48E6C457E66DD /* win.mp3 */; };
@@ -154,6 +155,7 @@
 		A13AFB3CCF0E8CF4532D8387 /* ParityAtlas.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = ParityAtlas.atlas; sourceTree = "<group>"; };
 		A372102F1BC050CE1277814B /* SKPhysicsQueryParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKPhysicsQueryParityTests.swift; sourceTree = "<group>"; };
 		A39A32CE6D3B822F52A9D425 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		A51D29EA9F7C6B8CCB69A7E3 /* SKPhysicsAngularParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKPhysicsAngularParityTests.swift; sourceTree = "<group>"; };
 		A73354CC61E7FA64558C5DC8 /* SKActionParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKActionParityTests.swift; sourceTree = "<group>"; };
 		AAF4A1F1B90B88970C6463DF /* HumanTurnState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumanTurnState.swift; sourceTree = "<group>"; };
 		AB0D07F94EE8B46027ED85F8 /* SKSceneLifecycleParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKSceneLifecycleParityTests.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 				73E03748AA8892618E17BD1F /* SKNodeHierarchyParityTests.swift */,
 				EC8A96FD54B635F728C4AFF5 /* SKNodePointQueryParityTests.swift */,
 				46A790FC45CC1883E3AD5C46 /* SKNodeSearchParityTests.swift */,
+				A51D29EA9F7C6B8CCB69A7E3 /* SKPhysicsAngularParityTests.swift */,
 				E95D271375470FECE5A0DAAE /* SKPhysicsBodyParityTests.swift */,
 				98FDB564D01736673D7A09E8 /* SKPhysicsParityTestCase.swift */,
 				A372102F1BC050CE1277814B /* SKPhysicsQueryParityTests.swift */,
@@ -617,6 +620,7 @@
 				CFE3EBC843ACD7E53852D773 /* SKNodeHierarchyParityTests.swift in Sources */,
 				E278D98CE8C673C94FC01C77 /* SKNodePointQueryParityTests.swift in Sources */,
 				EFE8C790FAFAD06377713E7F /* SKNodeSearchParityTests.swift in Sources */,
+				7A2DDB3B1BAC3C90C8630B1C /* SKPhysicsAngularParityTests.swift in Sources */,
 				F99022B978A50786FF04BA36 /* SKPhysicsBodyParityTests.swift in Sources */,
 				A259203494EBF884DA112E7C /* SKPhysicsParityTestCase.swift in Sources */,
 				4D17A197966EED4E2545414E /* SKPhysicsQueryParityTests.swift in Sources */,
