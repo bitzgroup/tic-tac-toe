@@ -565,6 +565,16 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       duration; and a `group` hands on the time its last action didn't need, so the next action in
       a sequence starts exactly where it would after a plain wait. The port now does both (it had
       drawn the length once, when the action was created, and had handed on no time after a group).
+- [x] `bitzgroup/SpriteKit`'s compound and path-based physics bodies (P4): `init(bodies:)`, and
+      `init(polygonFrom:)`, `init(edgeChainFrom:)` and `init(edgeLoopFrom:)` with a path. Recorded on
+      iOS/tvOS (`SKPhysicsCompoundParityTests`): a compound collides with every part (a ball falls
+      through the gap between two), sums their areas, turns about their shared center of mass, and
+      takes the first body's density, restitution and friction; a compound nested in another
+      collides but adds no area. Path bodies read only the first subpath; a polygon may be concave
+      or clockwise and keeps its full area; a full circle's path makes an exact circle body, while
+      other curves are flattened (more coarsely than the port flattens them). The port mirrors all
+      of it, splitting concave polygons into convex pieces; Apple's NaN density for a compound with
+      an edge body first is recorded but not mirrored.
 
 ## Explicitly out of scope
 
