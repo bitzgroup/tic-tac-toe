@@ -549,6 +549,16 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       rate (before, a box on a floor kept hopping at 20 frames a second and fell through it at 5).
       Neither app uses physics; an emulator pass with a tilted box, a sliding ball and an
       off-center impulse added temporarily confirmed the port.
+- [x] `bitzgroup/SpriteKit`'s physics actions (A6): `applyForce`/`applyImpulse` (also at a point),
+      `applyTorque`, `applyAngularImpulse`, `changeMass`, `changeCharge`, and a field's
+      `strength`/`falloff` actions. Recorded on iOS/tvOS (`SKPhysicsActionParityTests`): force and
+      impulse actions change the velocity as each frame's actions run, by the share of the push the
+      eased progress moved that frame; one with no duration applies nothing and a reversed one
+      pushes the same way; `strength(by:)` multiplies; `falloff(to:)`/`falloff(by:)` change nothing
+      and never finish, holding up any sequence they're in. The port does the same, and gained a
+      stored `SKPhysicsBody.charge`. Recording it also showed Apple's `easeIn` curve is `2t² − t³`,
+      not the port's `t²`, and that `radialGravityField()` starts with a falloff of 2 — both added
+      to the parity plan (A10, P6).
 
 ## Explicitly out of scope
 
