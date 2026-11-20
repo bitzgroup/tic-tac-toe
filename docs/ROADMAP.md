@@ -559,6 +559,12 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       stored `SKPhysicsBody.charge`. Recording it also showed Apple's `easeIn` curve is `2t² − t³`,
       not the port's `t²`, and that `radialGravityField()` starts with a falloff of 2 — both added
       to the parity plan (A10, P6).
+- [x] `bitzgroup/SpriteKit`'s action timing (A7), two deviations the port had recorded. On iOS/tvOS
+      (`SKActionTimingParityTests`), `wait(forDuration:withRange:)` draws a new length on every
+      run — each pass of a `repeat`, each node it runs on — while its `duration` reads as the base
+      duration; and a `group` hands on the time its last action didn't need, so the next action in
+      a sequence starts exactly where it would after a plain wait. The port now does both (it had
+      drawn the length once, when the action was created, and had handed on no time after a group).
 
 ## Explicitly out of scope
 
