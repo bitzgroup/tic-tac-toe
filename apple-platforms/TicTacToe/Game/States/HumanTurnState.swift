@@ -1,6 +1,6 @@
 import GameplayKit
 
-/// Waits for the SpriteKit layer (Phase 2) to report a tap via `applyHumanMove(at:)`. See
+/// Waits for the SpriteKit layer (`GameScene`) to report a tap via `applyHumanMove(at:)`. See
 /// `docs/GAME_DESIGN.md`'s "Turn flow" section.
 final class HumanTurnState: GKState {
     unowned let match: TicTacToeMatch

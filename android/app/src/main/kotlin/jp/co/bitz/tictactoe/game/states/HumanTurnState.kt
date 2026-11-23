@@ -6,7 +6,7 @@ import jp.co.bitz.tictactoe.game.TicTacToeMove
 import kotlin.reflect.KClass
 
 /**
- * Waits for the SpriteKit layer (Phase 2) to report a tap via [applyHumanMove]. See
+ * Waits for the SpriteKit layer (`GameScene`) to report a tap via [applyHumanMove]. See
  * docs/GAME_DESIGN.md's "Turn flow" section.
  */
 public class HumanTurnState(

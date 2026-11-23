@@ -18,9 +18,19 @@ needs a release — they don't have to ship in lockstep.
    (`git log --oneline <last-tag>..HEAD`) for:
    - correctness bugs
    - unclear or stale comments/docs, and refactor opportunities
+   - writing that assumes maintainer context, per the library's `CONTRIBUTING.md` ("Writing for
+     readers outside the project") — see the scan below
    - Apple-framework compatibility gaps — anything that has drifted from, or never matched, the
      real Apple framework's behavior, including anything already flagged in that library's
      `docs/API_COMPATIBILITY.md` (if present) as an open (not intentionally-scoped) gap
+
+   A quick first pass for the mechanical part of the maintainer-context item, run in the library's checkout
+   (every hit needs a human look — a reference to an existing doc section by its heading is fine):
+   ```sh
+   git grep -nE 'Phase [0-9]+|PR #?[0-9]+|\b(previously|used to|until .* (is|are) (wired|added))\b' -- '*.kt'
+   git grep -nIE '/Users/|/home/|@[a-z0-9.-]+\.(com|jp|net)\b' -- . ':!*.pbxproj'
+   git ls-files | grep -E 'local\.properties|settings\.local\.json|xcuserdata|\.env$'
+   ```
 
    This step is read-only research. If you delegate it to a subagent, see "Subagent safety" below
    — do not give it write/mutation tool access.

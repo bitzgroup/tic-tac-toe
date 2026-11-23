@@ -7,12 +7,12 @@ import XCTest
 /// (`HumanTurnState.applyHumanMove` → `GKStateMachine` cascade → `AITurnState`) end to end at
 /// every difficulty. See `docs/ROADMAP.md` Phase 3's "playable start-to-finish" item.
 ///
-/// Note: `AITurnState`'s move is applied to `match` synchronously (Phase 1), but `GameScene`
-/// defers *revealing* it via `SKAction.wait` (Phase 2) — a real `SKView` frame loop drives that,
+/// Note: `AITurnState`'s move is applied to `match` synchronously, but `GameScene`
+/// defers *revealing* it via `SKAction.wait` — a real `SKView` frame loop drives that,
 /// which this headless test has none of. So a game that ends on the AI's move never fires
 /// `handleGameOver()`/updates `statusLabel` within this test, even though `match`'s model state is
 /// already correctly terminal — see the class doc above. That visual reveal path was already
-/// verified manually via simulator screenshots when Phase 2 landed; this test covers the
+/// verified manually via simulator screenshots; this test covers the
 /// deterministic model/state-machine wiring the "playable start-to-finish" checklist item cares
 /// about, at all three difficulties.
 final class GameScenePlaythroughTests: XCTestCase {

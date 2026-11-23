@@ -9,8 +9,8 @@ import kotlin.reflect.KClass
 /**
  * Asks the difficulty-appropriate strategist (or, on Easy, [GKRandomDistribution]) for a move and
  * applies it. See docs/GAME_DESIGN.md's "AI difficulty → GameplayKit strategist" and "Turn flow"
- * sections. No artificial delay here — the visible "CPU thinking…" pause is a SpriteKit concern
- * (Phase 2).
+ * sections. No artificial delay here — the visible "CPU thinking…" pause is a SpriteKit concern,
+ * handled by `GameScene`.
  */
 public class AITurnState(
     private val match: TicTacToeMatch,
