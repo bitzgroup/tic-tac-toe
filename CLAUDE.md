@@ -136,6 +136,14 @@ branching model, the same convention `bitzgroup/SpriteKit` and `bitzgroup/Gamepl
 
 ## Working in this repo
 
+- **Writing for outside readers:** this repo and its three submodules are public OSS — follow
+  `CONTRIBUTING.md`'s "Writing for readers outside the project" rules in every comment, doc,
+  commit message, and PR you write (here and in the submodules, whose own `CONTRIBUTING.md` carry
+  the same rules). In particular: describe code as it is now (no roadmap phase numbers, PR numbers,
+  or "previously" in code comments — history goes in commits/PRs/`docs/ROADMAP.md`; linking a doc
+  section by its heading, e.g. `docs/GAME_DESIGN.md`'s "Polish (Phase 5)", is fine), don't leave
+  forward-looking notes that will go stale, and keep cross-references pointing at sections that
+  exist. The `oss-library-release` skill's audit step checks for this.
 - **Documentation language:** all docs (README, code comments, ROADMAP, etc.) must be written in
   **English** — this is a public OSS sample, matching the convention of the `SpriteKit` and
   `GameplayKit` sibling repos it demonstrates.

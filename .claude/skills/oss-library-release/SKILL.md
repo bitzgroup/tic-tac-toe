@@ -22,8 +22,12 @@ the checklist form.
 
 1. [ ] Audit: `git log --oneline <last-tag>..HEAD` in the library's own checkout; review changed
        code/docs for correctness bugs, unclear writing, and Apple-framework compatibility gaps
-       (cross-check `docs/API_COMPATIBILITY.md` if the library has one). This is read-only — see
-       "Delegating to a subagent" below before spawning anything for this step.
+       (cross-check `docs/API_COMPATIBILITY.md` if the library has one), plus writing that assumes
+       maintainer context per the library's `CONTRIBUTING.md` ("Writing for readers outside the
+       project": phase/PR numbers or "previously" in comments, stale forward-looking notes,
+       dangling doc cross-references, personal/machine-specific details) — run the scan commands
+       in `docs/RELEASE_PROCESS.md` step 1 first. This is read-only — see "Delegating to a
+       subagent" below before spawning anything for this step.
 2. [ ] Fix anything found on `feature/<name>` branches → PR into `develop`. **Stop and get explicit
        approval before merging each PR** — do not chain merges off a general "proceed".
 3. [ ] Regression-check: from `android/`, run

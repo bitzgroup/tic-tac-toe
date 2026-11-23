@@ -39,14 +39,12 @@ SpriteKit + GameplayKit and their Kotlin/Android ports.
 
 ## Status
 
-Phase 0 (repository scaffolding), Phase 1 (GameplayKit game model, AI, turn state machine),
-Phase 2 (SpriteKit board rendering & input — `MenuScene`/`GameScene`, marks as entities, `en`/`ja`
-localization), Phase 3 (platform app shells; both apps verified playable start-to-finish at all
-three difficulties), Phase 4 (parity verification — Hard-mode move-for-move parity tests,
-entity-lifecycle tests, a full `en`/`ja` visual pass on both platforms), and Phase 5 (polish —
-win-particle burst, tap/win sound effects, app icons) are complete on both platforms, fully
-unit-tested and visually/manually verified, including on physical devices. See
-[`docs/ROADMAP.md`](docs/ROADMAP.md) for the phased plan and progress checklist.
+Both apps are feature-complete (`v0.1.0`) and verified playable start-to-finish at all three
+difficulties, on simulators/emulators and physical devices. Since then, this repo has mainly served
+as the parity harness for the three Android libraries: it records Apple's real SpriteKit/GameplayKit
+behavior as parity probes (`apple-platforms/`'s `SpriteKitParity`/`GameplayKitParity` schemes) and
+checks the Android ports against them. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the full plan
+and history.
 
 ## Repository layout
 
@@ -63,7 +61,42 @@ tic-tac-toe/
   embeds the three library submodules, how parity is verified
 - [`docs/ROADMAP.md`](docs/ROADMAP.md) — phased implementation plan and progress checklist
 
-See [`CLAUDE.md`](CLAUDE.md) for build/test commands.
+## Building and running
+
+Clone with the three Android library submodules:
+
+```sh
+git clone --recurse-submodules https://github.com/bitzgroup/tic-tac-toe.git
+# or, in an existing clone:
+git submodule update --init --recursive
+```
+
+**iOS / Apple platforms** (from `apple-platforms/`; needs Xcode, iOS 15+ / tvOS 17+ targets).
+[XcodeGen](https://github.com/yonaskolb/XcodeGen) is only needed if you add or remove files —
+the generated `TicTacToe.xcodeproj` is committed.
+
+```sh
+xcodegen generate   # only after adding/removing files
+xcodebuild -project TicTacToe.xcodeproj -scheme TicTacToe \
+  -destination 'platform=iOS Simulator,name=<simulator>' build
+xcodebuild test -project TicTacToe.xcodeproj -scheme TicTacToe \
+  -destination 'platform=iOS Simulator,name=<simulator>'
+```
+
+Or open `TicTacToe.xcodeproj` in Xcode and run the `TicTacToe` scheme.
+
+**Android** (from `android/`; needs JDK 17 and the Android SDK, min SDK 24):
+
+```sh
+./gradlew :app:assembleDebug
+./gradlew :app:testDebugUnitTest
+./gradlew :app:ktlintCheck :app:detekt
+```
+
+Keep the `:app` prefix: an unscoped task also runs against the included library submodules, whose
+build scripts don't resolve their own config paths correctly from this repo's root.
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) before opening a pull request.
 
 ## License
 

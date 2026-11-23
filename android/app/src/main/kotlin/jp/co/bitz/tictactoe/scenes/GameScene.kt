@@ -213,7 +213,7 @@ public class GameScene(
 
     /**
      * The cell the AI's move landed on, found by diffing the board — `AITurnState.didEnter`
-     * (Phase 1) applies the move synchronously, so this recovers *where* it played rather than
+     * applies the move synchronously, so this recovers *where* it played rather than
      * re-triggering search.
      */
     private fun newlyOccupiedCell(

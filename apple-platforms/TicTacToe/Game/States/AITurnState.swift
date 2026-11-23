@@ -3,7 +3,7 @@ import GameplayKit
 /// Asks the difficulty-appropriate strategist (or, on Easy, `GKRandomDistribution`) for a move
 /// and applies it. See `docs/GAME_DESIGN.md`'s "AI difficulty → GameplayKit strategist" and "Turn
 /// flow" sections. No artificial delay here — the visible "CPU thinking…" pause is a SpriteKit
-/// concern (Phase 2).
+/// concern, handled by `GameScene`.
 final class AITurnState: GKState {
     unowned let match: TicTacToeMatch
 
