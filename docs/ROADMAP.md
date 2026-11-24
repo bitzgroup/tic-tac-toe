@@ -581,6 +581,17 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       `t + t² − t³`, and `easeInEaseOut` `3t² − 2t³`. The port had used `t²` and `2t − t²` for the
       first two (its `easeInEaseOut` already matched) and now uses Apple's. Neither app sets a
       timing mode, so neither changes.
+- [x] `bitzgroup/SpriteKit`'s field defaults (P6). Recorded on iOS/tvOS (`SKFieldParityTests`):
+      `radialGravityField()` starts with a falloff of 2 and the other kinds with 0, and every
+      field's `minimumRadius` starts at `0.0045776367`. Recording it also showed how the gravity
+      fields work: a field accelerates at `strength` m/s² (150 points/s²) divided by the distance
+      from the field node in meters — never less than `minimumRadius`, which is in points — raised
+      to `falloff`, for linear fields too, whose vector isn't normalized; mass doesn't matter. The
+      port had used points rather than meters, ignored falloff on linear fields and normalized
+      their vector; it now matches. Drag fields turned out to behave oddly on Apple — slowing a
+      body non-linearly and, from a strength of about 0.1, driving it to the 36000 points/s speed
+      cap — which is recorded and added to the parity plan (P7) rather than mirrored. Neither app
+      uses fields.
 
 ## Explicitly out of scope
 
