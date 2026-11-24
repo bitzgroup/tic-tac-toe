@@ -257,7 +257,7 @@ records the deviation.
 (`.gitmodules`' `branch = develop`, set via `git submodule set-branch --branch develop <path>`)
 rather than being pinned to a release tag — tic-tac-toe's own implementation is currently the
 fastest way real gaps in the three libraries surface (see the `spritekit-compose`/`GKSKBridge`
-nested-project-path bug found and fixed while scaffolding Phase 0), so tracking `develop` lets
+nested-project-path bug found and fixed while first setting up this repo), so tracking `develop` lets
 fixes flow in without a formal release cycle each time. Once the three libraries and this app are
 all stable, switch back to pinning each submodule to a specific release tag (`git submodule set-branch
 --branch '' <path>` — an empty branch name reverts to the default detached-at-a-fixed-commit
@@ -323,7 +323,7 @@ Three categories of discrepancy come up this way, handled differently:
 - **A real bug or gap in the OSS library** — fix it upstream in that library's own repo (branch
   off its `develop`, PR, same as any other change there), the way
   [SpriteKit#24](https://github.com/bitzgroup/SpriteKit/pull/24) fixed the
-  `spritekit-compose`/`GKSKBridge` nested-project-path conflict found while wiring up Phase 0.
+  `spritekit-compose`/`GKSKBridge` nested-project-path conflict found while first wiring up the submodules.
   `docs/ROADMAP.md` records what was found and links to the fix, in the phase where it surfaced.
 - **A documented, intentional deviation left as-is** (Apple leaves some behavior undocumented,
   e.g. minmax tie-break order, and the OSS library made a defensible choice that isn't a "bug" to

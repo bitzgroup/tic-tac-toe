@@ -91,7 +91,7 @@ GameplayKit in the loop at all, mirroring FourInARow's own `AAPLBoard` (rules) /
     briefly required it for Monte Carlo too on the (wrong) assumption that the Minmax finding below
     generalized — reverted upstream in
     [GameplayKit#18](https://github.com/bitzgroup/GameplayKit/pull/18).
-    **This wasn't always symmetric — a real Apple/OSS discrepancy this app's own Phase 1
+    **This wasn't always symmetric — a real Apple/OSS discrepancy this app's own game-model
     implementation found and fixed, not just documented:** `bitzgroup/GameplayKit`'s `v0.1.0`
     originally always branched by copying and never called `unapplyGameModelUpdate` at all, unlike
     Apple's real `GKMinmaxStrategist`, which documents backtracking via unapply as its own
@@ -316,7 +316,7 @@ implementations are written against, not left to drift.
     so: `bitzgroup/SpriteKit`'s `v0.1.0` had no bundle lookup and forwarded the string straight to
     `MediaPlayer.setDataSource(String)`, whose commonly-cited `"file:///android_asset/…"` form
     failed silently on-device (`MediaPlayer error (-38, 0)`, swallowed by the library's
-    `runCatching` wrappers), so Phase 5 shipped with `GameScene` copying each asset into
+    `runCatching` wrappers), so `v0.1.0` shipped with `GameScene` copying each asset into
     `Context.getCacheDir()` and passing that absolute path. The post-`v0.1.0` Apple-parity audit
     (`docs/ROADMAP.md` Phase 7) fixed the lookup upstream and removed that workaround.
 - **App icon:** both platforms ship the same icon design — a dark background (`#1A1A1A`, not pure
