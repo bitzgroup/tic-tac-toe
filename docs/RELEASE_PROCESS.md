@@ -24,10 +24,14 @@ needs a release — they don't have to ship in lockstep.
      real Apple framework's behavior, including anything already flagged in that library's
      `docs/API_COMPATIBILITY.md` (if present) as an open (not intentionally-scoped) gap
 
-   A quick first pass for the mechanical part of the maintainer-context item, run in the library's checkout
-   (every hit needs a human look — a reference to an existing doc section by its heading is fine):
+   A quick first pass for the mechanical part of the maintainer-context item, run in the library's
+   checkout (the same commands work in this repo too). Every hit needs a human look — a reference
+   to an existing doc section by its heading is fine, `docs/ROADMAP.md`/`CLAUDE.md` are
+   excluded because recording history is their job, and `CONTRIBUTING.md` because it quotes these
+   patterns as examples:
    ```sh
-   git grep -nE 'Phase [0-9]+|PR #?[0-9]+|\b(previously|used to|until .* (is|are) (wired|added))\b' -- '*.kt'
+   git grep -nE 'Phase [0-9]+|PR #?[0-9]+|\b(previously|used to|until .* (is|are) (wired|added))\b' \
+     -- '*.kt' '*.swift' '*.md' ':!docs/ROADMAP.md' ':!CLAUDE.md' ':!CONTRIBUTING.md'
    git grep -nIE '/Users/|/home/|@[a-z0-9.-]+\.(com|jp|net)\b' -- . ':!*.pbxproj'
    git ls-files | grep -E 'local\.properties|settings\.local\.json|xcuserdata|\.env$'
    ```
