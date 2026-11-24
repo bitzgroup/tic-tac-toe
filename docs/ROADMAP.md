@@ -575,6 +575,12 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       other curves are flattened (more coarsely than the port flattens them). The port mirrors all
       of it, splitting concave polygons into convex pieces; Apple's NaN density for a compound with
       an edge body first is recorded but not mirrored.
+- [x] `bitzgroup/SpriteKit`'s timing curves (A10). Recorded on iOS/tvOS
+      (`SKActionTimingCurveParityTests`) by sampling a one-second `moveBy` frame by frame: every
+      `SKActionTimingMode` is an exact cubic — `easeIn` is `2t² − t³`, `easeOut` its mirror
+      `t + t² − t³`, and `easeInEaseOut` `3t² − 2t³`. The port had used `t²` and `2t − t²` for the
+      first two (its `easeInEaseOut` already matched) and now uses Apple's. Neither app sets a
+      timing mode, so neither changes.
 
 ## Explicitly out of scope
 

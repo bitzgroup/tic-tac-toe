@@ -56,6 +56,7 @@
 		A2621176142539991F1C636A /* GKGraphParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580A26CDB4338C6EA38ACD92 /* GKGraphParityTests.swift */; };
 		A31FB7A2031F4143C6F54443 /* SKViewFrameRateParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54354E411CE8A29F25D01E1B /* SKViewFrameRateParityTests.swift */; };
 		A45C47D476075CE62F742F9A /* ParityHostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDFE8A7ADEEF82FDD61AE8A /* ParityHostApp.swift */; };
+		A74510A07F77EDEB46CF97E6 /* SKActionTimingCurveParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC59BFF1C7324B60BBA01E3C /* SKActionTimingCurveParityTests.swift */; };
 		ACA6342E083D00775E3903D1 /* ParityProbe.png in Resources */ = {isa = PBXBuildFile; fileRef = 423D3C78889DB0A69DE57258 /* ParityProbe.png */; };
 		AD590AAA9C11247453468F50 /* SKRenderPixelParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5417E097026F21753C0F0247 /* SKRenderPixelParityTests.swift */; };
 		AFA196D2F2D3C6FE21231E70 /* TicTacToeMarkComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347281F0057617CB6C554F86 /* TicTacToeMarkComponent.swift */; };
@@ -170,6 +171,7 @@
 		B6038F9FDAE3EF08975E8A39 /* GKRandomParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKRandomParityTests.swift; sourceTree = "<group>"; };
 		B89F34B3B56977CD8C1A3F81 /* SKViewLifecycleParityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKViewLifecycleParityUITests.swift; sourceTree = "<group>"; };
 		BBDFE8A7ADEEF82FDD61AE8A /* ParityHostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParityHostApp.swift; sourceTree = "<group>"; };
+		BC59BFF1C7324B60BBA01E3C /* SKActionTimingCurveParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKActionTimingCurveParityTests.swift; sourceTree = "<group>"; };
 		BDCD19D034B196A3F78D12B9 /* SKViewPauseParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKViewPauseParityTests.swift; sourceTree = "<group>"; };
 		BE3552B78124F8A02219AA6B /* TicTacToeMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeMatch.swift; sourceTree = "<group>"; };
 		C013B25D3D170D3E5811FEE3 /* SKShapeNodeInitParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKShapeNodeInitParityTests.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 			isa = PBXGroup;
 			children = (
 				A73354CC61E7FA64558C5DC8 /* SKActionParityTests.swift */,
+				BC59BFF1C7324B60BBA01E3C /* SKActionTimingCurveParityTests.swift */,
 				6996D7438D8D25873B1F3208 /* SKActionTimingParityTests.swift */,
 				E0FF115C36BCAD16BBB83B7B /* SKCameraParityTests.swift */,
 				CE51AFF95BFD08D635A6206F /* SKLabelAttributedTextParityTests.swift */,
@@ -621,6 +624,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B6ADB1B34686AA258516E62 /* SKActionParityTests.swift in Sources */,
+				A74510A07F77EDEB46CF97E6 /* SKActionTimingCurveParityTests.swift in Sources */,
 				20A0DE627A177618863F3DF8 /* SKActionTimingParityTests.swift in Sources */,
 				1DECFDE4ED09A902FAA63F10 /* SKCameraParityTests.swift in Sources */,
 				D6A42010B916BA2067BB0C98 /* SKLabelAttributedTextParityTests.swift in Sources */,
