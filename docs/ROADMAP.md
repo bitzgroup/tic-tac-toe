@@ -601,6 +601,17 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       range can still be moved — and a distance constraint with a reference node gives a NaN
       position once the node sits on its target; those are recorded and added to the parity plan
       (C3) rather than mirrored. Neither app uses constraints.
+- [x] `bitzgroup/SpriteKit`'s `SKKeyframeSequence` modes and editing (E2). Recorded on iOS/tvOS
+      (`SKKeyframeSequenceParityTests`): `interpolationMode` starts as `.linear` and `repeatMode` as
+      `.clamp`; `.step` holds the latest keyframe reached; `.spline` is a cubic Hermite curve, flat
+      at the end keyframes, whose other tangents weight the change on each side by the opposite
+      side's time gap (Catmull-Rom when evenly spaced); `.loop` wraps the time by the last
+      keyframe's time. Times are never sorted — not by the initializer, not by `addKeyframeValue`
+      or `setKeyframeTime` — sampling limits the time to the last keyframe's, and equal times sample
+      as the later keyframe. Only numbers and colors (each unpremultiplied component) interpolate;
+      anything else samples as `nil`. Since a spline mixes up to four keyframes, the port's sequence
+      now takes an interpolator for its value type when it's created, and `sample` takes only the
+      time, as on Apple. Neither app uses keyframe sequences.
 
 ## Explicitly out of scope
 
