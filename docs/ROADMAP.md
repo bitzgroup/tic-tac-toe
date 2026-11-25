@@ -612,6 +612,19 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       anything else samples as `nil`. Since a spline mixes up to four keyframes, the port's sequence
       now takes an interpolator for its value type when it's created, and `sample` takes only the
       time, as on Apple. Neither app uses keyframe sequences.
+- [x] `bitzgroup/SpriteKit`'s `SKEmitterNode` keyframe sequences, `targetNode`, `particleRenderOrder`
+      and `particleAction` (E1). Recorded on iOS/tvOS (`SKEmitterParityTests`) by rendering one
+      particle and reading its pixels back. `particleAlphaSequence`, `particleScaleSequence` and
+      `particleColorBlendFactorSequence` replace their value, range and speed, sampled by the
+      fraction of a particle's lifetime it has lived; `particleColorSequence` replaces only the
+      color, and the blend factor mixes color and opacity from opaque white toward the particle
+      color. With a `targetNode`, particles stay where they were born when the emitter moves, move
+      with the target and take its opacity, and their motion and size ignore the emitter's rotation
+      and scale. Apple draws the newest particle on top in every `particleRenderOrder`, ignores
+      `particleZPositionSpeed`, and on simulators runs `particleAction` on no particle; the port
+      accepts all three with no effect. The defaults turned out to be `emissionAngle` `π/2`,
+      `particleLifetime` `0` and a transparent white `particleColor`, which the port now matches.
+      Both apps set every one of those explicitly for their win-particle burst, so neither changes.
 
 ## Explicitly out of scope
 
