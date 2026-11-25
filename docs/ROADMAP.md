@@ -592,6 +592,15 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       body non-linearly and, from a strength of about 0.1, driving it to the 36000 points/s speed
       cap — which is recorded and added to the parity plan (P7) rather than mirrored. Neither app
       uses fields.
+- [x] `bitzgroup/SpriteKit`'s `SKConstraint.referenceNode` and point-based `distance`/`orient`
+      constraints (C2). Recorded on iOS/tvOS (`SKConstraintParityTests`): `referenceNode` starts
+      as `nil`; position and distance ranges are measured in its coordinates (the parent's by
+      default), including its scale and rotation, and a point target is in the parent's
+      coordinates unless another node is given. With a reference node rotated relative to the
+      parent, Apple's `zRotation`/`orient` results don't follow that model — a node already within
+      range can still be moved — and a distance constraint with a reference node gives a NaN
+      position once the node sits on its target; those are recorded and added to the parity plan
+      (C3) rather than mirrored. Neither app uses constraints.
 
 ## Explicitly out of scope
 
