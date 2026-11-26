@@ -625,6 +625,17 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       accepts all three with no effect. The defaults turned out to be `emissionAngle` `π/2`,
       `particleLifetime` `0` and a transparent white `particleColor`, which the port now matches.
       Both apps set every one of those explicitly for their win-particle burst, so neither changes.
+- [x] `bitzgroup/GKSKBridge`'s `SKTexture(noiseMap)` (K4), Apple's `SKTexture(noiseMap:)`.
+      Recorded on iOS/tvOS (`GKNoiseTextureParityTests`) by reading the texture's pixels back:
+      - The texture has one pixel per sample, with sample row 0 at the bottom.
+      - Each pixel is an opaque gray `(v + 1) / 2 × 255`, rounded down in double precision, so
+        `-0.2` as a `Float` gives 101, not float arithmetic's 102.
+      - Values outside `-1...1` are clamped.
+
+      Apple colors the texture with the noise's `gradientColors`, which `bitzgroup/GameplayKit`'s
+      `GKNoise` doesn't have, so the port always gives the default gray. It's built on
+      `bitzgroup/SpriteKit`'s public `SKTexture(bitmap)`, so SpriteKit needed no change. Neither app
+      uses noise.
 
 ## Explicitly out of scope
 
