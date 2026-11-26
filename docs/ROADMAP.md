@@ -625,6 +625,51 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       accepts all three with no effect. The defaults turned out to be `emissionAngle` `π/2`,
       `particleLifetime` `0` and a transparent white `particleColor`, which the port now matches.
       Both apps set every one of those explicitly for their win-particle burst, so neither changes.
+- [x] `bitzgroup/SpriteKit`'s tile-map `fill(with:)`, `mapSize`, color properties,
+      `SKTileGroup.empty()` and `placementWeight` (M1). Recorded on iOS/tvOS
+      (`SKTileMapParityTests`): `fill` and the filling initializer never automap and use the
+      group's first rule; a grid map's `mapSize` is its unscaled tiles; Apple stores a tile map's
+      `color`/`colorBlendFactor` but never draws them, while `blendMode` is drawn; placing
+      `empty()` clears a cell; placement weights pick proportionally, evenly when all are `0`.
+      Apple's `enableAutomapping` turned out to default to `true`, which the port now matches.
+      Neither app uses tile maps.
+- [x] `bitzgroup/SpriteKit`'s door transitions and `pausesIncomingScene`/`pausesOutgoingScene`
+      (X1). Recorded on iOS/tvOS (`SKTransitionParityUITests`) from screenshots taken part-way
+      through a transition, with the progress bracketed by the host's elapsed time: each door is
+      half its scene, moved without scaling by half the view and eased `3t² − 2t³`; `doorway`'s
+      incoming scene comes forward over black from about 0.42 of its size. Both pause flags default
+      to `true` (`SKTransitionParityTests`); a paused scene gets no `update(_:)` until the
+      transition ends, and both scenes are un-paused then. The port had kept the incoming scene
+      running during a transition, so the Android app's game scene now waits out the menu's
+      half-second cross-fade before it starts, as the iOS app's always has.
+- [x] `bitzgroup/GKSKBridge`'s `tileMapNodes` (K3), Apple's
+      `SKTileMapNode.tileMapNodes(tileSet:columns:rows:tileSize:from:tileTypeNoiseMapThresholds:)`.
+      Recorded on iOS/tvOS (`GKNoiseTileMapParityTests`) with noise maps whose samples were set
+      directly: one map per threshold plus one; map 0 full of the first group, map `k` holding group
+      `k` wherever the noise is at least threshold `k − 1`; each cell's noise the mean of 3 × 3
+      linearly interpolated samples at 1/6, 1/2 and 5/6 of the cell, clamped to the last sample.
+      Bisecting the threshold per cell is what showed the 3 × 3 averaging: single-point sampling
+      matched everywhere but the last cells. It also showed that Apple names every new
+      `SKTileMapNode` `"Default Tile Map"`, which `bitzgroup/SpriteKit`'s now does too.
+- [x] `bitzgroup/GKSKBridge`'s `obstaclesFromNodePhysicsBodies` (K2), Apple's
+      `SKNode.obstacles(fromNodePhysicsBodies:)`. Recorded on iOS/tvOS (`GKPhysicsObstacleParityTests`).
+      Each obstacle is the body's outline in scene space:
+      - A rectangle or polygon gives its vertices, counterclockwise from the first one given.
+      - A circle gives an octagon at scene-space angles.
+      - An edge chain gives its points; a loop repeats its first point.
+      - A body of one part gives that part.
+
+      A single edge, a body of several parts and a concave polygon give no obstacle, nor does a
+      node without a body. Apple's framework crashes for a node outside a scene. It also reads the
+      transform its physics engine last synced, so a node moved after its body joined the scene
+      keeps its old obstacle until a frame runs. Since Apple keeps body shapes private,
+      `bitzgroup/SpriteKit` gained a `physicsBodyOutline` function for the bridge to read. Recording
+      this showed that a clockwise polygon keeps its first vertex when reversed, which the port now
+      matches. It also showed two scaling differences, now recorded as SpriteKit's P8:
+      - Apple scales a body only by scale changes made after the body is attached.
+      - Apple gives a circle under a non-uniform scale the radius `r·√((sx² + sy²)/2)`.
+
+      Neither app uses physics.
 - [x] `bitzgroup/GKSKBridge`'s `SKTexture(noiseMap)` (K4), Apple's `SKTexture(noiseMap:)`.
       Recorded on iOS/tvOS (`GKNoiseTextureParityTests`) by reading the texture's pixels back:
       - The texture has one pixel per sample, with sample row 0 at the bottom.
