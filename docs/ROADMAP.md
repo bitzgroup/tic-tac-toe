@@ -625,6 +625,15 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       accepts all three with no effect. The defaults turned out to be `emissionAngle` `π/2`,
       `particleLifetime` `0` and a transparent white `particleColor`, which the port now matches.
       Both apps set every one of those explicitly for their win-particle burst, so neither changes.
+- [x] `bitzgroup/GKSKBridge`'s `tileMapNodes` (K3), Apple's
+      `SKTileMapNode.tileMapNodes(tileSet:columns:rows:tileSize:from:tileTypeNoiseMapThresholds:)`.
+      Recorded on iOS/tvOS (`GKNoiseTileMapParityTests`) with noise maps whose samples were set
+      directly: one map per threshold plus one; map 0 full of the first group, map `k` holding group
+      `k` wherever the noise is at least threshold `k − 1`; each cell's noise the mean of 3 × 3
+      linearly interpolated samples at 1/6, 1/2 and 5/6 of the cell, clamped to the last sample.
+      Bisecting the threshold per cell is what showed the 3 × 3 averaging: single-point sampling
+      matched everywhere but the last cells. It also showed that Apple names every new
+      `SKTileMapNode` `"Default Tile Map"`, which `bitzgroup/SpriteKit`'s now does too.
 
 ## Explicitly out of scope
 
