@@ -625,6 +625,15 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       accepts all three with no effect. The defaults turned out to be `emissionAngle` `π/2`,
       `particleLifetime` `0` and a transparent white `particleColor`, which the port now matches.
       Both apps set every one of those explicitly for their win-particle burst, so neither changes.
+- [x] `bitzgroup/SpriteKit`'s door transitions and `pausesIncomingScene`/`pausesOutgoingScene`
+      (X1). Recorded on iOS/tvOS (`SKTransitionParityUITests`) from screenshots taken part-way
+      through a transition, with the progress bracketed by the host's elapsed time: each door is
+      half its scene, moved without scaling by half the view and eased `3t² − 2t³`; `doorway`'s
+      incoming scene comes forward over black from about 0.42 of its size. Both pause flags default
+      to `true` (`SKTransitionParityTests`); a paused scene gets no `update(_:)` until the
+      transition ends, and both scenes are un-paused then. The port had kept the incoming scene
+      running during a transition, so the Android app's game scene now waits out the menu's
+      half-second cross-fade before it starts, as the iOS app's always has.
 
 ## Explicitly out of scope
 

@@ -150,6 +150,8 @@ final class ProbeViewController: UIViewController {
         ])
 
         switch scenario {
+        case "transition":
+            startTransitionScenario()
         case "presentPaused":
             scene.isPaused = true
             skView.presentScene(scene)
@@ -176,6 +178,64 @@ final class ProbeViewController: UIViewController {
     }
 
     private var firstResponderResult: Bool?
+
+    // MARK: Transitions
+
+    /// The incoming scene of the `transition` scenario.
+    private var incoming: ProbeScene?
+    private var transitionStart: Date?
+
+    private func argument(_ name: String) -> String? {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard let index = arguments.firstIndex(of: "-\(name)"), index + 1 < arguments.count else { return nil }
+        return arguments[index + 1]
+    }
+
+    private func quadrant(_ color: UIColor, _ x: CGFloat, _ y: CGFloat) -> SKSpriteNode {
+        let node = SKSpriteNode(color: color, size: CGSize(width: 200, height: 200))
+        node.anchorPoint = .zero
+        node.position = CGPoint(x: x, y: y)
+        return node
+    }
+
+    /// Presents an outgoing scene of four colored quadrants (red bottom left, green bottom right,
+    /// magenta top left, yellow top right), then after a second transitions to a blue incoming
+    /// scene with a cyan 100-point square in its middle. `-transition <name>` picks the effect,
+    /// `-duration <seconds>` its length (default 8), and `-pausesIncoming`/`-pausesOutgoing
+    /// true|false` override the transition's defaults.
+    private func startTransitionScenario() {
+        child.removeFromParent()
+        scene.backgroundColor = .black
+        scene.addChild(quadrant(.red, 0, 0))
+        scene.addChild(quadrant(.green, 200, 0))
+        scene.addChild(quadrant(.magenta, 0, 200))
+        scene.addChild(quadrant(.yellow, 200, 200))
+        skView.presentScene(scene)
+
+        let next = ProbeScene(size: scene.size)
+        next.backgroundColor = .blue
+        let square = SKSpriteNode(color: .cyan, size: CGSize(width: 100, height: 100))
+        square.position = CGPoint(x: 200, y: 200)
+        next.addChild(square)
+        incoming = next
+
+        let duration = argument("duration").flatMap(Double.init) ?? 8
+        let transition: SKTransition
+        switch argument("transition") ?? "" {
+        case "doorsOpenHorizontal": transition = .doorsOpenHorizontal(withDuration: duration)
+        case "doorsOpenVertical": transition = .doorsOpenVertical(withDuration: duration)
+        case "doorsCloseHorizontal": transition = .doorsCloseHorizontal(withDuration: duration)
+        case "doorsCloseVertical": transition = .doorsCloseVertical(withDuration: duration)
+        case "doorway": transition = .doorway(withDuration: duration)
+        default: transition = .crossFade(withDuration: duration)
+        }
+        if let value = argument("pausesIncoming") { transition.pausesIncomingScene = value == "true" }
+        if let value = argument("pausesOutgoing") { transition.pausesOutgoingScene = value == "true" }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.transitionStart = Date()
+            self.skView.presentScene(next, transition: transition)
+        }
+    }
 
     /// Forwarding scenarios hand every press to the scene, the way a tvOS game's view controller
     /// has to (SpriteKit itself never delivers presses to a scene). A press the scene doesn't
@@ -214,6 +274,10 @@ final class ProbeViewController: UIViewController {
             "maxTimestampLagMs=\(scene.timestampLagsMs.max() ?? -1)",
             "minTimestampLagMs=\(scene.timestampLagsMs.min() ?? -1)",
             "forces=\(scene.forces.sorted().joined(separator: ","))",
+            "incomingUpdates=\(incoming?.updates ?? -1)",
+            "incomingPaused=\(incoming.map { String($0.isPaused) } ?? "n/a")",
+            "presented=\(skView.scene === incoming ? "incoming" : "outgoing")",
+            "transitionElapsedMs=\(transitionStart.map { Int(Date().timeIntervalSince($0) * 1000) } ?? -1)",
         ].joined(separator: " ")
     }
 }
