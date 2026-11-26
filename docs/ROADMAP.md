@@ -625,6 +625,14 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       accepts all three with no effect. The defaults turned out to be `emissionAngle` `π/2`,
       `particleLifetime` `0` and a transparent white `particleColor`, which the port now matches.
       Both apps set every one of those explicitly for their win-particle burst, so neither changes.
+- [x] `bitzgroup/SpriteKit`'s tile-map `fill(with:)`, `mapSize`, color properties,
+      `SKTileGroup.empty()` and `placementWeight` (M1). Recorded on iOS/tvOS
+      (`SKTileMapParityTests`): `fill` and the filling initializer never automap and use the
+      group's first rule; a grid map's `mapSize` is its unscaled tiles; Apple stores a tile map's
+      `color`/`colorBlendFactor` but never draws them, while `blendMode` is drawn; placing
+      `empty()` clears a cell; placement weights pick proportionally, evenly when all are `0`.
+      Apple's `enableAutomapping` turned out to default to `true`, which the port now matches.
+      Neither app uses tile maps.
 
 ## Explicitly out of scope
 
