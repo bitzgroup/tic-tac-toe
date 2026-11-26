@@ -31,6 +31,7 @@
 		42FE19845B6AF6BAD3365578 /* GKNoiseParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC04B79F3949EE062ECE1BCF /* GKNoiseParityTests.swift */; };
 		436E58CC3950342D7371AD2A /* SKViewDelegateParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0790146F0C40299766AB6CD /* SKViewDelegateParityTests.swift */; };
 		463F03E06A9225BDAB9F6E75 /* SKNodeCopyParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85561E418CAE0280FEEDE5AC /* SKNodeCopyParityTests.swift */; };
+		468A30E37BC7832D582302B6 /* GKNoiseTileMapParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B28FF04402051060364215 /* GKNoiseTileMapParityTests.swift */; };
 		47176D784D3785CB4293983F /* SKTextureNamedParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F675CE0AC18A7E14CCA1316 /* SKTextureNamedParityTests.swift */; };
 		4947F9002103F1DAFF8C0EE5 /* GKMonteCarloUnapplyCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767084C0525713618A6EEAC3 /* GKMonteCarloUnapplyCompatibilityTests.swift */; };
 		4D17A197966EED4E2545414E /* SKPhysicsQueryParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A372102F1BC050CE1277814B /* SKPhysicsQueryParityTests.swift */; };
@@ -191,6 +192,7 @@
 		C013B25D3D170D3E5811FEE3 /* SKShapeNodeInitParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKShapeNodeInitParityTests.swift; sourceTree = "<group>"; };
 		C0790146F0C40299766AB6CD /* SKViewDelegateParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKViewDelegateParityTests.swift; sourceTree = "<group>"; };
 		C1A8225255641317A14E44A6 /* SKTextureAtlasParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKTextureAtlasParityTests.swift; sourceTree = "<group>"; };
+		C2B28FF04402051060364215 /* GKNoiseTileMapParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKNoiseTileMapParityTests.swift; sourceTree = "<group>"; };
 		C9F09DAECD229CD90CE907D4 /* GKStateMachineParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKStateMachineParityTests.swift; sourceTree = "<group>"; };
 		CA9FA812A3A337B5C17E7929 /* GKObstacleGraphParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKObstacleGraphParityTests.swift; sourceTree = "<group>"; };
 		CE51AFF95BFD08D635A6206F /* SKLabelAttributedTextParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKLabelAttributedTextParityTests.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 				3FF3928EC00FDC527DB0E3FC /* GKCustomNodeClassParityTests.swift */,
 				580A26CDB4338C6EA38ACD92 /* GKGraphParityTests.swift */,
 				DC04B79F3949EE062ECE1BCF /* GKNoiseParityTests.swift */,
+				C2B28FF04402051060364215 /* GKNoiseTileMapParityTests.swift */,
 				CA9FA812A3A337B5C17E7929 /* GKObstacleGraphParityTests.swift */,
 				B6038F9FDAE3EF08975E8A39 /* GKRandomParityTests.swift */,
 				1EADBD623B642EAC8FAC569D /* GKRTreeParityTests.swift */,
@@ -748,6 +751,7 @@
 				0CDCA30504BFD4EA00C170EF /* GKCustomNodeClassParityTests.swift in Sources */,
 				A2621176142539991F1C636A /* GKGraphParityTests.swift in Sources */,
 				42FE19845B6AF6BAD3365578 /* GKNoiseParityTests.swift in Sources */,
+				468A30E37BC7832D582302B6 /* GKNoiseTileMapParityTests.swift in Sources */,
 				B6F1F3DC7667C032C871708E /* GKObstacleGraphParityTests.swift in Sources */,
 				DC0F399E5DCA2EDD2633BAE5 /* GKRTreeParityTests.swift in Sources */,
 				3A158268B2CD9F56D39526C9 /* GKRandomParityTests.swift in Sources */,
