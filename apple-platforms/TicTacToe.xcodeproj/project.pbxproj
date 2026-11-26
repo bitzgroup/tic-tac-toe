@@ -55,6 +55,7 @@
 		9F14DDA3816FB595D2FAE561 /* CellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915C0125B3F2DABAC680B2E3 /* CellNode.swift */; };
 		9FB9D009906CB0BACC02D24D /* GKStateMachineParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F09DAECD229CD90CE907D4 /* GKStateMachineParityTests.swift */; };
 		9FBDAF56B42F03A69AEFF6C5 /* ParityAtlas.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A13AFB3CCF0E8CF4532D8387 /* ParityAtlas.atlas */; };
+		A2297FBA2BD104426A1A4009 /* GKPhysicsObstacleParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA89099767DDA9C08CFE0D /* GKPhysicsObstacleParityTests.swift */; };
 		A259203494EBF884DA112E7C /* SKPhysicsParityTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98FDB564D01736673D7A09E8 /* SKPhysicsParityTestCase.swift */; };
 		A2621176142539991F1C636A /* GKGraphParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580A26CDB4338C6EA38ACD92 /* GKGraphParityTests.swift */; };
 		A31FB7A2031F4143C6F54443 /* SKViewFrameRateParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54354E411CE8A29F25D01E1B /* SKViewFrameRateParityTests.swift */; };
@@ -208,6 +209,7 @@
 		E718010BD2AC7A621579C0D1 /* SKViewDebugOverlayParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKViewDebugOverlayParityTests.swift; sourceTree = "<group>"; };
 		E95D271375470FECE5A0DAAE /* SKPhysicsBodyParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKPhysicsBodyParityTests.swift; sourceTree = "<group>"; };
 		EC8A96FD54B635F728C4AFF5 /* SKNodePointQueryParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKNodePointQueryParityTests.swift; sourceTree = "<group>"; };
+		F1BA89099767DDA9C08CFE0D /* GKPhysicsObstacleParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKPhysicsObstacleParityTests.swift; sourceTree = "<group>"; };
 		F8B4D2282A8AD7422289BF58 /* SKTouchTapCountParityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKTouchTapCountParityUITests.swift; sourceTree = "<group>"; };
 		FA2E062FA69A52AB47C092BD /* Score.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
 		FF73A1A71459487A2945FC98 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
@@ -294,6 +296,7 @@
 				DC04B79F3949EE062ECE1BCF /* GKNoiseParityTests.swift */,
 				C2B28FF04402051060364215 /* GKNoiseTileMapParityTests.swift */,
 				CA9FA812A3A337B5C17E7929 /* GKObstacleGraphParityTests.swift */,
+				F1BA89099767DDA9C08CFE0D /* GKPhysicsObstacleParityTests.swift */,
 				B6038F9FDAE3EF08975E8A39 /* GKRandomParityTests.swift */,
 				1EADBD623B642EAC8FAC569D /* GKRTreeParityTests.swift */,
 				15A4B1C7A4B69CC1526BC78D /* GKSKBridgeParityTests.swift */,
@@ -753,6 +756,7 @@
 				42FE19845B6AF6BAD3365578 /* GKNoiseParityTests.swift in Sources */,
 				468A30E37BC7832D582302B6 /* GKNoiseTileMapParityTests.swift in Sources */,
 				B6F1F3DC7667C032C871708E /* GKObstacleGraphParityTests.swift in Sources */,
+				A2297FBA2BD104426A1A4009 /* GKPhysicsObstacleParityTests.swift in Sources */,
 				DC0F399E5DCA2EDD2633BAE5 /* GKRTreeParityTests.swift in Sources */,
 				3A158268B2CD9F56D39526C9 /* GKRandomParityTests.swift in Sources */,
 				5B26A235591B6BCCD046D488 /* GKSKBridgeParityTests.swift in Sources */,

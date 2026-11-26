@@ -651,6 +651,25 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       Bisecting the threshold per cell is what showed the 3 × 3 averaging: single-point sampling
       matched everywhere but the last cells. It also showed that Apple names every new
       `SKTileMapNode` `"Default Tile Map"`, which `bitzgroup/SpriteKit`'s now does too.
+- [x] `bitzgroup/GKSKBridge`'s `obstaclesFromNodePhysicsBodies` (K2), Apple's
+      `SKNode.obstacles(fromNodePhysicsBodies:)`. Recorded on iOS/tvOS (`GKPhysicsObstacleParityTests`).
+      Each obstacle is the body's outline in scene space:
+      - A rectangle or polygon gives its vertices, counterclockwise from the first one given.
+      - A circle gives an octagon at scene-space angles.
+      - An edge chain gives its points; a loop repeats its first point.
+      - A body of one part gives that part.
+
+      A single edge, a body of several parts and a concave polygon give no obstacle, nor does a
+      node without a body. Apple's framework crashes for a node outside a scene. It also reads the
+      transform its physics engine last synced, so a node moved after its body joined the scene
+      keeps its old obstacle until a frame runs. Since Apple keeps body shapes private,
+      `bitzgroup/SpriteKit` gained a `physicsBodyOutline` function for the bridge to read. Recording
+      this showed that a clockwise polygon keeps its first vertex when reversed, which the port now
+      matches. It also showed two scaling differences, now recorded as SpriteKit's P8:
+      - Apple scales a body only by scale changes made after the body is attached.
+      - Apple gives a circle under a non-uniform scale the radius `r·√((sx² + sy²)/2)`.
+
+      Neither app uses physics.
 
 ## Explicitly out of scope
 
