@@ -30,9 +30,9 @@ needs a release — they don't have to ship in lockstep.
    excluded because recording history is their job, and `CONTRIBUTING.md` because it quotes these
    patterns as examples:
    ```sh
-   git grep -nE 'Phase [0-9]+|PR #?[0-9]+|\b(previously|used to|until .* (is|are) (wired|added))\b' \
+   git grep -niE 'Phase [0-9]+|PR #?[0-9]+|(^|[^[:alnum:]_])(previously|used to|until .* (is|are) (wired|added))([^[:alnum:]_]|$)' \
      -- '*.kt' '*.swift' '*.md' ':!docs/ROADMAP.md' ':!CLAUDE.md' ':!CONTRIBUTING.md'
-   git grep -nIE '/Users/|/home/|@[a-z0-9.-]+\.(com|jp|net)\b' -- . ':!*.pbxproj'
+   git grep -nIE '/Users/|/home/|@[a-z0-9.-]+\.(com|jp|net)([^[:alnum:]_]|$)' -- . ':!*.pbxproj'
    git ls-files | grep -E 'local\.properties|settings\.local\.json|xcuserdata|\.env$'
    ```
 
