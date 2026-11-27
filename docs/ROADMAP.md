@@ -682,6 +682,18 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       `bitzgroup/SpriteKit`'s public `SKTexture(bitmap)`, so SpriteKit needed no change. Neither app
       uses noise.
 
+- [x] `bitzgroup/SpriteKit`'s physics bodies under scale (P8). Recorded on iOS/tvOS
+      (`SKPhysicsScaleParityTests`) with `body(at:)` queries and contacts, which agree:
+      - A node's own scale counts only relative to its scale when the body was attached, so a
+        body put on a node already at scale 2 keeps its given size. A copied node and a node a
+        body is moved to each count from their own scale at that moment.
+      - The node's ancestors' scale counts in full.
+      - A rectangle stretches along each axis; a circle stays a circle of radius
+        `r·√((sx² + sy²)/2)` under a non-uniform scale.
+
+      The port applied the node's full current scale and took a circle's radius from its x
+      scale; it now does the same as Apple. Neither app scales a physics body.
+
 ## Explicitly out of scope
 
 - Persistence (win/loss record across app launches), accounts, networking/multiplayer — see
