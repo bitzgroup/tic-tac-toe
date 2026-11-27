@@ -10,6 +10,7 @@
 		01B3021E366A0D7FB61829D2 /* TicTacToeMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFAC04CE7E5EA75DE40B150 /* TicTacToeMove.swift */; };
 		04A4E30ED356BF27ACA2886F /* SKLabelMultilineParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF85891F13D915A92C6C3AB3 /* SKLabelMultilineParityTests.swift */; };
 		060E257BF909425AAC79F23B /* SKEmitterParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8245CB467238F0A0577D0A5 /* SKEmitterParityTests.swift */; };
+		078DEEF081476D77DEA74A85 /* SKTileAutomapParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894E54DDFCCEA1C5C837D594 /* SKTileAutomapParityTests.swift */; };
 		0CDCA30504BFD4EA00C170EF /* GKCustomNodeClassParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF3928EC00FDC527DB0E3FC /* GKCustomNodeClassParityTests.swift */; };
 		0FFAC7CC789B87B77C4B0F32 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B58F32345774E4B9660BA8F /* GameplayKit.framework */; };
 		127BA6C817366DD44AE80793 /* TicTacToeBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450F612B1AA82CC46C2AAB46 /* TicTacToeBoardTests.swift */; };
@@ -167,6 +168,7 @@
 		8334A28347CF1B65368FB847 /* SKTransitionParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKTransitionParityTests.swift; sourceTree = "<group>"; };
 		85561E418CAE0280FEEDE5AC /* SKNodeCopyParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKNodeCopyParityTests.swift; sourceTree = "<group>"; };
 		86E7EA53D85625E1CE54B073 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		894E54DDFCCEA1C5C837D594 /* SKTileAutomapParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKTileAutomapParityTests.swift; sourceTree = "<group>"; };
 		8DA2EEC318FEAA3670D3189A /* SKPhysicsCompoundParityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKPhysicsCompoundParityTests.swift; sourceTree = "<group>"; };
 		8F394505B183A24C2007014F /* TicTacToe.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		915C0125B3F2DABAC680B2E3 /* CellNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellNode.swift; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 				E08B1AF4267E8F264B3268BC /* SKSpriteSizeParityTests.swift */,
 				C1A8225255641317A14E44A6 /* SKTextureAtlasParityTests.swift */,
 				7F675CE0AC18A7E14CCA1316 /* SKTextureNamedParityTests.swift */,
+				894E54DDFCCEA1C5C837D594 /* SKTileAutomapParityTests.swift */,
 				76A0CDF7159CBD5350926293 /* SKTileMapParityTests.swift */,
 				8334A28347CF1B65368FB847 /* SKTransitionParityTests.swift */,
 				E718010BD2AC7A621579C0D1 /* SKViewDebugOverlayParityTests.swift */,
@@ -681,6 +684,7 @@
 				1E374A3CFB70926B5419BD4C /* SKSpriteSizeParityTests.swift in Sources */,
 				82D024A006BEE4FCBFBE92C0 /* SKTextureAtlasParityTests.swift in Sources */,
 				47176D784D3785CB4293983F /* SKTextureNamedParityTests.swift in Sources */,
+				078DEEF081476D77DEA74A85 /* SKTileAutomapParityTests.swift in Sources */,
 				F70E0262CE1A6AFB5F47D59B /* SKTileMapParityTests.swift in Sources */,
 				B75EE259C4D227FC0F27B824 /* SKTransitionParityTests.swift in Sources */,
 				CFCF32C03302BFFE7B6B1BCB /* SKViewDebugOverlayParityTests.swift in Sources */,
