@@ -681,6 +681,16 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       `GKNoise` doesn't have, so the port always gives the default gray. It's built on
       `bitzgroup/SpriteKit`'s public `SKTexture(bitmap)`, so SpriteKit needed no change. Neither app
       uses noise.
+- [x] `GKEntity`/`GKComponent` `copy()` (`bitzgroup/GameplayKit`'s G9), recorded on iOS/tvOS
+      (`GKEntityCopyParityTests`) to decide whether the port should add it:
+      - An entity holding a component the game defines, or an entity subclass the game defines,
+        copies to `nil`, which crashes a Swift caller.
+      - An entity made only of framework classes copies as if archived: a `GKSKNodeComponent`'s
+        node is duplicated, but an agent loses its position and speeds.
+      - A component copied alone is a new, unattached instance with none of the original's state.
+
+      Since Apple's `copy()` can't copy a game's own entities, the port records this as a
+      deviation rather than adding `copy()`. The iOS app copies no entities.
 
 ## Explicitly out of scope
 
