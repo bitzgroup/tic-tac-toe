@@ -681,6 +681,19 @@ there. The game itself stays iOS-only; a tvOS/Android TV version of the game wou
       `GKNoise` doesn't have, so the port always gives the default gray. It's built on
       `bitzgroup/SpriteKit`'s public `SKTexture(bitmap)`, so SpriteKit needed no change. Neither app
       uses noise.
+- [x] `bitzgroup/SpriteKit`'s automapping rule choice (M2), recorded on iOS/tvOS
+      (`SKTileAutomapParityTests`) by naming each rule's definition and reading back what every
+      cell got:
+      - With a rule for every mask, a tile takes the rule for its four edge neighbors; diagonal
+        neighbors never count.
+      - With an Xcode adjacency group's 13 rules, placing one tile also paints its eight neighbors
+        with the edge rules around it.
+      - Placing the group on a cell that already holds it changes nothing, so a block placed tile
+        by tile comes out uneven.
+      - A tile no rule fits keeps its group but gets no definition.
+
+      Since this undocumented brush depends on the order tiles are placed in, the port keeps its
+      closest-mask matching and records the difference. Neither app uses tile maps.
 
 ## Explicitly out of scope
 
